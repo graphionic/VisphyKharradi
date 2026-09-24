@@ -1,0 +1,28 @@
+# 5E.2A SECURITY: prevent PHP/script execution inside uploads/packages
+# Compatible with mod_php (Apache) and CGI/FastCGI (no php_flag crash)
+Options -Indexes -ExecCGI
+
+RemoveHandler .php .phtml .php3 .php4 .php5 .phar .pl .py .pyc .pyo .cgi .sh
+RemoveType .php .phtml .php3 .php4 .php5 .phar .pl .py .pyc .pyo
+
+<FilesMatch "\.(php|phtml|phar|php3|php4|php5|pl|py|cgi|sh|exe)$">
+  Require all denied
+</FilesMatch>
+<FilesMatch "\.(php|phtml|phar)$">
+  <IfModule mod_php.c>
+    php_flag engine off
+  </IfModule>
+  <IfModule mod_php7.c>
+    php_flag engine off
+  </IfModule>
+  <IfModule mod_php8.c>
+    php_flag engine off
+  </IfModule>
+  <IfModule mod_php5.c>
+    php_flag engine off
+  </IfModule>
+</FilesMatch>
+
+<Files ".htaccess">
+  Require all denied
+</Files>

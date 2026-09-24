@@ -1,0 +1,43 @@
+/* Ftpreneur Admin — Utilities v5 — Minimal helpers */
+.u-muted { color: var(--color-text-muted); }
+.u-faint { color: var(--color-text-faint); }
+.u-small { font-size: var(--text-sm); }
+.u-stack { display: grid; gap: var(--space-4); }
+.u-stack-sm { display: grid; gap: var(--space-2); }
+.u-stack-lg { display: grid; gap: var(--space-6); }
+.u-flex { display: flex; align-items: center; gap: var(--space-3); }
+.u-flex-between { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.u-w-full { width: 100%; }
+.u-mt-4 { margin-top: var(--space-4); }
+.u-mb-4 { margin-bottom: var(--space-4); }
+.u-text-right { text-align: right; }
+.u-hidden { display: none !important; }
+.u-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+/* Focus ring utility */
+.u-ring:focus-visible { outline: none; box-shadow: var(--ring); border-color: var(--color-primary); }
+
+/* Truncate */
+.u-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Stack with divider */
+.u-divide > * + * { border-top: 1px solid var(--color-divider); }
+
+/* Responsive helpers */
+@media (max-width: 640px) {
+  .u-hide-mobile { display: none !important; }
+}
+@media (min-width: 641px) {
+  .u-hide-desktop { display: none !important; }
+}
+
+/* Inline code helper */
+.u-code {
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border-subtle);
+  padding: 1px 6px;
+  border-radius: 6px;
+  color: var(--color-text-secondary);
+}
