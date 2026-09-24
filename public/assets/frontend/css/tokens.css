@@ -1,0 +1,127 @@
+/**
+ * Ftpreneur — Production Frontend Design Tokens
+ * Source of Truth: Approved Brand Guidelines (docs/brand-guidelines/)
+ */
+
+:root {
+  /* Brand Core Palette */
+  --color-primary: #2E47FF;
+  --color-primary-hover: #1A34E6;
+  --color-primary-light: #EEF2FF;
+  
+  --color-secondary: #00B79B;
+  --color-secondary-hover: #009E86;
+  --color-secondary-light: #E6F8F5;
+  
+  --color-accent: #FF9E2C;
+  --color-accent-hover: #E88B1A;
+  --color-accent-light: #FFF6EB;
+  
+  --color-ink: #141B31;
+  --color-ink-subtle: #1E293B;
+
+  /* Surfaces & Backgrounds */
+  --color-bg-canvas: #F8FAFC;
+  --color-bg-surface: #FFFFFF;
+  --color-bg-subdued: #F1F5F9;
+  --color-bg-alt: #0F172A;
+
+  /* Neutral Text Colors */
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748B;
+  --color-text-inverse: #FFFFFF;
+  --color-text-inverse-muted: #94A3B8;
+
+  /* Borders & Dividers */
+  --color-border: #E2E8F0;
+  --color-border-subdued: #F1F5F9;
+  --color-border-strong: #CBD5E1;
+
+  /* Functional & Status */
+  --color-success: #00B79B;
+  --color-warning: #FF9E2C;
+  --color-error: #EF4444;
+  --color-info: #2E47FF;
+
+  /* Typography */
+  --font-family-display: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Fluid Typography Scale */
+  --font-size-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.8125rem);    /* 12px -> 13px */
+  --font-size-sm: clamp(0.8438rem, 0.8rem + 0.25vw, 0.9375rem); /* 13.5px -> 15px */
+  --font-size-base: clamp(1rem, 0.95rem + 0.25vw, 1.0625rem);   /* 16px -> 17px */
+  --font-size-lg: clamp(1.125rem, 1.05rem + 0.35vw, 1.25rem);   /* 18px -> 20px */
+  --font-size-xl: clamp(1.3125rem, 1.2rem + 0.55vw, 1.5625rem); /* 21px -> 25px */
+  --font-size-2xl: clamp(1.625rem, 1.45rem + 0.85vw, 2rem);     /* 26px -> 32px */
+  --font-size-3xl: clamp(2.125rem, 1.85rem + 1.35vw, 2.75rem);  /* 34px -> 44px */
+  --font-size-4xl: clamp(2.625rem, 2.2rem + 2.1vw, 3.75rem);    /* 42px -> 60px */
+
+  /* Line Heights */
+  --line-height-tight: 1.15;
+  --line-height-snug: 1.3;
+  --line-height-base: 1.6;
+  --line-height-relaxed: 1.75;
+
+  /* Letter Spacing */
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide: 0.03em;
+  --letter-spacing-wider: 0.06em;
+
+  /* Spacing Scale (8pt Grid) */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.25rem;  /* 20px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-10: 2.5rem;  /* 40px */
+  --space-12: 3rem;    /* 48px */
+  --space-16: 4rem;    /* 64px */
+  --space-20: 5rem;    /* 80px */
+  --space-24: 6rem;    /* 96px */
+
+  /* Border Radii */
+  --radius-sm: 0.375rem; /* 6px */
+  --radius-md: 0.5rem;   /* 8px */
+  --radius-lg: 0.75rem;  /* 12px */
+  --radius-xl: 1rem;     /* 16px */
+  --radius-2xl: 1.5rem;  /* 24px */
+  --radius-full: 9999px;
+
+  /* Elevation / Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.10), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  --shadow-focus: 0 0 0 3px rgba(46, 71, 255, 0.35);
+
+  /* Layout Containers */
+  --container-max-width: 76.5rem; /* 1224px */
+  --container-wide-width: 85rem;   /* 1360px */
+  --gutter-mobile: 1rem;
+  --gutter-desktop: 2rem;
+
+  /* Motion & Transitions */
+  --motion-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-deliberate: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms linear;
+    --motion-normal: 0ms linear;
+    --motion-deliberate: 0ms linear;
+  }
+}

@@ -31,6 +31,9 @@ $routes->get('admin/packages', 'Admin\PackageController::index', ['filter' => 'a
 // UI Preview — dev only, authenticated (Phase 4)
 $routes->get('admin/ui-preview', 'Admin\UiPreviewController::index', ['filter' => 'adminAuth']);
 
+// Production Frontend Design System Preview — dev only, authenticated (Phase 6A)
+$routes->get('admin/frontend-preview', 'Admin\FrontendPreviewController::index', ['filter' => 'adminAuth']);
+
 // Brand Guidelines — authenticated preview (docs/brand-guidelines/ is source of truth, not prod theme)
 $routes->get('admin/brand-guidelines', 'Admin\BrandGuidelinesController::index', ['filter' => 'adminAuth']);
 $routes->get('admin/brand-guidelines/frame', 'Admin\BrandGuidelinesController::frame', ['filter' => 'adminAuth']);
