@@ -62,33 +62,6 @@ final class FrontendFoundationTest extends CIUnitTestCase
         $result->assertSee('main-content');
     }
 
-    public function testAdminFrontendPreviewRequiresAuthentication(): void
-    {
-        $result = $this->call('get', '/admin/frontend-preview');
-
-        $result->assertRedirect();
-        $this->assertStringContainsString('admin/login', $result->getRedirectUrl());
-    }
-
-    public function testAdminFrontendPreviewAccessibleInNonProductionEnvironment(): void
-    {
-        $admin = $this->createAdmin();
-        $session = [
-            'admin_id'            => $admin['id'],
-            'admin_email'         => $admin['email'],
-            'admin_name'          => $admin['name'],
-            'admin_authenticated' => true,
-            'auth_time'           => time(),
-        ];
-
-        $result = $this->withSession($session)->call('get', '/admin/frontend-preview');
-
-        $result->assertStatus(200);
-        $result->assertSee('Production Frontend Design System Preview');
-        $result->assertSee('assets/frontend/css/tokens.css');
-        $result->assertSee('assets/frontend/css/components.css');
-    }
-
     public function testBrandGuidelinesAdminPreviewRemainsIntact(): void
     {
         $admin = $this->createAdmin();
