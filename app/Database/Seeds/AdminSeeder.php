@@ -20,9 +20,9 @@ class AdminSeeder extends Seeder
 {
     public function run(): void
     {
-        $name     = env('ADMIN_SEED_NAME');
-        $email    = env('ADMIN_SEED_EMAIL');
-        $password = env('ADMIN_SEED_PASSWORD');
+        $name     = trim((string) env('ADMIN_SEED_NAME'));
+        $email    = strtolower(trim((string) env('ADMIN_SEED_EMAIL')));
+        $password = (string) env('ADMIN_SEED_PASSWORD');
 
         if (empty($name) || empty($email) || empty($password)) {
             // Fail safe — do not seed with defaults
@@ -36,21 +36,27 @@ class AdminSeeder extends Seeder
             return;
         }
 
-        if (strlen($password) < 10) {
-            echo "AdminSeeder: ADMIN_SEED_PASSWORD must be at least 10 characters — aborting.\n";
-            return;
-        }
-
-        // Check if admin already exists
-        $existing = $this->db->table('admins')->where('email', $email)->get()->getRowArray();
-        if ($existing) {
-            echo "AdminSeeder: Admin with email '{$email}' already exists — skipping.\n";
+        if (strlen($password) < 8) {
+            echo "AdminSeeder: ADMIN_SEED_PASSWORD must be at least 8 characters — aborting.\n";
             return;
         }
 
         $hash = password_hash($password, PASSWORD_DEFAULT);
         if ($hash === false) {
             echo "AdminSeeder: password_hash() failed — aborting.\n";
+            return;
+        }
+
+        // Check if admin already exists — synchronize if present, insert if absent
+        $existing = $this->db->table('admins')->where('email', $email)->get()->getRowArray();
+        if ($existing) {
+            $this->db->table('admins')->where('id', $existing['id'])->update([
+                'name'          => $name,
+                'password_hash' => $hash,
+                'is_active'     => 1,
+                'updated_at'    => date('Y-m-d H:i:s'),
+            ]);
+            echo "AdminSeeder: Admin '{$email}' synchronized successfully.\n";
             return;
         }
 
