@@ -58,6 +58,7 @@ class PackageController extends BaseController
             'perPage'       => $result['perPage'],
             'currentPage'   => $result['currentPage'],
             'featureCounts' => $result['featureCounts'],
+            'optionCounts'  => $result['optionCounts'] ?? [],
             'filters'       => $result['filters'],
             'queryParams'   => $queryParams,
             'sortOptions'   => $this->packageService->getSortOptions(),
@@ -71,8 +72,9 @@ class PackageController extends BaseController
         $errors = session()->getFlashdata('errors') ?? [];
         if (isset($errors) && !is_array($errors)) $errors = [];
         return view('admin/packages/create', [
-            'title'  => 'Create Package — Ftpreneur',
-            'errors' => $errors,
+            'title'   => 'Create Package — Ftpreneur',
+            'options' => [],
+            'errors'  => $errors,
         ]);
     }
 
@@ -132,10 +134,7 @@ class PackageController extends BaseController
                 $result = $this->packageService->createPackageWithMedia($input, $adminId, $_FILES['featured_image'], $galleryFiles, $galleryAlt);
             } else {
                 $result = $this->packageService->createPackage($input, $adminId);
-                // Also try media-aware with nulls to handle gallery via $_FILES already captured? For now simple
-                // If gallery files were via $_FILES, we already captured above, but if we went to else, we missed? Check again
                 if (!empty($galleryFiles)) {
-                    // This shouldn't happen, but handle
                     $result = $this->packageService->createPackageWithMedia($input, $adminId, null, $galleryFiles, $galleryAlt);
                 }
             }
@@ -165,6 +164,7 @@ class PackageController extends BaseController
         $package = $data['package'];
         $features = $data['features'];
         $gallery = $data['gallery'];
+        $options = $data['options'] ?? [];
 
         $errors = session()->getFlashdata('errors') ?? [];
         if (!is_array($errors)) $errors = [];
@@ -174,6 +174,7 @@ class PackageController extends BaseController
             'package'  => $package,
             'features' => $features,
             'gallery'  => $gallery,
+            'options'  => $options,
             'errors'   => $errors,
         ]);
     }

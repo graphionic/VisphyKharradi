@@ -114,6 +114,7 @@ $canReorder = $filters['sort'] === 'display_order' && $filters['q'] === '' && $f
                         <?php
                             $fid = (int) $pkg['id'];
                             $featCount = $featureCounts[$fid] ?? 0;
+                            $optCount = $optionCounts[$fid] ?? 0;
                             $badgeLabel = PackageService::badgeLabel($pkg['badge'] ?? null);
                             $priceSelling = PackageService::formatPrice($pkg['selling_price']);
                             $priceRegular = isset($pkg['regular_price']) && $pkg['regular_price'] !== null && (float)$pkg['regular_price'] > (float)$pkg['selling_price'] ? PackageService::formatPrice($pkg['regular_price']) : null;
@@ -155,6 +156,9 @@ $canReorder = $filters['sort'] === 'display_order' && $filters['q'] === '' && $f
                                 <span class="table__primary"><?= esc($priceSelling) ?></span>
                                 <?php if ($priceRegular): ?>
                                     <span class="table__muted" style="text-decoration:line-through; margin-left:6px; font-size:0.80em;"><?= esc($priceRegular) ?></span>
+                                <?php endif; ?>
+                                <?php if ($optCount > 0): ?>
+                                    <div class="table__muted" style="font-size:0.75rem; margin-top:2px; font-weight:500; font-family:var(--font-sans); color:var(--color-primary-600);"><?= esc((string)$optCount) ?> <?= $optCount === 1 ? 'option' : 'options' ?></div>
                                 <?php endif; ?>
                             </td>
                             <td><?= esc($duration) ?></td>

@@ -34,31 +34,11 @@ $getValue = function($field, $default = '') use ($pkg) {
     if (isset($pkg[$field])) return (string)$pkg[$field];
     return $default;
 };
-$oldFeatures = old('features');
-if ($oldFeatures === null) {
-    $oldFeatures = $featuresList ?? [];
+$oldOptions = old('options');
+if ($oldOptions === null) {
+    $oldOptions = $options ?? [];
 }
-if (!is_array($oldFeatures)) $oldFeatures = [$oldFeatures];
-if (empty($oldFeatures) && empty($errors) && ($mode ?? 'create') === 'create') {
-    $oldFeatures = [''];
-}
-if (empty($oldFeatures) && ($mode ?? 'create') === 'create' && !empty($errors)) {
-    if (isset($errors['features']) || isset($errors['features_details'])) {
-        if (empty($oldFeatures)) $oldFeatures = [''];
-    }
-}
-if (empty($oldFeatures) && ($mode ?? 'create') === 'edit') {
-    $oldFeatures = $featuresList ?? [''];
-    if (empty($oldFeatures)) $oldFeatures = [''];
-}
-// Gallery existing: for edit, $gallery is array of rows; for create, empty
-// Preserve submitted gallery order on validation failure
-$oldGalleryIds = old('existing_gallery_ids');
-if ($oldGalleryIds === null) $oldGalleryIds = old('gallery_existing_ids');
-$oldGalleryOrder = old('gallery_order');
-$featuredImage = $pkg['featured_image'] ?? null;
-$hasFeaturedError = $hasError('featured_image');
-$hasGalleryError = $hasError('gallery_images');
+if (!is_array($oldOptions)) $oldOptions = [];
 ?>
 
 <div class="pkg-create__layout">
@@ -127,38 +107,38 @@ $hasGalleryError = $hasError('gallery_images');
             </div>
         </section>
 
-        <!-- Pricing & Duration -->
+        <!-- Pricing & Duration (Base/Default) -->
         <section class="card">
             <div class="card__header">
                 <div>
-                    <div class="card__title">Pricing &amp; Duration</div>
-                    <div class="card__subtitle">DECIMAL-safe amounts and program length</div>
+                    <div class="card__title">Base Pricing &amp; Duration</div>
+                    <div class="card__subtitle">Default/starting amount and program length for backward compatibility</div>
                 </div>
             </div>
             <div class="card__body" style="display:grid; gap:16px;">
                 <div class="form__row form__row--2">
                     <div class="field">
-                        <label class="field__label" for="regular_price">Regular Price (₹) <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
-                        <input class="field__input <?= $hasError('regular_price') ? 'field__input--error' : '' ?>" id="regular_price" name="regular_price" type="number" step="0.01" min="0" inputmode="decimal" value="<?= esc($getValue('regular_price', '')) ?>" required aria-required="true" aria-invalid="<?= $hasError('regular_price') ? 'true' : 'false' ?>">
+                        <label class="field__label" for="regular_price">Regular Price (₹)</label>
+                        <input class="field__input <?= $hasError('regular_price') ? 'field__input--error' : '' ?>" id="regular_price" name="regular_price" type="number" step="0.01" min="0" inputmode="decimal" value="<?= esc($getValue('regular_price', '')) ?>" aria-invalid="<?= $hasError('regular_price') ? 'true' : 'false' ?>">
                         <?php if ($hasError('regular_price')): ?><div class="field__error"><?= esc($errors['regular_price']) ?></div><?php endif; ?>
                     </div>
                     <div class="field">
-                        <label class="field__label" for="selling_price">Selling Price (₹) <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
-                        <input class="field__input <?= $hasError('selling_price') ? 'field__input--error' : '' ?>" id="selling_price" name="selling_price" type="number" step="0.01" min="0" inputmode="decimal" value="<?= esc($getValue('selling_price', '')) ?>" required aria-required="true" aria-invalid="<?= $hasError('selling_price') ? 'true' : 'false' ?>">
-                        <div class="field__hint">Must be ≤ regular price. Equal allowed.</div>
+                        <label class="field__label" for="selling_price">Selling Price (₹)</label>
+                        <input class="field__input <?= $hasError('selling_price') ? 'field__input--error' : '' ?>" id="selling_price" name="selling_price" type="number" step="0.01" min="0" inputmode="decimal" value="<?= esc($getValue('selling_price', '')) ?>" aria-invalid="<?= $hasError('selling_price') ? 'true' : 'false' ?>">
+                        <div class="field__hint">Must be ≤ regular price. Auto-derives from options if left blank.</div>
                         <?php if ($hasError('selling_price')): ?><div class="field__error"><?= esc($errors['selling_price']) ?></div><?php endif; ?>
                     </div>
                 </div>
 
                 <div class="form__row form__row--2">
                     <div class="field">
-                        <label class="field__label" for="duration_value">Duration Value <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
-                        <input class="field__input <?= $hasError('duration_value') ? 'field__input--error' : '' ?>" id="duration_value" name="duration_value" type="number" min="1" step="1" value="<?= esc($getValue('duration_value', '')) ?>" required aria-required="true">
+                        <label class="field__label" for="duration_value">Duration Value</label>
+                        <input class="field__input <?= $hasError('duration_value') ? 'field__input--error' : '' ?>" id="duration_value" name="duration_value" type="number" min="1" step="1" value="<?= esc($getValue('duration_value', '')) ?>">
                         <?php if ($hasError('duration_value')): ?><div class="field__error"><?= esc($errors['duration_value']) ?></div><?php endif; ?>
                     </div>
                     <div class="field">
-                        <label class="field__label" for="duration_unit">Duration Unit <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
-                        <select class="field__input <?= $hasError('duration_unit') ? 'field__input--error' : '' ?>" id="duration_unit" name="duration_unit" required aria-required="true">
+                        <label class="field__label" for="duration_unit">Duration Unit</label>
+                        <select class="field__input <?= $hasError('duration_unit') ? 'field__input--error' : '' ?>" id="duration_unit" name="duration_unit">
                             <option value="">Select unit</option>
                             <option value="days" <?= $getValue('duration_unit', '')==='days' ? 'selected' : '' ?>>Days</option>
                             <option value="weeks" <?= $getValue('duration_unit', '')==='weeks' ? 'selected' : '' ?>>Weeks</option>
@@ -166,6 +146,126 @@ $hasGalleryError = $hasError('gallery_images');
                         </select>
                         <?php if ($hasError('duration_unit')): ?><div class="field__error"><?= esc($errors['duration_unit']) ?></div><?php endif; ?>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DURATION & PRICING OPTIONS -->
+        <section class="card" id="pkg-options-section">
+            <div class="card__header">
+                <div>
+                    <div class="card__title">Duration &amp; Pricing Options</div>
+                    <div class="card__subtitle">Dynamic duration tiers, pricing, and option-specific inclusions</div>
+                </div>
+                <button type="button" class="btn btn--secondary btn--sm" id="btn-add-option">+ Add Option</button>
+            </div>
+            <div class="card__body">
+                <?php if ($hasError('options')): ?>
+                    <div class="field__error" style="margin-bottom:12px;">Please fix highlighted errors in options below.</div>
+                <?php endif; ?>
+
+                <div id="options-container" style="display:grid; gap:16px;">
+                    <div id="options-empty-state" class="u-muted" style="text-align:center; padding:24px 12px; border:1.5px dashed var(--color-border); border-radius:8px; font-size:0.875rem; display:<?= empty($oldOptions) ? 'block' : 'none' ?>;">
+                        No duration options configured yet. Click <strong>+ Add Option</strong> to create custom duration tiers (e.g. 3 Months, 6 Months).
+                    </div>
+
+                    <?php foreach ($oldOptions as $optIdx => $opt): ?>
+                        <?php
+                        $optName = $opt['name'] ?? '';
+                        $optVal = $opt['duration_value'] ?? '3';
+                        $optUnit = strtolower($opt['duration_unit'] ?? 'month');
+                        $optPrice = $opt['price'] ?? '';
+                        $optDesc = $opt['short_description'] ?? '';
+                        $optActive = isset($opt['is_active']) ? ($opt['is_active'] == 1 || $opt['is_active'] === '1' || $opt['is_active'] === 'on') : true;
+                        $optFeatures = $opt['features'] ?? $opt['inclusions'] ?? [];
+                        if (!is_array($optFeatures)) $optFeatures = [];
+                        $optErr = $errors['options'][$optIdx] ?? [];
+                        ?>
+                        <div class="card option-card" data-option-item style="border:1px solid var(--color-border); border-radius:8px; overflow:hidden;">
+                            <div class="option-card__header" data-toggle-option style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; background:var(--color-surface-subtle); cursor:pointer; user-select:none;">
+                                <div style="display:flex; align-items:center; gap:12px;">
+                                    <span class="option-chevron" style="display:inline-flex; align-items:center; transition:transform 0.2s;">
+                                        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    </span>
+                                    <div>
+                                        <strong class="option-title-display"><?= esc($optName !== '' ? $optName : 'New Duration Option') ?></strong>
+                                        <span class="badge option-active-badge <?= $optActive ? 'badge--success' : 'badge--neutral' ?>" style="margin-left:8px;"><?= $optActive ? 'Active' : 'Inactive' ?></span>
+                                        <div class="field__hint option-subtitle-display" style="margin:2px 0 0 0;"><?= esc($optVal) ?> <?= esc(ucfirst($optUnit)) ?><?= $optPrice !== '' ? ' — ₹' . esc(number_format((float)$optPrice, 0)) : '' ?></div>
+                                    </div>
+                                </div>
+                                <div style="display:flex; gap:6px; align-items:center;" onclick="event.stopPropagation();">
+                                    <button type="button" class="icon-btn icon-btn--sm" data-move-option-up aria-label="Move option up" title="Move up">
+                                        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 14L6 10l1.4-1.4L10 11.2l2.6-2.6L14 10l-4 4Z" fill="currentColor"/></svg>
+                                    </button>
+                                    <button type="button" class="icon-btn icon-btn--sm" data-move-option-down aria-label="Move option down" title="Move down">
+                                        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 6l4 4-1.4 1.4L10 8.8 7.4 11.4 6 10l4-4Z" fill="currentColor"/></svg>
+                                    </button>
+                                    <button type="button" class="btn btn--ghost btn--sm" data-remove-option style="color:var(--color-danger);">Remove</button>
+                                </div>
+                            </div>
+                            <div class="option-card__body" style="padding:16px; display:grid; gap:16px; border-top:1px solid var(--color-border-subtle);">
+                                <input type="hidden" name="options[<?= $optIdx ?>][id]" value="<?= esc((string)($opt['id'] ?? '')) ?>">
+                                <div class="form__row form__row--2">
+                                    <div class="field">
+                                        <label class="field__label">Option Name <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
+                                        <input class="field__input option-name-input <?= isset($optErr['name']) ? 'field__input--error' : '' ?>" name="options[<?= $optIdx ?>][name]" type="text" value="<?= esc($optName) ?>" placeholder="e.g. 3 Month Program" required>
+                                        <?php if (isset($optErr['name'])): ?><div class="field__error"><?= esc($optErr['name']) ?></div><?php endif; ?>
+                                    </div>
+                                    <div class="field">
+                                        <label class="field__label">Price (₹) <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
+                                        <input class="field__input option-price-input <?= isset($optErr['price']) ? 'field__input--error' : '' ?>" name="options[<?= $optIdx ?>][price]" type="number" step="0.01" min="0" value="<?= esc($optPrice) ?>" placeholder="50000" required>
+                                        <?php if (isset($optErr['price'])): ?><div class="field__error"><?= esc($optErr['price']) ?></div><?php endif; ?>
+                                    </div>
+                                </div>
+
+                                <div class="form__row form__row--2">
+                                    <div class="field">
+                                        <label class="field__label">Duration Value <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
+                                        <input class="field__input option-dur-val-input <?= isset($optErr['duration_value']) ? 'field__input--error' : '' ?>" name="options[<?= $optIdx ?>][duration_value]" type="number" min="1" step="1" value="<?= esc((string)$optVal) ?>" placeholder="3" required>
+                                        <?php if (isset($optErr['duration_value'])): ?><div class="field__error"><?= esc($optErr['duration_value']) ?></div><?php endif; ?>
+                                    </div>
+                                    <div class="field">
+                                        <label class="field__label">Duration Unit <span aria-hidden="true" style="color:var(--color-danger)">*</span></label>
+                                        <select class="field__input option-dur-unit-input <?= isset($optErr['duration_unit']) ? 'field__input--error' : '' ?>" name="options[<?= $optIdx ?>][duration_unit]" required>
+                                            <option value="day" <?= in_array($optUnit, ['day','days']) ? 'selected' : '' ?>>Days</option>
+                                            <option value="week" <?= in_array($optUnit, ['week','weeks']) ? 'selected' : '' ?>>Weeks</option>
+                                            <option value="month" <?= in_array($optUnit, ['month','months']) ? 'selected' : '' ?>>Months</option>
+                                            <option value="year" <?= in_array($optUnit, ['year','years']) ? 'selected' : '' ?>>Years</option>
+                                        </select>
+                                        <?php if (isset($optErr['duration_unit'])): ?><div class="field__error"><?= esc($optErr['duration_unit']) ?></div><?php endif; ?>
+                                    </div>
+                                </div>
+
+                                <div class="field">
+                                    <label class="field__label">Short Description</label>
+                                    <textarea class="field__input" name="options[<?= $optIdx ?>][short_description]" rows="2" placeholder="Brief overview for this option..."><?= esc($optDesc) ?></textarea>
+                                </div>
+
+                                <div class="field">
+                                    <label style="display:flex; gap:8px; align-items:center; cursor:pointer;">
+                                        <input type="checkbox" class="option-active-input" name="options[<?= $optIdx ?>][is_active]" value="1" <?= $optActive ? 'checked' : '' ?> style="width:16px;height:16px;">
+                                        <span class="field__label" style="margin:0;">Active (Enabled for selection)</span>
+                                    </label>
+                                </div>
+
+                                <!-- Inclusions -->
+                                <div style="border:1px solid var(--color-border-subtle); border-radius:6px; padding:12px; background:var(--color-surface-subtle);">
+                                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                                        <label class="field__label" style="margin:0; font-weight:600;">What's Included <span class="u-muted" style="font-weight:normal;">(Option features)</span></label>
+                                        <button type="button" class="btn btn--secondary btn--sm" data-add-option-inclusion>+ Add Inclusion</button>
+                                    </div>
+                                    <div class="option-inclusions-list" style="display:grid; gap:8px;">
+                                        <?php foreach ($optFeatures as $fIdx => $fText): ?>
+                                            <div class="option-inclusion-row" style="display:flex; gap:8px; align-items:center;">
+                                                <input class="field__input" name="options[<?= $optIdx ?>][features][]" type="text" value="<?= esc($fText) ?>" maxlength="300" placeholder="e.g. 2 video calls with Visphy Kharradi">
+                                                <button type="button" class="btn btn--ghost btn--sm" data-remove-option-inclusion style="color:var(--color-danger);">Remove</button>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </section>

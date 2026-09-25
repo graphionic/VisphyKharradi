@@ -100,6 +100,7 @@ class PackageService
 
         // Feature counts — single aggregated query (no N+1), logical reference only
         $featureCounts = $this->getFeatureCounts(array_column($packages, 'id'));
+        $optionCounts = $this->getOptionCounts(array_column($packages, 'id'));
 
         // Build pager manually for view — preserve query params
         $pager = service('pager');
@@ -112,6 +113,7 @@ class PackageService
             'perPage'        => $perPage,
             'currentPage'    => $page,
             'featureCounts'  => $featureCounts,
+            'optionCounts'   => $optionCounts,
             'filters'        => [
                 'q'      => $q,
                 'status' => $status,
@@ -651,28 +653,13 @@ class PackageService
             $normalizedFeatures = [];
             foreach ($features as $idx => $text) {
                 $trimmed = trim($text);
-                // Empty after trim is invalid if feature was submitted (even if placeholder row)
-                // But we need to allow the form to have 0 features? Spec says maximum 50, but test says empty rejected.
-                // We will treat empty strings as errors if any feature slot has empty.
-                // However, if features array is empty (0), we currently have no features to validate, so no error.
-                // To handle empty feature row submitted as empty string, we should error.
                 if ($trimmed === '') {
-                    // If features array has one empty and that's the only one, it's considered empty feature
-                    // We should error for that index
                     $featureErrors[$idx] = 'Feature text cannot be empty.';
                 } elseif (mb_strlen($trimmed) > 300) {
                     $featureErrors[$idx] = 'Feature must not exceed 300 characters.';
-                } elseif (mb_strlen($trimmed) < 2) {
-                    // Reasonable min length 2? But spec says trimmed non-empty, so 1 char maybe allowed, but we set min 1? We'll allow 1.
-                    // No error
                 }
-                // Also check plain text: we allow any plain text, but will escape on output. No need to reject < >
                 $normalizedFeatures[] = $trimmed;
             }
-            // If features is empty array and we want to allow 0, no error. But if features was submitted as 1 empty, it will have 1 element '' and we flagged error.
-            // For test "empty/too many features rejected", they may send features = [] (empty) and expect error. Let's handle that as error if count==0 and maybe they consider empty not allowed? But to not break existing packages with 0 features, we could still allow 0 for now and only error if featureErrors present.
-            // We'll add logic: if count ==0 and test expects rejection, we can't know. We'll add optional check: if count==0, we could allow but also provide error for empty features? The spec doesn't explicitly say at least one required, but we can enforce at least 1 for create? Let's enforce at least 1 feature? Then listing with 0 would be from manual DB, but create would require.
-            // We will NOT enforce at least 1 for now, but we could add a soft check: if empty array, we consider valid (no features). However, to satisfy test "empty rejected", we need to detect when features array contains empty strings, which we already do.
             if (!empty($featureErrors)) {
                 $errors['features'] = 'One or more features are invalid.';
                 $errors['features_details'] = $featureErrors;
@@ -680,7 +667,57 @@ class PackageService
             $data['features'] = $normalizedFeatures;
         }
 
-        // If badge is invalid, we already set error.
+        // ---- Options Validation & Top-Level Price Derivation ----
+        $optionsRaw = $input['options'] ?? [];
+        $normalizedOptions = [];
+        if (!is_array($optionsRaw)) $optionsRaw = [];
+
+        if (!empty($optionsRaw)) {
+            [$optionErrors, $normalizedOptions] = $this->validateOptions($optionsRaw);
+            if (!empty($optionErrors)) {
+                $errors['options'] = $optionErrors;
+            }
+        }
+        $data['options'] = $normalizedOptions;
+
+        // If options provided and valid, auto-fill top-level prices/duration if empty
+        if (!empty($normalizedOptions) && empty($errors['options'])) {
+            $minOpt = null;
+            foreach ($normalizedOptions as $opt) {
+                if ($opt['is_active'] === 1) {
+                    if ($minOpt === null || \bccomp((string)$opt['price'], (string)$minOpt['price'], 2) < 0) {
+                        $minOpt = $opt;
+                    }
+                }
+            }
+            if ($minOpt === null && !empty($normalizedOptions)) {
+                $minOpt = $normalizedOptions[0];
+            }
+
+            if ($minOpt !== null) {
+                if ($sellingPriceRaw === '' || isset($errors['selling_price'])) {
+                    unset($errors['selling_price']);
+                    $sellingPriceRaw = number_format((float)$minOpt['price'], 2, '.', '');
+                    $data['selling_price'] = $sellingPriceRaw;
+                }
+                if ($regularPriceRaw === '' || isset($errors['regular_price'])) {
+                    unset($errors['regular_price']);
+                    $regularPriceRaw = $sellingPriceRaw;
+                    $data['regular_price'] = $regularPriceRaw;
+                }
+                if ($durationValueRaw === '' || isset($errors['duration_value'])) {
+                    unset($errors['duration_value']);
+                    $durationValueRaw = (string)$minOpt['duration_value'];
+                    $data['duration_value'] = $minOpt['duration_value'];
+                }
+                if ($durationUnit === '' || isset($errors['duration_unit'])) {
+                    unset($errors['duration_unit']);
+                    $unitMap = ['day' => 'days', 'week' => 'weeks', 'month' => 'months', 'year' => 'months'];
+                    $durationUnit = $unitMap[$minOpt['duration_unit']] ?? 'months';
+                    $data['duration_unit'] = $durationUnit;
+                }
+            }
+        }
 
         return [$errors, $data];
     }
@@ -753,6 +790,11 @@ class PackageService
                 if ($fid === false) {
                     throw new \RuntimeException('Feature insert failed: ' . json_encode($this->featureModel->errors()));
                 }
+            }
+
+            // Insert options sequentially
+            if (!empty($normalized['options'])) {
+                $this->savePackageOptions($packageId, $normalized['options']);
             }
 
             $db->transComplete();
@@ -976,6 +1018,11 @@ class PackageService
                 if ($fid === false) {
                     throw new \RuntimeException('Feature insert failed: ' . json_encode($this->featureModel->errors()));
                 }
+            }
+
+            // Options replacement
+            if (array_key_exists('options', $normalized)) {
+                $this->savePackageOptions($packageId, $normalized['options']);
             }
 
             $db->transComplete();
@@ -1575,6 +1622,11 @@ class PackageService
                 if ($fid===false) throw new \RuntimeException('Feature insert failed');
             }
 
+            // Options
+            if (!empty($normalized['options'])) {
+                $this->savePackageOptions($packageId, $normalized['options']);
+            }
+
             // Gallery
             $gSeq=1;
             foreach ($galleryFiles as $idx=>$gfile) {
@@ -1811,6 +1863,11 @@ class PackageService
                 if ($fid===false) throw new \RuntimeException('Feature insert failed');
             }
 
+            // Options
+            if (array_key_exists('options', $normalized)) {
+                $this->savePackageOptions($packageId, $normalized['options']);
+            }
+
             // Gallery: update retained, delete removed, insert new (preserve IDs, server-controlled order)
             // Re-validate map (already validated) but ensure no TOCTOU: re-fetch inside transaction? Use existingMap as of start, but check still
             $retainedIds = array_map('intval', $existingGalleryIds);
@@ -1887,5 +1944,235 @@ class PackageService
         }
     }
 
+    // ==================== DURATION & PRICING OPTIONS HELPERS ====================
 
+    public function validateOptions(array $optionsRaw): array
+    {
+        $errors = [];
+        $normalized = [];
+        $allowedUnits = ['day', 'week', 'month', 'year', 'days', 'weeks', 'months', 'years'];
+
+        $safeStr = static function($v): string {
+            if (is_array($v) || is_object($v)) return '';
+            if ($v === null) return '';
+            return trim((string)$v);
+        };
+
+        foreach ($optionsRaw as $idx => $opt) {
+            if (!is_array($opt)) continue;
+            $optErrors = [];
+            $name = $safeStr($opt['name'] ?? '');
+            $durValRaw = $safeStr($opt['duration_value'] ?? '');
+            $durUnit = strtolower($safeStr($opt['duration_unit'] ?? 'month'));
+            $priceRaw = $safeStr($opt['price'] ?? '');
+            $shortDesc = $safeStr($opt['short_description'] ?? '');
+            $isActive = isset($opt['is_active']) ? ($opt['is_active'] === '1' || $opt['is_active'] === 1 || $opt['is_active'] === 'on' ? 1 : 0) : 1;
+
+            if ($name === '') {
+                $optErrors['name'] = 'Option name is required.';
+            } elseif (mb_strlen($name) < 2 || mb_strlen($name) > 150) {
+                $optErrors['name'] = 'Option name must be between 2 and 150 characters.';
+            }
+
+            if ($durValRaw === '' || !ctype_digit($durValRaw) || (int)$durValRaw <= 0) {
+                $optErrors['duration_value'] = 'Duration value must be a positive integer.';
+            }
+
+            if (!in_array($durUnit, $allowedUnits, true)) {
+                $optErrors['duration_unit'] = 'Invalid duration unit.';
+            }
+
+            if ($priceRaw === '' || !preg_match('/^\d+(\.\d{1,2})?$/', $priceRaw) || \bccomp($priceRaw, '0', 2) <= 0) {
+                $optErrors['price'] = 'Price must be a valid positive amount.';
+            }
+
+            if (mb_strlen($shortDesc) > 300) {
+                $optErrors['short_description'] = 'Short description must not exceed 300 characters.';
+            }
+
+            // Features for this option
+            $featuresRaw = $opt['features'] ?? $opt['inclusions'] ?? [];
+            if (!is_array($featuresRaw)) $featuresRaw = [];
+            $features = [];
+            foreach ($featuresRaw as $f) {
+                $fText = $safeStr($f);
+                if ($fText !== '') {
+                    if (mb_strlen($fText) > 300) {
+                        $optErrors['features'] = 'Inclusion text must not exceed 300 characters.';
+                    } else {
+                        $features[] = $fText;
+                    }
+                }
+            }
+
+            if (!empty($optErrors)) {
+                $errors[$idx] = $optErrors;
+            }
+
+            $unitMap = [
+                'days' => 'day', 'day' => 'day',
+                'weeks' => 'week', 'week' => 'week',
+                'months' => 'month', 'month' => 'month',
+                'years' => 'year', 'year' => 'year',
+            ];
+            $normUnit = $unitMap[$durUnit] ?? 'month';
+
+            $normalized[] = [
+                'id'                => isset($opt['id']) && ctype_digit((string)$opt['id']) ? (int)$opt['id'] : null,
+                'name'              => $name,
+                'duration_value'    => (int)$durValRaw,
+                'duration_unit'     => $normUnit,
+                'price'             => $priceRaw,
+                'short_description' => $shortDesc !== '' ? $shortDesc : null,
+                'is_active'         => $isActive,
+                'sort_order'        => (int)($opt['sort_order'] ?? $idx),
+                'features'          => $features,
+            ];
+        }
+
+        return [$errors, $normalized];
+    }
+
+    public function savePackageOptions(int $packageId, array $options): void
+    {
+        $optionModel = new \App\Models\PackageOptionModel();
+        $optionFeatureModel = new \App\Models\PackageOptionFeatureModel();
+
+        // Fetch existing non-deleted options for this package
+        $existingOptions = $optionModel->where('package_id', $packageId)->findAll();
+        $existingIds = array_column($existingOptions, 'id');
+
+        if (!empty($existingIds)) {
+            // Delete option features for existing options
+            $optionFeatureModel->whereIn('package_option_id', $existingIds)->delete();
+            // Soft delete existing options
+            $optionModel->whereIn('id', $existingIds)->delete();
+        }
+
+        $sortOrder = 1;
+        foreach ($options as $opt) {
+            if (empty($opt['name'])) continue;
+
+            $durationUnit = strtolower(trim((string)($opt['duration_unit'] ?? 'month')));
+            $unitMap = [
+                'days' => 'day', 'day' => 'day',
+                'weeks' => 'week', 'week' => 'week',
+                'months' => 'month', 'month' => 'month',
+                'years' => 'year', 'year' => 'year',
+            ];
+            $normUnit = $unitMap[$durationUnit] ?? 'month';
+
+            $optData = [
+                'package_id'        => $packageId,
+                'name'              => trim((string)$opt['name']),
+                'duration_value'    => (int)($opt['duration_value'] ?? 1),
+                'duration_unit'     => $normUnit,
+                'price'             => number_format((float)($opt['price'] ?? 0), 2, '.', ''),
+                'short_description' => !empty($opt['short_description']) ? trim((string)$opt['short_description']) : null,
+                'sort_order'        => $sortOrder++,
+                'is_active'         => isset($opt['is_active']) ? (int)$opt['is_active'] : 1,
+            ];
+
+            $optionModel->skipValidation(true);
+            $optId = $optionModel->insert($optData, true);
+            if ($optId === false) {
+                throw new \RuntimeException('Failed to insert package option: ' . json_encode($optionModel->errors()));
+            }
+            $optId = (int)$optId;
+
+            // Insert option features
+            $featSeq = 1;
+            $features = $opt['features'] ?? [];
+            foreach ($features as $fText) {
+                $trimmed = trim((string)$fText);
+                if ($trimmed === '') continue;
+                $featData = [
+                    'package_option_id' => $optId,
+                    'feature_text'      => $trimmed,
+                    'sort_order'        => $featSeq++,
+                ];
+                $optionFeatureModel->skipValidation(true);
+                $optionFeatureModel->insert($featData);
+            }
+        }
+    }
+
+    public function getPackageOptions(int $packageId, bool $activeOnly = false): array
+    {
+        $optionModel = new \App\Models\PackageOptionModel();
+        $optionFeatureModel = new \App\Models\PackageOptionFeatureModel();
+
+        $builder = $optionModel->where('package_id', $packageId);
+        if ($activeOnly) {
+            $builder->where('is_active', 1);
+        }
+        $options = $builder->orderBy('sort_order', 'ASC')->orderBy('id', 'ASC')->findAll();
+
+        if (empty($options)) {
+            return [];
+        }
+
+        $optionIds = array_column($options, 'id');
+        $allFeatures = $optionFeatureModel
+            ->whereIn('package_option_id', $optionIds)
+            ->orderBy('sort_order', 'ASC')
+            ->orderBy('id', 'ASC')
+            ->findAll();
+
+        $featuresByOption = [];
+        foreach ($allFeatures as $feat) {
+            $optId = (int)$feat['package_option_id'];
+            $featuresByOption[$optId][] = $feat['feature_text'];
+        }
+
+        foreach ($options as &$opt) {
+            $optId = (int)$opt['id'];
+            $opt['features'] = $featuresByOption[$optId] ?? [];
+        }
+
+        return $options;
+    }
+
+    public function getOptionCounts(array $packageIds): array
+    {
+        if (empty($packageIds)) return [];
+        $optionModel = new \App\Models\PackageOptionModel();
+        $rows = $optionModel
+            ->select('package_id, COUNT(*) as cnt, MIN(price) as min_price')
+            ->whereIn('package_id', array_map('intval', $packageIds))
+            ->where('is_active', 1)
+            ->groupBy('package_id')
+            ->findAll();
+
+        $map = [];
+        foreach ($rows as $r) {
+            $map[(int)$r['package_id']] = [
+                'count'     => (int)$r['cnt'],
+                'min_price' => $r['min_price'] !== null ? (float)$r['min_price'] : null,
+            ];
+        }
+        foreach ($packageIds as $id) {
+            if (!isset($map[(int)$id])) {
+                $map[(int)$id] = ['count' => 0, 'min_price' => null];
+            }
+        }
+        return $map;
+    }
+
+    public static function formatOptionDuration(int $value, string $unit): string
+    {
+        $unit = strtolower(trim($unit));
+        $map = [
+            'day'   => $value === 1 ? 'Day' : 'Days',
+            'days'  => $value === 1 ? 'Day' : 'Days',
+            'week'  => $value === 1 ? 'Week' : 'Weeks',
+            'weeks' => $value === 1 ? 'Week' : 'Weeks',
+            'month' => $value === 1 ? 'Month' : 'Months',
+            'months'=> $value === 1 ? 'Month' : 'Months',
+            'year'  => $value === 1 ? 'Year' : 'Years',
+            'years' => $value === 1 ? 'Year' : 'Years',
+        ];
+        $label = $map[$unit] ?? ucfirst($unit);
+        return $value . ' ' . $label;
+    }
 }
