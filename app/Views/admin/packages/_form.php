@@ -45,6 +45,10 @@ if ($oldOptions === null) {
     $oldOptions = $options ?? [];
 }
 if (!is_array($oldOptions)) $oldOptions = [];
+
+$featuredImage = $pkg['featured_image'] ?? null;
+$hasFeaturedError = $hasError('featured_image');
+$hasGalleryError = $hasError('gallery_images');
 ?>
 
 <div class="pkg-create__layout">
