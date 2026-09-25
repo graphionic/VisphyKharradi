@@ -261,9 +261,14 @@ class PackageService
         $value = (int) $value;
         // Handle pluralization
         $map = [
+            'day'    => $value === 1 ? 'Day' : 'Days',
             'days'   => $value === 1 ? 'Day' : 'Days',
+            'week'   => $value === 1 ? 'Week' : 'Weeks',
             'weeks'  => $value === 1 ? 'Week' : 'Weeks',
+            'month'  => $value === 1 ? 'Month' : 'Months',
             'months' => $value === 1 ? 'Month' : 'Months',
+            'year'   => $value === 1 ? 'Year' : 'Years',
+            'years'  => $value === 1 ? 'Year' : 'Years',
         ];
         $label = $map[$unit] ?? ucfirst($unit);
         return $value . ' ' . $label;
