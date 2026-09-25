@@ -126,12 +126,8 @@ $canReorder = $filters['sort'] === 'display_order' && $filters['q'] === '' && $f
                         ?>
                         <tr data-package-id="<?= esc((string)$fid, 'attr') ?>" <?= $canReorder ? 'draggable="true"' : '' ?> style="<?= $canReorder ? 'cursor:grab;' : '' ?>">
                             <?php if ($canReorder): ?>
-                            <td style="text-align:center;">
-                                <span aria-hidden="true" style="cursor:grab; user-select:none;">&#x283F;</span>
-                                <div style="display:flex; gap:4px; justify-content:center; margin-top:4px;">
-                                    <button type="button" class="icon-btn icon-btn--sm" data-move-up aria-label="Move up"><svg width="12" height="12" viewBox="0 0 20 20" fill="none"><path d="M10 6l-5 5 1.4 1.4L10 7.8 13.6 10.4 15 9l-5-3Z" fill="currentColor"/></svg></button>
-                                    <button type="button" class="icon-btn icon-btn--sm" data-move-down aria-label="Move down"><svg width="12" height="12" viewBox="0 0 20 20" fill="none"><path d="M10 14l5-5-1.4-1.4L10 11.2 6.4 7.6 5 9l5 5Z" fill="currentColor"/></svg></button>
-                                </div>
+                            <td style="text-align:center; vertical-align:middle;">
+                                <span aria-hidden="true" title="Drag to reorder" style="cursor:grab; user-select:none; font-size:1.125rem; color:var(--color-text-muted); padding:4px;">&#x283F;</span>
                             </td>
                             <?php endif; ?>
                             <td>

@@ -53,7 +53,7 @@ class PackageModel extends Model
         'selling_price'  => 'required|decimal|greater_than[0]',
         'regular_price'  => 'permit_empty|decimal|greater_than[0]',
         'duration_value' => 'permit_empty|is_natural_no_zero',
-        'duration_unit'  => 'permit_empty|in_list[days,weeks,months]',
+        'duration_unit'  => 'permit_empty|in_list[day,days,week,weeks,month,months,year,years]',
         'badge'          => 'permit_empty|max_length[50]',
         'cta_label'      => 'required|max_length[50]',
         'google_form_url'=> 'permit_empty|valid_url|max_length[2048]',
