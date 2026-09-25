@@ -2,6 +2,8 @@
 
 <?= $this->section('content') ?>
 
+<!-- Ftpreneur Operations — Phase 1 Foundation Ready -->
+
 <!-- NAV -->
 <header class="nav">
   <a class="brand" href="#" aria-label="FTPRENEUR by Visphy Kharradi — home">
@@ -282,6 +284,156 @@
         </div>
       </article>
 
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION 03 — YOUR REALITY -->
+<section id="reality" class="reality" aria-labelledby="reality-title">
+  <div class="reality__container">
+
+    <!-- Editorial Chapter Header -->
+    <header class="reality__chapter-bar">
+      <div class="reality__chapter-id">
+        <span class="reality__chapter-num">03</span>
+        <span class="reality__chapter-slash">/</span>
+        <span class="reality__chapter-label">YOUR REALITY</span>
+      </div>
+      <div class="reality__chapter-divider" aria-hidden="true"></div>
+      <span class="reality__chapter-tag">BUILT AROUND YOU</span>
+    </header>
+
+    <!-- Asymmetric 40% / 60% Grid -->
+    <div class="reality__grid">
+
+      <!-- Left Column: Main Editorial Headline & Contextual Response -->
+      <div class="reality__left">
+
+        <h2 id="reality-title" class="reality__headline">
+          <span class="reality__headline-line">YOUR HEALTH IS <span class="reality__headline-accent">PERSONAL.</span></span>
+          <span class="reality__headline-line reality__headline-space">YOUR PLAN SHOULD</span>
+          <span class="reality__headline-line"><span class="reality__headline-accent">BE TOO.</span></span>
+        </h2>
+
+        <p class="reality__lead">
+          Your body, health condition, routine and goals are personal. Ftpreneur brings nutrition, strength and lifestyle together to support better health, stronger everyday habits and sustainable progress.
+        </p>
+
+        <!-- Dynamic Contextual Response Box -->
+        <div class="reality__response" aria-live="polite">
+          <span class="reality__response-meta">CONTEXTUAL FOCUS // <span id="reality-response-num" class="reality__response-meta-num">01</span></span>
+          <div class="reality__response-text-wrap">
+            <div class="reality__response-heading" id="reality-response-line1">NOT A CRASH DIET.</div>
+            <div class="reality__response-sub" id="reality-response-line2">PROGRESS BUILT TO LAST.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Interactive Concern Matrix (4 Editorial Rows) -->
+      <div class="reality__matrix" role="tablist" aria-label="Visitor Concern Areas">
+
+        <!-- Row 01 -->
+        <button type="button" 
+                class="reality__row reality__row--active" 
+                role="tab" 
+                aria-selected="true" 
+                aria-controls="reality-panel-1" 
+                id="reality-tab-1" 
+                data-row-index="1"
+                data-line1="NOT A CRASH DIET."
+                data-line2="PROGRESS BUILT TO LAST."
+                data-image="<?= base_url('assets/frontend/images/reality/reality-weight.webp') ?>"
+                data-label="01 / BODY">
+          <span class="reality__row-indicator" aria-hidden="true"></span>
+          <div class="reality__row-num">01</div>
+          <div class="reality__row-body">
+            <h3 class="reality__row-title">WEIGHT &amp; BODY COMPOSITION</h3>
+            <p class="reality__row-copy" id="reality-panel-1">Building healthier, sustainable progress.</p>
+          </div>
+          <div class="reality__row-action" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="reality__row-arrow"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </button>
+
+        <!-- Row 02 -->
+        <button type="button" 
+                class="reality__row" 
+                role="tab" 
+                aria-selected="false" 
+                aria-controls="reality-panel-2" 
+                id="reality-tab-2" 
+                data-row-index="2"
+                data-line1="BETTER HEALTH STARTS"
+                data-line2="WITH BETTER DAILY PATTERNS."
+                data-image="<?= base_url('assets/frontend/images/reality/reality-metabolic.webp') ?>"
+                data-label="02 / HEALTH">
+          <span class="reality__row-indicator" aria-hidden="true"></span>
+          <div class="reality__row-num">02</div>
+          <div class="reality__row-body">
+            <h3 class="reality__row-title">METABOLIC &amp; LIFESTYLE HEALTH</h3>
+            <p class="reality__row-copy" id="reality-panel-2">Improving everyday patterns that influence long-term health and metabolic well-being.</p>
+          </div>
+          <div class="reality__row-action" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="reality__row-arrow"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </button>
+
+        <!-- Row 03 -->
+        <button type="button" 
+                class="reality__row" 
+                role="tab" 
+                aria-selected="false" 
+                aria-controls="reality-panel-3" 
+                id="reality-tab-3" 
+                data-row-index="3"
+                data-line1="MOVE BETTER."
+                data-line2="BUILD CAPABILITY."
+                data-image="<?= base_url('assets/frontend/images/reality/reality-strength.webp') ?>"
+                data-label="03 / STRENGTH">
+          <span class="reality__row-indicator" aria-hidden="true"></span>
+          <div class="reality__row-num">03</div>
+          <div class="reality__row-body">
+            <h3 class="reality__row-title">STRENGTH, MOBILITY &amp; ENERGY</h3>
+            <p class="reality__row-copy" id="reality-panel-3">Building strength, movement capacity and everyday energy.</p>
+          </div>
+          <div class="reality__row-action" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="reality__row-arrow"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </button>
+
+        <!-- Row 04 -->
+        <button type="button" 
+                class="reality__row" 
+                role="tab" 
+                aria-selected="false" 
+                aria-controls="reality-panel-4" 
+                id="reality-tab-4" 
+                data-row-index="4"
+                data-line1="BETTER HABITS."
+                data-line2="BUILT FOR REAL LIFE."
+                data-image="<?= base_url('assets/frontend/images/reality/reality-nutrition.webp') ?>"
+                data-label="04 / NUTRITION">
+          <span class="reality__row-indicator" aria-hidden="true"></span>
+          <div class="reality__row-num">04</div>
+          <div class="reality__row-body">
+            <h3 class="reality__row-title">NUTRITION &amp; SUSTAINABLE HABITS</h3>
+            <p class="reality__row-copy" id="reality-panel-4">Making food, routine and lifestyle changes work together for the long term.</p>
+          </div>
+          <div class="reality__row-action" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="reality__row-arrow"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Floating Editorial Image Preview (Desktop Only) -->
+    <div class="reality__preview" id="reality-preview" aria-hidden="true">
+      <img src="" alt="" class="reality__preview-img" id="reality-preview-img" />
+      <span class="reality__preview-label" id="reality-preview-label">01 / BODY</span>
     </div>
 
   </div>

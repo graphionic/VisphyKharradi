@@ -8,7 +8,7 @@ use CodeIgniter\Database\Migration;
  * CreatePackageOptions
  *
  * Adds dynamic duration & pricing options for packages.
- * ZERO DATABASE FOREIGN KEYS — logical references only using indexed BIGINT UNSIGNED fields.
+ * ZERO DATABASE FK CONSTRAINTS — logical references only using indexed BIGINT UNSIGNED fields.
  */
 class CreatePackageOptions extends Migration
 {

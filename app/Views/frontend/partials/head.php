@@ -52,6 +52,7 @@ $robotsVal = esc($robots ?? 'index, follow');
 <link rel="stylesheet" href="<?= base_url('assets/frontend/css/fonts.css') ?>" />
 <link rel="stylesheet" href="<?= base_url('assets/frontend/css/hero.css') ?>" />
 <link rel="stylesheet" href="<?= base_url('assets/frontend/css/credibility.css?v=6.0') ?>" />
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/reality.css?v=1.0') ?>" />
 
 <!-- Production Frontend CSS -->
 <link rel="stylesheet" href="<?= base_url('assets/frontend/css/tokens.css?v=6.0') ?>">
