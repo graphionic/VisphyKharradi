@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>FTPRENEUR — Personalised health + disease management · Visphy Kharradi</title>
+  <meta name="description" content="A personalised approach to nutrition, strength and lifestyle — designed around your body, your health condition, your goals and everyday life. Led by Visphy Kharradi." />
+  <link rel="preload" href="assets/fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/visphy-cutout.webp" as="image" />
+  <link rel="stylesheet" href="assets/fonts.css" />
+  <link rel="stylesheet" href="hero.css" />
+  <script>document.documentElement.classList.replace("no-js", "js");</script>
+</head>
+<body>
+
+<!-- =====================================================
+     NAV
+     ===================================================== -->
+<header class="nav">
+  <a class="brand" href="#" aria-label="FTPRENEUR by Visphy Kharradi — home">
+    <span class="brand__mark" aria-hidden="true"></span>
+    <span class="brand__text">
+      <span class="brand__name">FTPRENEUR</span>
+      <span class="brand__by">BY VISPHY KHARRADI</span>
+    </span>
+  </a>
+  <nav class="nav__links" aria-label="Primary">
+    <a href="#about">About</a>
+    <a href="#approach">Approach</a>
+    <a href="#programs">Programs</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <a class="nav__cta" href="#start">
+    <span>Get started</span>
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" /></svg>
+  </a>
+  <button class="nav__menu" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="hero-title">
+
+    <!-- 01 · architectural grid -->
+    <div class="grid" aria-hidden="true"><span></span><span></span><span></span></div>
+
+    <!-- orbit system (frames Visphy) -->
+    <div class="layer" data-depth="-3" aria-hidden="true">
+      <div class="orbit">
+        <svg class="orbit__svg" viewBox="0 0 1000 1000">
+          <circle class="orbit__outer" cx="500" cy="500" r="499" />
+          <circle class="orbit__inner" cx="500" cy="500" r="420" />
+        </svg>
+        <span class="orbit__node"></span>
+        <span class="orbit__mint"></span>
+      </div>
+    </div>
+
+    <!-- ultramarine disc -->
+    <div class="layer" data-depth="-1.5" aria-hidden="true">
+      <div class="field-clip"><div class="field"><div class="field__light"></div></div></div>
+    </div>
+
+    <!-- marigold orbital accent -->
+    <div class="layer" data-depth="4" aria-hidden="true">
+      <span class="sun"></span>
+    </div>
+
+    <!-- YOU. (solid) — sits BEHIND Visphy -->
+    <div class="layer layer--you" data-depth="1.5">
+      <div class="you you--solid" aria-hidden="true"><span class="you__w">YOU</span><span class="you__dot">.</span></div>
+    </div>
+
+    <!-- Visphy -->
+    <div class="layer layer--portrait" data-depth="4">
+      <img class="portrait" src="assets/visphy-cutout.webp" width="660" height="1400"
+           alt="Visphy Kharradi, founder and coach of FTPRENEUR — black-and-white portrait" />
+    </div>
+
+    <!-- YOU. (outline) — drawn OVER Visphy, masked to his silhouette -->
+    <div class="layer layer--you-front" data-depth="1.5" aria-hidden="true">
+      <div class="you-front">
+        <div class="you you--line"><span class="you__w">YOU</span><span class="you__dot">.</span></div>
+      </div>
+    </div>
+
+    <!-- identity + disciplines, attached to the portrait -->
+    <div class="layer layer--meta" data-depth="2">
+      <div class="vname" aria-hidden="true">
+        <span class="vname__role">FOUNDER / COACH</span>
+        <span class="vname__name"><span class="vname__a">VISPHY</span><span class="vname__b">KHARRADI</span></span>
+      </div>
+
+      <ol class="pillars" aria-label="How the method works">
+        <li><a href="#nutrition"><span class="pillars__n">01</span><span class="pillars__w">Nutrition</span></a></li>
+        <li><a href="#strength"><span class="pillars__n">02</span><span class="pillars__w">Strength</span></a></li>
+        <li><a href="#lifestyle"><span class="pillars__n">03</span><span class="pillars__w">Lifestyle</span></a></li>
+      </ol>
+    </div>
+
+    <p class="motto" aria-hidden="true"><span>Manage better.</span> <span>Move better.</span> <span>Live better.</span></p>
+
+    <!-- message -->
+    <div class="layer layer--msg" data-depth="1">
+      <p class="eyebrow"><i aria-hidden="true"></i><span>Personalised health <b>+</b><br class="br-m" /> disease management</span></p>
+
+      <h1 id="hero-title" class="headline">
+        <span class="line"><span class="line__in">BUILT</span></span>
+        <span class="line"><span class="line__in">AROUND</span></span>
+        <span class="sr-only">you.</span>
+      </h1>
+
+      <div class="copy">
+        <p class="lede">
+          A personalised approach to nutrition, strength and lifestyle — designed around
+          <em>your body</em>, your <em>health condition</em>, your goals and everyday life.
+        </p>
+
+        <div class="ctas">
+          <a class="btn-primary" href="#programs">
+            <span class="btn-primary__label">Explore programs</span>
+            <span class="btn-primary__tile" aria-hidden="true">
+              <svg viewBox="0 0 20 20"><path d="M4 10h11M10.5 5.5 15 10l-4.5 4.5" /></svg>
+            </span>
+          </a>
+          <a class="btn-ghost" href="#approach">
+            <span class="btn-ghost__label">How it works</span>
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v9M4.5 8.5 8 12l3.5-3.5" /></svg>
+          </a>
+        </div>
+
+        <p class="note">Programs are personalised. Individual outcomes vary.</p>
+      </div>
+    </div>
+
+    <div class="scroll" aria-hidden="true"><span class="scroll__line"></span><span>SCROLL</span></div>
+
+    <div class="grain" aria-hidden="true"></div>
+  </section>
+</main>
+
+<script src="hero.js" defer></script>
+</body>
+</html>
