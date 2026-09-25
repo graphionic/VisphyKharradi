@@ -114,7 +114,8 @@ $canReorder = $filters['sort'] === 'display_order' && $filters['q'] === '' && $f
                         <?php
                             $fid = (int) $pkg['id'];
                             $featCount = $featureCounts[$fid] ?? 0;
-                            $optCount = $optionCounts[$fid] ?? 0;
+                            $optRaw = $optionCounts[$fid] ?? 0;
+                            $optCount = is_array($optRaw) ? (int)($optRaw['count'] ?? 0) : (int)$optRaw;
                             $badgeLabel = PackageService::badgeLabel($pkg['badge'] ?? null);
                             $priceSelling = PackageService::formatPrice($pkg['selling_price']);
                             $priceRegular = isset($pkg['regular_price']) && $pkg['regular_price'] !== null && (float)$pkg['regular_price'] > (float)$pkg['selling_price'] ? PackageService::formatPrice($pkg['regular_price']) : null;
