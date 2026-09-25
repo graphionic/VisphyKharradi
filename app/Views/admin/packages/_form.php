@@ -34,6 +34,12 @@ $getValue = function($field, $default = '') use ($pkg) {
     if (isset($pkg[$field])) return (string)$pkg[$field];
     return $default;
 };
+$oldFeatures = old('features');
+if ($oldFeatures === null) {
+    $oldFeatures = $features ?? $featuresList ?? [];
+}
+if (!is_array($oldFeatures)) $oldFeatures = [];
+
 $oldOptions = old('options');
 if ($oldOptions === null) {
     $oldOptions = $options ?? [];
