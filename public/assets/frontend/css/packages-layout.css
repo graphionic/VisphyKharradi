@@ -1,0 +1,73 @@
+/* Layout only: the selected concept supplies all card styles. */
+.package-display {
+  display: contents;
+  --package-columns: var(--package-grid-desktop, 3);
+  --package-slides: var(--package-carousel-desktop, 3);
+  --package-slide-gap: 24px;
+}
+.package-display .package-layout-track {
+  grid-template-columns: repeat(var(--package-columns), minmax(0, 1fr));
+}
+.package-display .package-layout-track > * { min-width: 0; }
+.package-display .package-layout-controls[hidden] { display: none; }
+.package-display .packages--carousel .package-layout-track {
+  display: grid;
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - (var(--package-slides) - 1) * var(--package-slide-gap)) / var(--package-slides));
+  gap: var(--package-slide-gap);
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: #2E47FF #E2E8F0;
+  padding-block: 6px 16px;
+}
+.package-display .packages--carousel .package-layout-track > * {
+  min-width: 0;
+  scroll-snap-align: start;
+}
+.package-display .packages--carousel :is(.pk__more, .pkg-more, .pv__more) { display: none; }
+.package-layout-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+  color: #141B31;
+}
+.package-layout-controls button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #D9DEEB;
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  font: 700 12px var(--f-body, 'Karla', sans-serif);
+  cursor: pointer;
+}
+.package-layout-controls button:hover:not(:disabled) { border-color: #2E47FF; color: #2E47FF; }
+.package-layout-controls button:disabled { opacity: .35; cursor: default; }
+.package-layout-progress { font: 500 11px var(--f-mono, 'JetBrains Mono', monospace); white-space: nowrap; }
+.package-layout-controls button:focus-visible,
+.package-display .package-layout-track:focus-visible { outline: 2px solid #2E47FF; outline-offset: 3px; }
+@media (max-width: 1024px) {
+  .package-display {
+    --package-columns: var(--package-grid-tablet, 2);
+    --package-slides: var(--package-carousel-tablet, 2);
+  }
+}
+@media (max-width: 640px) {
+  .package-display {
+    --package-columns: var(--package-grid-mobile, 1);
+    --package-slides: var(--package-carousel-mobile, 1);
+    --package-slide-gap: 16px;
+  }
+  .package-layout-controls button { padding-inline: 10px; }
+}

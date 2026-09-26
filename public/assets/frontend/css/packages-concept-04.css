@@ -261,7 +261,6 @@ body.is-locked-c4 { overflow: hidden !important; }
   letter-spacing: .16em;
   text-transform: uppercase;
 }
-.pv-card__tag b { font-weight: 700; }
 .pv-card__tag i {
   width: 8px;
   height: 8px;
@@ -284,22 +283,6 @@ body.is-locked-c4 { overflow: hidden !important; }
   line-height: 1;
   letter-spacing: .12em;
   text-transform: uppercase;
-}
-.pv-card__num {
-  position: absolute;
-  bottom: calc(var(--cut) - 6px);
-  z-index: 2;
-  right: 18px;
-  font-family: var(--f-display);
-  font-weight: 800;
-  font-size: clamp(96px, 8.4vw, 132px);
-  line-height: .76;
-  letter-spacing: -.06em;
-  font-variation-settings: "opsz" 96;
-  color: transparent;
-  -webkit-text-stroke: 1.5px rgba(255, 255, 255, .7);
-  transition: color .45s var(--ease), -webkit-text-stroke-color .45s, transform .5s var(--ease);
-  pointer-events: none;
 }
 .pv-card__demo {
   position: absolute;
@@ -384,7 +367,6 @@ body.is-locked-c4 { overflow: hidden !important; }
 
 /* Mirrored Rhythm: Checkerboard Diagonal Cut */
 .pv-card[data-side="r"] .pv-card__panel { clip-path: polygon(0 var(--cut), 100% 0, 100% 100%, 0 100%); }
-.pv-card[data-side="r"] .pv-card__num { right: auto; left: 16px; }
 .pv-card[data-side="r"] .pv-card__demo { left: auto; right: 22px; }
 
 /* CTA Bar */
@@ -441,11 +423,6 @@ body.is-locked-c4 { overflow: hidden !important; }
   transform: scale(1.035);
 }
 .pv-card:is(:hover, :has(:focus-visible), .is-selected) .pv-card__rail { width: 100%; }
-.pv-card:is(:hover, :has(:focus-visible), .is-selected) .pv-card__num {
-  color: rgba(255, 255, 255, .95);
-  -webkit-text-stroke-color: transparent;
-  transform: translateY(-4px);
-}
 .pv-card:is(:hover, :has(:focus-visible), .is-selected) .pv-card__cta {
   background-size: 100% 100%;
   color: #fff;

@@ -20,6 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const closeBtns = drawer.querySelectorAll('[data-pkg-close]');
   const prevBtn = drawer.querySelector('[data-pkg-prev]');
   const nextBtn = drawer.querySelector('[data-pkg-next]');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let closeTimer;
+  let drawerOpener;
 
   // Data map for drawer switching
   const packageDataMap = [];
@@ -38,13 +41,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
   let activeIndex = 0;
   const initialVisible = 6;
-  const step = 6;
   let currentlyVisible = Math.min(initialVisible, cards.length);
+
+  const layout = window.PackageLayout.create(sec, grid, updateGridVisibility);
 
   // Initialize grid visibility
   function updateGridVisibility() {
+    if (!layout.isCarousel()) {
+      currentlyVisible = Math.min(cards.length, layout.fillRows(currentlyVisible));
+    }
     cards.forEach((card, i) => {
-      if (i < currentlyVisible) {
+      if (layout.isCarousel() || i < currentlyVisible) {
         card.style.display = 'grid';
       } else {
         card.style.display = 'none';
@@ -62,13 +69,14 @@ document.addEventListener('DOMContentLoaded', function() {
         moreWrap.classList.remove('is-hidden');
       }
     }
+    layout.refresh();
   }
 
   updateGridVisibility();
 
   if (moreBtn) {
     moreBtn.addEventListener('click', function() {
-      currentlyVisible = Math.min(currentlyVisible + step, cards.length);
+      currentlyVisible = Math.min(currentlyVisible + layout.pageSize(), cards.length);
       updateGridVisibility();
     });
   }
@@ -155,14 +163,34 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Open animations & lock scroll
+    clearTimeout(closeTimer);
+    const wasOpen = drawer.classList.contains('is-active');
+    if (!wasOpen) drawerOpener = document.activeElement;
+    drawer.inert = false;
+    drawer.setAttribute('aria-hidden', 'false');
     drawer.classList.add('is-active');
     document.body.classList.add('is-pkg-drawer-locked');
+    if (!wasOpen && sheet) sheet.focus({ preventScroll: true });
+  }
+
+  function finishClose() {
+    if (drawer.classList.contains('is-active')) return;
+    clearTimeout(closeTimer);
+    document.body.classList.remove('is-pkg-drawer-locked');
   }
 
   function closeDrawer() {
+    if (!drawer.classList.contains('is-active')) return;
     drawer.classList.remove('is-active');
-    document.body.classList.remove('is-pkg-drawer-locked');
+    if (drawerOpener && drawerOpener.isConnected) drawerOpener.focus({ preventScroll: true });
+    drawer.inert = true;
+    drawer.setAttribute('aria-hidden', 'true');
+    closeTimer = setTimeout(finishClose, reducedMotion.matches ? 0 : 600);
   }
+
+  if (sheet) sheet.addEventListener('transitionend', function(event) {
+    if (event.target === sheet && event.propertyName === 'transform') finishClose();
+  });
 
   // Card click triggers
   cards.forEach((card, index) => {

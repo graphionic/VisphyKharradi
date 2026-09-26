@@ -387,15 +387,22 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .reality {
-    padding: 3rem 0;
+    padding: 64px 20px 72px;
   }
 
   .reality__chapter-bar {
-    gap: 0.75rem;
-    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
   }
+
+  .reality__chapter-divider { display: none; }
+
+  .reality__grid { gap: 32px; }
+
+  .reality__lead { margin-top: 20px; }
 
   .reality__chapter-tag {
     font-size: 0.68rem;
@@ -413,6 +420,7 @@
   }
 
   .reality__response {
+    margin-top: 24px;
     padding: 1rem 1.15rem;
   }
 }

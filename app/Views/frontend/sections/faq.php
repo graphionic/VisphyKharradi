@@ -3,15 +3,6 @@
      ========================================================================== -->
 <section class="faq-sec" id="faq" aria-labelledby="faq-title">
   
-  <!-- Background Technical Grid & Ghost Numerals -->
-  <div class="faq-bg-grid" aria-hidden="true">
-    <span class="faq-bg-line faq-bg-line--h1"></span>
-    <span class="faq-bg-line faq-bg-line--h2"></span>
-    <span class="faq-bg-line faq-bg-line--v1"></span>
-    <span class="faq-bg-line faq-bg-line--v2"></span>
-    <div class="faq-bg-ghost">06</div>
-  </div>
-
   <div class="faq-container">
     <div class="faq-grid">
       
@@ -45,7 +36,7 @@
 
       <!-- Right Column: Editorial Accordion List -->
       <div class="faq-right">
-        <div class="faq-accordion" role="tablist" aria-label="Frequently Asked Questions">
+        <div class="faq-accordion" role="group" aria-label="Frequently Asked Questions">
           
           <?php foreach ($faqs as $index => $faq): ?>
             <?php 

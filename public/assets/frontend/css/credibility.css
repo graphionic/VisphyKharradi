@@ -644,17 +644,22 @@
   }
 
   .credibility__nodes {
-    grid-template-columns: 1fr;
-    gap: 24px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 16px;
     margin-top: 28px;
   }
 
+  .credibility__node {
+    min-width: 0;
+    padding-left: 10px;
+  }
+
   .credibility__node-val {
-    font-size: 42px;
+    font-size: clamp(28px, 8vw, 42px);
   }
 
   .credibility__node-val--text {
-    font-size: 28px;
+    font-size: clamp(20px, 5.5vw, 28px);
   }
 }
 

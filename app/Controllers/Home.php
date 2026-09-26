@@ -62,6 +62,8 @@ class Home extends BaseController
             'meta_description' => "Transform your health through scientific nutrition, strength training, and lifestyle disease management with Visphy Kharradi.",
             'canonical_url'    => base_url('/'),
             'activeDesign'     => $activeDesign,
+            'packageLayouts'   => $settingModel->getPackageDisplayLayouts(),
+            'packageCounts'    => $settingModel->getPackageDisplayCounts(),
             'packages'         => $packages,
             'faqs'             => $faqs,
             'clientResults'    => $clientResults,

@@ -80,14 +80,6 @@ $totalPackages = count($packages);
                tabindex="0"
                data-package-json="<?= $jsonPayload ?>"
       >
-        <!-- Spine -->
-        <div class="pkg-card__spine" aria-hidden="true">
-          <span class="pkg-card__spine-fill"></span>
-          <span class="pkg-card__spine-txt">
-            <b><?= $numStr ?></b><i></i><span>EDITION</span>
-          </span>
-        </div>
-
         <!-- Main Card Content -->
         <div class="pkg-card__main">
           <figure class="pkg-card__cover">
@@ -99,7 +91,6 @@ $totalPackages = count($packages);
               />
             </div>
 
-            <span class="pkg-card__no" aria-hidden="true"><?= $numStr ?></span>
             <span class="pkg-card__wk" aria-hidden="true"><?= esc($duration) ?></span>
 
             <?php if ($isFeatured): ?>

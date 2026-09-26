@@ -108,10 +108,9 @@ $edProgramsJson = json_encode($edPrograms, JSON_HEX_TAG | JSON_HEX_APOS | JSON_H
     <div class="pv-card__media">
       <img class="pv-card__img" alt="" loading="lazy" decoding="async" />
       <span class="pv-card__rail" aria-hidden="true"></span>
-      <p class="pv-card__tag"><b data-f="number">01</b><i aria-hidden="true"></i><span data-f="category">Personalised</span></p>
+      <p class="pv-card__tag"><i aria-hidden="true"></i><span data-f="category">Personalised</span></p>
       <p class="pv-card__sig"><i aria-hidden="true"></i><span data-f="featuredLabel">Signature Program</span></p>
       <span class="pv-card__wk" aria-hidden="true"><b data-f="durationWeeks">12</b> wk</span>
-      <span class="pv-card__num" data-f="number" aria-hidden="true">01</span>
     </div>
     <div class="pv-card__panel">
       <h3 class="pv-card__name" data-f="name">Program Name</h3>

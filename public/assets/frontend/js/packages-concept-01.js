@@ -7,7 +7,6 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     var DATA = window.PK_PROGRAMS || [];
-    var STEP = 6;
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     var grid = document.querySelector(".pk__grid");
@@ -19,6 +18,8 @@
     var progress = document.querySelector(".pk__progress");
 
     if (!grid || !DATA || !DATA.length) return;
+
+    var layout = window.PackageLayout.create(document.getElementById('programs'), grid, reset);
 
     function pad(n) { return (n < 10 ? "0" : "") + n; }
     function inr(n) { return "₹" + Number(n).toLocaleString("en-IN"); }
@@ -71,19 +72,19 @@
     function card(p, k) {
       var isFeatured = p.featured;
       var accent = p.accent || (isFeatured ? "ultra" : (k % 3 === 0 ? "ultra" : (k % 3 === 1 ? "mint" : "marigold")));
-      var numStr = pad(p.n);
+      // Stable palette rhythm follows package order, including after filtering.
+      var tone = ['ultra', 'mint', 'sky', 'white', 'mint', 'sky', 'white', 'ink'][(p.n - 1) % 8];
       var weeks = p.weeks || 12;
 
       return '<li class="pk__cell" style="--k:' + k + '">' +
-        '<article class="pk-card' + (isFeatured ? " is-featured" : "") + '" data-accent="' + accent + '" data-n="' + p.n + '" data-slug="' + esc(p.slug) + '">' +
+        '<article class="pk-card' + (isFeatured ? " is-featured" : "") + '" data-accent="' + accent + '" data-tone="' + tone + '" data-n="' + p.n + '" data-slug="' + esc(p.slug) + '">' +
           (isFeatured ? '<span class="pk-card__edge" aria-hidden="true"></span>' : "") +
           '<div class="pk-card__top">' +
             (isFeatured ? '<span class="pk-card__sig">Signature program</span>'
-                        : '<span class="pk-card__prog">Program // <b>' + numStr + '</b></span>') +
+                        : '<span class="pk-card__prog">Personalised program</span>') +
             '<span class="pk-card__dur">' + weeks + ' wk</span>' +
           '</div>' +
           '<p class="pk-card__cat"><i aria-hidden="true"></i>' + (isFeatured ? "Recommended start · " : "") + esc(p.category || "Personalised") + '</p>' +
-          '<span class="pk-card__num" aria-hidden="true">' + numStr + '</span>' +
           '<h3 class="pk-card__name"><button class="pk-card__open" type="button" aria-haspopup="dialog" aria-controls="pk-drawer" data-n="' + p.n + '">' + esc(p.name) + '</button></h3>' +
           '<p class="pk-card__purpose">' + esc(p.purpose || p.short_description || "") + '</p>' +
           '<div class="pk-card__track" aria-hidden="true">' + ticks(weeks) + '</div>' +
@@ -112,12 +113,14 @@
         });
       }
       sync();
+      layout.refresh();
       return fresh;
     }
 
     function reset() {
       grid.innerHTML = ""; shown = 0;
-      renderTo(Math.min(STEP, list.length), true);
+      renderTo(layout.isCarousel() ? list.length : Math.min(layout.pageSize(), list.length), !layout.isCarousel());
+      layout.reset();
     }
 
     function sync() {
@@ -130,29 +133,29 @@
       }
       if (moreBtn) {
         var left = list.length - shown;
-        moreBtn.hidden = list.length <= STEP;
+        moreBtn.hidden = list.length <= layout.pageSize();
         moreBtn.classList.toggle("is-less", left === 0);
         if (moreT) moreT.textContent = left === 0 ? "Show less" : "Show more programs";
-        moreBtn.setAttribute("aria-label", left === 0 ? "Show fewer programs" : "Show " + Math.min(STEP, left) + " more programs");
+        moreBtn.setAttribute("aria-label", left === 0 ? "Show fewer programs" : "Show " + Math.min(layout.pageSize(), left) + " more programs");
       }
     }
 
     if (moreBtn) {
       moreBtn.addEventListener("click", function () {
         if (shown < list.length) {
-          var fresh = renderTo(Math.min(shown + STEP, list.length), true);
+          var fresh = renderTo(Math.min(shown + layout.pageSize(), list.length), true);
           var b = fresh[0] && fresh[0].querySelector(".pk-card__open");
           if (b) b.focus({ preventScroll: true });
         } else {
-          while (grid.children.length > STEP) grid.removeChild(grid.lastElementChild);
-          shown = STEP; sync();
+          while (grid.children.length > layout.pageSize()) grid.removeChild(grid.lastElementChild);
+          shown = layout.pageSize(); sync();
           var sec = document.getElementById("programs");
           if (sec) sec.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
         }
       });
     }
 
-    renderTo(Math.min(STEP, list.length), false);
+    renderTo(layout.isCarousel() ? list.length : Math.min(layout.pageSize(), list.length), false);
 
     /* =========================================================
        DRAWER INTERACTIONS & POPULATION
@@ -436,7 +439,7 @@
       var pMatch = DATA.filter(function (x) { return x.slug === m[1]; })[0];
       if (pMatch) {
         var idx = list.indexOf(pMatch);
-        if (idx >= shown) renderTo(Math.min(list.length, Math.ceil((idx + 1) / STEP) * STEP), false);
+        if (idx >= shown) renderTo(Math.min(list.length, Math.ceil((idx + 1) / layout.pageSize()) * layout.pageSize()), false);
         var targetBtn = grid.querySelector('.pk-card__open[data-n="' + pMatch.n + '"]');
         open(pMatch, targetBtn);
       }

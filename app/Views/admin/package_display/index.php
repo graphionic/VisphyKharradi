@@ -156,18 +156,60 @@
             <?php endforeach; ?>
         </div>
 
+        <section class="package-layout-settings" aria-labelledby="package-layout-title">
+            <h2 id="package-layout-title">Layout by device</h2>
+            <p>Choose how cards are arranged. The selected concept and package card design stay the same.</p>
+            <div class="package-layout-settings__grid">
+                <?php foreach (['desktop' => 'Desktop · above 1024px', 'tablet' => 'Tablet · 641–1024px', 'mobile' => 'Mobile · up to 640px'] as $device => $label): ?>
+                    <?php $selectedLayout = $currentLayouts[$device] ?? \App\Models\SettingModel::DEFAULT_PACKAGE_LAYOUTS[$device]; ?>
+                    <fieldset class="package-device" data-device="<?= esc($device) ?>">
+                        <legend><?= esc($label) ?></legend>
+                        <span class="package-device__label">Layout</span>
+                        <?php foreach (['grid' => 'Grid', 'carousel' => 'Carousel'] as $value => $name): ?>
+                            <label>
+                                <input type="radio" name="package_layout_<?= esc($device) ?>" value="<?= esc($value) ?>"
+                                    <?= $selectedLayout === $value ? 'checked' : '' ?> required>
+                                <?= esc($name) ?>
+                            </label>
+                        <?php endforeach; ?>
+                        <?php foreach (['grid' => 'Columns', 'carousel' => 'Slides per view'] as $mode => $countLabel): ?>
+                            <?php
+                            $count = $currentCounts[$mode][$device] ?? \App\Models\SettingModel::DEFAULT_PACKAGE_COUNTS[$device];
+                            $max = \App\Models\SettingModel::PACKAGE_DEVICE_LIMITS[$device];
+                            $inputId = 'package-count-' . $mode . '-' . $device;
+                            ?>
+                            <div class="package-device__count" data-count-mode="<?= esc($mode) ?>" <?= $mode !== $selectedLayout ? 'hidden' : '' ?>>
+                                <label class="package-device__label" for="<?= esc($inputId) ?>"><?= esc($countLabel) ?></label>
+                                <div class="package-stepper" data-stepper>
+                                    <button type="button" data-step="-1" aria-label="<?= esc('Decrease ' . $device . ' ' . strtolower($countLabel), 'attr') ?>" aria-controls="<?= esc($inputId) ?>" <?= $count <= 1 ? 'disabled' : '' ?>>−</button>
+                                    <input type="text" readonly inputmode="numeric" role="spinbutton"
+                                        id="<?= esc($inputId) ?>" name="package_count_<?= esc($mode . '_' . $device) ?>"
+                                        value="<?= (int) $count ?>" aria-valuenow="<?= (int) $count ?>"
+                                        aria-valuemin="1" aria-valuemax="<?= (int) $max ?>"
+                                        aria-label="<?= esc($device . ' ' . strtolower($countLabel), 'attr') ?>">
+                                    <button type="button" data-step="1" aria-label="<?= esc('Increase ' . $device . ' ' . strtolower($countLabel), 'attr') ?>" aria-controls="<?= esc($inputId) ?>" <?= $count >= $max ? 'disabled' : '' ?>>+</button>
+                                </div>
+                                <span class="package-device__range">1–<?= (int) $max ?> cards</span>
+                            </div>
+                        <?php endforeach; ?>
+                    </fieldset>
+                <?php endforeach; ?>
+            </div>
+            <p>Grid keeps Show More. Carousel supports swipe and navigation through all packages, with no autoplay.</p>
+        </section>
+
         <!-- Sticky Action Bar -->
         <div class="package-display-actions">
             <div class="package-display-actions__inner">
                 <div class="package-display-actions__hint">
-                    Changes apply immediately to public website routing once saved.
+                    Save to apply this design, device layouts and card counts to the website.
                 </div>
                 <button type="submit" class="btn btn--primary btn--lg">
                     <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                         <path d="M14.5 3H5.5C4.11929 3 3 4.11929 3 5.5V14.5C3 15.8807 4.11929 17 5.5 17H14.5C15.8807 17 17 15.8807 17 14.5V5.5C17 4.11929 15.8807 3 14.5 3Z" stroke="currentColor" stroke-width="1.5"/>
                         <path d="M7 10L9 12L13 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    Save Design
+                    Save Display Settings
                 </button>
             </div>
         </div>
@@ -176,6 +218,24 @@
 
 <style>
 /* Package Display Admin Component Styles */
+.package-layout-settings { padding: var(--space-6); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-card); }
+.package-layout-settings p { color: var(--color-text-muted); margin: 12px 0; }
+.package-layout-settings__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+.package-layout-settings fieldset { margin: 0; padding: 16px; border: 1px solid var(--color-border); border-radius: var(--radius-md); min-width: 0; }
+.package-layout-settings legend { font-weight: 700; }
+.package-layout-settings label { display: inline-flex; align-items: center; gap: 6px; margin-right: 16px; cursor: pointer; }
+
+.package-layout-settings .package-device__label { display: block; margin: 0 0 10px; font-size: var(--text-sm); font-weight: 600; color: var(--color-text); }
+.package-device__count { margin-top: 22px; }
+.package-device__count[hidden] { display: none; }
+.package-device__range { display: block; margin-top: 8px; font-size: var(--text-xs); color: var(--color-text-muted); }
+.package-stepper { display: inline-flex; align-items: center; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-canvas); overflow: hidden; }
+.package-stepper button { display: grid; place-items: center; width: 42px; height: 42px; padding: 0; border: 0; background: transparent; color: var(--color-text); font-size: 22px; cursor: pointer; }
+.package-stepper button:hover:not(:disabled) { background: var(--color-surface-selected); color: var(--color-primary); }
+.package-stepper button:disabled { opacity: .3; cursor: default; }
+.package-stepper input { width: 52px; height: 42px; min-width: 0; padding: 0; border: 0; border-inline: 1px solid var(--color-border); border-radius: 0; background: var(--color-surface); color: var(--color-text); text-align: center; font: inherit; font-weight: 700; }
+.package-stepper :is(button, input):focus-visible { outline: 2px solid var(--color-primary); outline-offset: -3px; }
+
 .package-display-page {
     display: flex;
     flex-direction: column;
@@ -555,6 +615,45 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.package-device').forEach(device => {
+        function syncLayout() {
+            const selected = device.querySelector('input[type="radio"]:checked');
+            device.querySelectorAll('[data-count-mode]').forEach(control => {
+                control.hidden = selected && control.dataset.countMode !== selected.value;
+            });
+        }
+        device.querySelectorAll('input[type="radio"]').forEach(radio => radio.addEventListener('change', syncLayout));
+        syncLayout();
+        device.querySelectorAll('[data-stepper]').forEach(stepper => {
+            const input = stepper.querySelector('input');
+            const minimum = Number(input.getAttribute('aria-valuemin'));
+            const maximum = Number(input.getAttribute('aria-valuemax'));
+            const decrease = stepper.querySelector('[data-step="-1"]');
+            const increase = stepper.querySelector('[data-step="1"]');
+            function setValue(value) {
+                const next = Math.max(minimum, Math.min(maximum, value));
+                input.value = next;
+                input.setAttribute('aria-valuenow', next);
+                decrease.disabled = next === minimum;
+                increase.disabled = next === maximum;
+            }
+            stepper.querySelectorAll('button').forEach(button => {
+                button.addEventListener('click', () => setValue(Number(input.value) + Number(button.dataset.step)));
+            });
+            input.addEventListener('keydown', event => {
+                const changes = {ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1};
+                if (Object.prototype.hasOwnProperty.call(changes, event.key)) {
+                    event.preventDefault();
+                    setValue(Number(input.value) + changes[event.key]);
+                } else if (event.key === 'Home' || event.key === 'End') {
+                    event.preventDefault();
+                    setValue(event.key === 'Home' ? minimum : maximum);
+                }
+            });
+            setValue(Number(input.value));
+        });
+    });
+
     const cards = document.querySelectorAll('.package-card');
     cards.forEach(card => {
         card.addEventListener('click', function() {

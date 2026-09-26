@@ -7,7 +7,6 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     var PROGRAMS = window.ED_PROGRAMS || [];
-    var PAGE = 6;
     var ACCENT = { Weight: 'ultra', Lifestyle: 'ultra', Metabolic: 'mint', Nutrition: 'mint', Strength: 'marigold', Complete: 'ink' };
 
     var root = document.querySelector('.pv-sec-c4');
@@ -27,8 +26,9 @@
     var inr = function (n) { return '₹' + Number(n).toLocaleString('en-IN'); };
     var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-    var state = { filter: 'All', shown: PAGE };
+    var state = { filter: 'All', shown: 6 };
     var cards = {};
+    var layout = window.PackageLayout.create(root, grid, function () { render(); });
 
     /* ---------- Category Filter Buttons ---------- */
     var rawCats = ['All'];
@@ -68,7 +68,7 @@
     function setFilter(f) {
       if (f === state.filter) return;
       state.filter = f;
-      state.shown = PAGE;
+      state.shown = layout.pageSize();
       if (filtersEl) {
         filtersEl.querySelectorAll('.pv__filter').forEach(function (b) {
           var on = b.dataset.f === f;
@@ -147,17 +147,22 @@
     }
 
     function render(animFrom) {
-      var items = list(), vis = items.slice(0, state.shown);
+      var items = list();
+      if (!layout.isCarousel()) state.shown = Math.min(items.length, layout.fillRows(state.shown));
+      var vis = layout.isCarousel() ? items : items.slice(0, state.shown);
       grid.innerHTML = '';
       vis.forEach(function (p, i) {
         var el = cards[p.slug] || (cards[p.slug] = build(p));
         grid.appendChild(el);
       });
       rhythm();
+      layout.reset();
 
       var n = vis.length, t = items.length;
-      if (status) status.innerHTML = 'Showing <b>' + pad(n) + '</b> of ' + pad(t);
-      if (more) more.hidden = t <= PAGE;
+      if (status) status.innerHTML = layout.isCarousel()
+        ? 'Active editions: <b>' + pad(t) + '</b>'
+        : 'Showing <b>' + pad(n) + '</b> of ' + pad(t);
+      if (more) more.hidden = t <= layout.pageSize();
 
       var countEl = root.querySelector('.pv__more-count');
       if (countEl) countEl.innerHTML = '<b>' + pad(n) + '</b> / ' + pad(t);
@@ -170,7 +175,7 @@
         moreBtn.classList.toggle('is-less', done);
         var lbl = root.querySelector('.pv__more-label');
         if (lbl) lbl.textContent = done ? 'Show fewer programs' : 'Show more programs';
-        moreBtn.setAttribute('aria-label', done ? 'Show fewer programs' : 'Show ' + Math.min(PAGE, t - n) + ' more programs');
+        moreBtn.setAttribute('aria-label', done ? 'Show fewer programs' : 'Show ' + Math.min(layout.pageSize(), t - n) + ' more programs');
       }
     }
 
@@ -178,13 +183,13 @@
       moreBtn.addEventListener('click', function () {
         var t = list().length;
         if (state.shown >= t) {
-          state.shown = PAGE;
+          state.shown = layout.pageSize();
           render();
           root.scrollIntoView({ behavior: reduced.matches ? 'auto' : 'smooth', block: 'start' });
           return;
         }
         var from = state.shown;
-        state.shown = Math.min(t, state.shown + PAGE);
+        state.shown = Math.min(t, state.shown + layout.pageSize());
         render(from);
       });
     }
@@ -318,7 +323,7 @@
     }
 
     function order() {
-      var o = list().slice(0, Math.max(state.shown, 1));
+      var o = layout.isCarousel() ? list() : list().slice(0, Math.max(state.shown, 1));
       return o.length ? o : PROGRAMS;
     }
 

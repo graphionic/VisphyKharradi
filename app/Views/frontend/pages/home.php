@@ -28,52 +28,55 @@
   <!-- 01 · architectural grid -->
   <div class="grid" aria-hidden="true"><span></span><span></span><span></span></div>
 
-  <!-- orbit system (frames Visphy) -->
-  <div class="layer" data-depth="-3" aria-hidden="true">
-    <div class="orbit">
-      <svg class="orbit__svg" viewBox="0 0 1000 1000">
-        <circle class="orbit__outer" cx="500" cy="500" r="499" />
-        <circle class="orbit__inner" cx="500" cy="500" r="420" />
-      </svg>
-      <span class="orbit__node"></span>
-      <span class="orbit__mint"></span>
-    </div>
-  </div>
-
-  <!-- ultramarine disc -->
-  <div class="layer" data-depth="-1.5" aria-hidden="true">
-    <div class="field-clip"><div class="field"><div class="field__light"></div></div></div>
-  </div>
-
-  <!-- marigold orbital accent -->
-  <div class="layer" data-depth="4" aria-hidden="true">
-    <span class="sun"></span>
-  </div>
-
   <!-- PEOPLE. (solid) — sits BEHIND Visphy -->
   <div class="layer layer--you" data-depth="1.5">
     <div class="you you--solid" aria-hidden="true"><span class="you__w">PEOPLE</span><span class="you__dot">.</span></div>
   </div>
 
-  <!-- Visphy -->
-  <div class="layer layer--portrait" data-depth="4">
-    <img class="portrait" src="<?= base_url('assets/frontend/images/visphy-cutout.webp') ?>" width="660" height="1400"
-         alt="Visphy Kharradi, founder and coach of FTPRENEUR — black-and-white portrait" />
-  </div>
-
-  <!-- PEOPLE. (outline) — drawn OVER Visphy, masked to his silhouette -->
-  <div class="layer layer--you-front" data-depth="1.5" aria-hidden="true">
-    <div class="you-front">
-      <div class="you you--line"><span class="you__w">PEOPLE</span><span class="you__dot">.</span></div>
+  <div class="hero__visual">
+    <!-- orbit system (frames Visphy) -->
+    <div class="layer" data-depth="-3" aria-hidden="true">
+      <div class="orbit">
+        <svg class="orbit__svg" viewBox="0 0 1000 1000">
+          <circle class="orbit__outer" cx="500" cy="500" r="499" />
+          <circle class="orbit__inner" cx="500" cy="500" r="420" />
+        </svg>
+        <span class="orbit__node"></span>
+        <span class="orbit__mint"></span>
+      </div>
     </div>
-  </div>
 
-  <!-- identity + disciplines, attached to the portrait -->
-  <div class="layer layer--meta" data-depth="2">
-    <div class="vname" aria-hidden="true">
-      <span class="vname__role">FOUNDER / COACH</span>
-      <span class="vname__name"><span class="vname__a">VISPHY</span><span class="vname__b">KHARRADI</span></span>
+    <!-- ultramarine disc -->
+    <div class="layer" data-depth="-1.5" aria-hidden="true">
+      <div class="field-clip"><div class="field"><div class="field__light"></div></div></div>
     </div>
+
+    <!-- marigold orbital accent -->
+    <div class="layer" data-depth="4" aria-hidden="true">
+      <span class="sun"></span>
+    </div>
+
+    <!-- Visphy -->
+    <div class="layer layer--portrait" data-depth="4">
+      <img class="portrait" src="<?= base_url('assets/frontend/images/visphy-cutout.webp') ?>" width="660" height="1400"
+           alt="Visphy Kharradi, founder and coach of FTPRENEUR — black-and-white portrait" />
+    </div>
+
+    <!-- PEOPLE. (outline) — drawn OVER Visphy, masked to his silhouette -->
+    <div class="layer layer--you-front" data-depth="1.5" aria-hidden="true">
+      <div class="you-front">
+        <div class="you you--line"><span class="you__w">PEOPLE</span><span class="you__dot">.</span></div>
+      </div>
+    </div>
+
+    <!-- identity + disciplines, attached to the portrait -->
+    <div class="layer layer--meta" data-depth="2">
+      <div class="vname" aria-hidden="true">
+        <span class="vname__role">FOUNDER / COACH</span>
+        <span class="vname__name"><span class="vname__a">VISPHY</span><span class="vname__b">KHARRADI</span></span>
+      </div>
+    </div>
+
   </div>
 
   <!-- message -->
@@ -109,8 +112,6 @@
           <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v9M4.5 8.5 8 12l3.5-3.5" /></svg>
         </a>
       </div>
-
-      <p class="note">Programs are personalised. Individual outcomes vary.</p>
 
       <!-- Editorial animated loop element (lower-left horizontal) -->
       <div class="editorial-loop" aria-hidden="true">
@@ -453,5 +454,8 @@
 <?php if (!empty($faqs)): ?>
   <?= $this->include('frontend/sections/faq') ?>
 <?php endif; ?>
+
+<!-- FOOTER — READY WHEN YOU ARE -->
+<?= $this->include('frontend/sections/footer') ?>
 
 <?= $this->endSection() ?>

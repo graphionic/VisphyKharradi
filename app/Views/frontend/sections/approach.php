@@ -3,15 +3,6 @@
      ========================================================================== -->
 <section class="approach-sec" id="approach" aria-labelledby="approach-title">
   
-  <!-- Background Technical Grid & Ghost Numerals -->
-  <div class="approach-bg-grid" aria-hidden="true">
-    <span class="approach-bg-line approach-bg-line--h1"></span>
-    <span class="approach-bg-line approach-bg-line--h2"></span>
-    <span class="approach-bg-line approach-bg-line--v1"></span>
-    <span class="approach-bg-line approach-bg-line--v2"></span>
-    <div class="approach-bg-ghost">05</div>
-  </div>
-
   <div class="approach-container">
     
     <!-- Compact Conversion Bridge & Action Call -->
@@ -19,7 +10,7 @@
       <div class="approach-conversion-box">
         <div class="approach-conversion-left">
           <h2 class="approach-conversion-title" id="approach-title">
-            YOUR HEALTH ISN'T GENERIC.<br>
+            YOUR HEALTH ISN'T GENERIC.
             <span class="text-accent">YOUR NEXT STEP SHOULDN'T BE EITHER.</span>
           </h2>
           <div class="approach-trust-pills">
