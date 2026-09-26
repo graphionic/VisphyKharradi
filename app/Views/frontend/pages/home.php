@@ -445,7 +445,11 @@
 <!-- SECTION 05 — THE APPROACH -->
 <?= $this->include('frontend/sections/approach') ?>
 
-<!-- SECTION 06 — DYNAMIC FAQ SYSTEM -->
+<!-- SECTION 06 — CLIENT RESULTS / REAL PROGRESS -->
+<?= $this->include('frontend/sections/client_results') ?>
+<?= $this->include('frontend/sections/client_results_drawer') ?>
+
+<!-- SECTION 07 — DYNAMIC FAQ SYSTEM -->
 <?php if (!empty($faqs)): ?>
   <?= $this->include('frontend/sections/faq') ?>
 <?php endif; ?>

@@ -69,6 +69,10 @@ $routes->get('admin/client-results/(:num)/reports/(:num)/file', 'Admin\ClientRes
 // Admin Proof Preview — Phase 07F
 $routes->get('admin/client-results/(:num)/preview', 'Admin\ClientResultController::preview/$1', ['filter' => 'adminAuth']);
 
+// Public Client Results & Report Streaming — Phase 09A
+$routes->get('client-results/(:num)/detail', 'Home::resultDetail/$1');
+$routes->get('client-results/report/stream/(:num)', 'Home::streamPublicReport/$1');
+
 // UI Preview — dev only, authenticated (Phase 4)
 $routes->get('admin/ui-preview', 'Admin\UiPreviewController::index', ['filter' => 'adminAuth']);
 

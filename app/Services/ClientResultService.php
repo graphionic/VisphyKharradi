@@ -1753,6 +1753,168 @@ class ClientResultService
             }
         }
     }
+
+    /**
+     * Get full public Client Result details by ID for the landing page bottom drawer.
+     * Includes full_story, public metrics, public media, and public reports metadata.
+     * Excludes all private child evidence.
+     */
+    public function getFullClientResultForPublic(int $id): ?array
+    {
+        if ($id <= 0) return null;
+
+        $result = $this->resultModel
+            ->where('id', $id)
+            ->where('is_active', 1)
+            ->where('deleted_at IS NULL', null, false)
+            ->first();
+
+        if (!$result) {
+            return null;
+        }
+
+        // 1. Fetch public focus areas
+        $focusAreas = $this->focusAreaModel
+            ->where('client_result_id', $id)
+            ->orderBy('display_order', 'ASC')
+            ->orderBy('id', 'ASC')
+            ->findAll();
+
+        $result['focus_areas'] = array_column($focusAreas, 'label');
+
+        // 2. Fetch PUBLIC metrics ONLY
+        $metrics = $this->metricModel
+            ->where('client_result_id', $id)
+            ->where('is_public', 1)
+            ->orderBy('display_order', 'ASC')
+            ->orderBy('id', 'ASC')
+            ->findAll();
+
+        $result['metrics'] = array_map(function ($m) {
+            return [
+                'id'           => (int) $m['id'],
+                'metric_name'  => $m['metric_name'],
+                'before_value' => $m['before_value'],
+                'after_value'  => $m['after_value'],
+                'unit'         => $m['unit'],
+                'context'      => $m['context'],
+            ];
+        }, $metrics);
+
+        // 3. Fetch PUBLIC media ONLY & categorize by type
+        $mediaList = $this->mediaModel
+            ->where('client_result_id', $id)
+            ->where('is_public', 1)
+            ->orderBy('display_order', 'ASC')
+            ->orderBy('id', 'ASC')
+            ->findAll();
+
+        $beforeAfter = [];
+        $transformationGallery = [];
+        $clientStoryGallery = [];
+
+        foreach ($mediaList as $med) {
+            $item = [
+                'id'          => (int) $med['id'],
+                'media_type'  => $med['media_type'],
+                'file_path'   => $med['file_path'],
+                'caption'     => $med['caption'],
+                'event_date'  => $med['event_date'],
+                'label_type'  => $med['label_type'],
+            ];
+
+            if ($med['media_type'] === 'before_after') {
+                $beforeAfter[] = $item;
+            } elseif ($med['media_type'] === 'transformation_gallery') {
+                $transformationGallery[] = $item;
+            } elseif ($med['media_type'] === 'client_story_gallery') {
+                $clientStoryGallery[] = $item;
+            }
+        }
+
+        $result['before_after']          = $beforeAfter;
+        $result['transformation_gallery'] = $transformationGallery;
+        $result['client_story_gallery']   = $clientStoryGallery;
+
+        // 4. Fetch PUBLIC reports metadata ONLY (NO file paths)
+        $reports = $this->reportModel
+            ->where('client_result_id', $id)
+            ->where('is_public', 1)
+            ->orderBy('display_order', 'ASC')
+            ->orderBy('id', 'ASC')
+            ->findAll();
+
+        $result['reports'] = array_map(function ($r) {
+            return [
+                'id'           => (int) $r['id'],
+                'report_title' => $r['report_title'],
+                'report_type'  => $r['report_type'],
+                'report_date'  => $r['report_date'],
+                'file_mime'    => $r['file_mime'],
+                'description'  => $r['description'],
+            ];
+        }, $reports);
+
+        return $result;
+    }
+
+    /**
+     * Resolve protected public report file location for secure stream delivery.
+     * Verifies: report exists, report is_public = 1, parent exists and is_active = 1,
+     * and file path is canonically inside WRITEPATH uploads/client_results/reports/.
+     */
+    public function servePublicReportFile(int $reportId): array
+    {
+        if ($reportId <= 0) {
+            return ['success' => false, 'error' => 'Invalid report ID.', 'code' => 400];
+        }
+
+        $report = $this->reportModel
+            ->where('id', $reportId)
+            ->where('is_public', 1)
+            ->first();
+
+        if (!$report) {
+            return ['success' => false, 'error' => 'Report not found or not public.', 'code' => 404];
+        }
+
+        // Verify parent Client Result is active and not deleted
+        $parent = $this->resultModel
+            ->where('id', $report['client_result_id'])
+            ->where('is_active', 1)
+            ->where('deleted_at IS NULL', null, false)
+            ->first();
+
+        if (!$parent) {
+            return ['success' => false, 'error' => 'Client Result not active or found.', 'code' => 404];
+        }
+
+        $storedPath = $report['file_path'];
+        $fullPath = WRITEPATH . ltrim($storedPath, '/\\');
+
+        $baseDir = realpath(WRITEPATH . 'uploads/client_results/reports');
+        if ($baseDir === false) {
+            return ['success' => false, 'error' => 'Storage directory error.', 'code' => 500];
+        }
+
+        $canonicalBase = rtrim($baseDir, '/\\') . DIRECTORY_SEPARATOR;
+        $realPath = realpath($fullPath);
+
+        if ($realPath === false || strpos($realPath, $canonicalBase) !== 0) {
+            return ['success' => false, 'error' => 'Unauthorized or invalid file path.', 'code' => 403];
+        }
+
+        if (!file_exists($realPath) || !is_file($realPath)) {
+            return ['success' => false, 'error' => 'File not found on storage.', 'code' => 404];
+        }
+
+        return [
+            'success'  => true,
+            'path'     => $realPath,
+            'mime'     => $report['file_mime'],
+            'filename' => $report['report_title'],
+        ];
+    }
 }
 
 

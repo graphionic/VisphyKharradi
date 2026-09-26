@@ -67,4 +67,46 @@ class Home extends BaseController
             'clientResults'    => $clientResults,
         ]);
     }
+
+    /**
+     * Public AJAX endpoint returning safe Client Result detail for bottom drawer.
+     */
+    public function resultDetail(int $id)
+    {
+        $service = new \App\Services\ClientResultService();
+        $detail = $service->getFullClientResultForPublic($id);
+
+        if (!$detail) {
+            return $this->response->setStatusCode(404)->setJSON([
+                'success' => false,
+                'error'   => 'Client Result not found or inactive.',
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'success' => true,
+            'data'    => $detail,
+        ]);
+    }
+
+    /**
+     * Public secure streaming route for public reports/evidence.
+     */
+    public function streamPublicReport(int $reportId)
+    {
+        $service = new \App\Services\ClientResultService();
+        $res = $service->servePublicReportFile($reportId);
+
+        if (!$res['success']) {
+            return $this->response
+                ->setStatusCode($res['code'] ?? 404)
+                ->setJSON(['success' => false, 'error' => $res['error']]);
+        }
+
+        return $this->response
+            ->setHeader('Content-Type', $res['mime'])
+            ->setHeader('Content-Disposition', 'inline; filename="' . basename($res['filename']) . '"')
+            ->setHeader('Cache-Control', 'private, max-age=3600')
+            ->setBody(file_get_contents($res['path']));
+    }
 }
