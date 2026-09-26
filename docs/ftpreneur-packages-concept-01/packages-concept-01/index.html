@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>FTPRENEUR — Package Experience · Concept 01 "The Training Log" (prototype)</title>
+  <link rel="stylesheet" href="assets/fonts.css" />
+  <link rel="stylesheet" href="packages.css" />
+</head>
+<body class="pk-page">
+
+<p class="pk-proto" role="note">Prototype · Package experience · Concept 01 — “The Training Log” · mock data</p>
+
+<section class="pk" id="programs" aria-labelledby="pk-title">
+  <div class="pk__inner">
+
+    <!-- Intro — compact; the cards are the hero -->
+    <header class="pk__intro">
+      <div class="pk__intro-main">
+        <p class="pk__eyebrow"><span class="pk__eyebrow-n">06</span> / Programs</p>
+        <h2 class="pk__title" id="pk-title"><span>Built for</span> <span class="pk__title-accent">real life.</span></h2>
+      </div>
+      <div class="pk__intro-side">
+        <p class="pk__lede">Not generic plans. Structured support around your health, your routine and your goals — every program is personalised after a 1:1 assessment.</p>
+        <p class="pk__qual">Programs are personalised. Individual outcomes vary.</p>
+      </div>
+    </header>
+
+    <!-- Lightweight category switcher (secondary) -->
+    <div class="pk__bar">
+      <div class="pk__filters" role="group" aria-label="Filter programs by category"></div>
+      <p class="pk__legend" aria-hidden="true"><i></i>1 tick = 1 week</p>
+    </div>
+
+    <ol class="pk__grid" aria-label="Programs"></ol>
+
+    <div class="pk__more">
+      <div class="pk__progress" aria-hidden="true"></div>
+      <p class="pk__count" aria-live="polite"><b class="pk__count-n">06</b> / <span class="pk__count-t">20</span> programs</p>
+      <button class="pk__more-btn" type="button">
+        <span class="pk__more-t">Show more programs</span>
+        <span class="pk__more-i" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6" /></svg></span>
+      </button>
+    </div>
+
+  </div>
+</section>
+
+<!-- =====================================================
+     BOTTOM DRAWER — program dossier
+     ===================================================== -->
+<div class="pkd" id="pk-drawer" hidden>
+  <div class="pkd__backdrop" data-close></div>
+
+  <div class="pkd__sheet" role="dialog" aria-modal="true" aria-labelledby="pkd-title" tabindex="-1">
+    <div class="pkd__grab" aria-hidden="true"><span></span></div>
+
+    <div class="pkd__bar">
+      <p class="pkd__crumb"><span class="pkd__crumb-dot" aria-hidden="true"></span>Program // <b data-f="n"></b> <span class="pkd__crumb-sep">·</span> <span data-f="category"></span></p>
+      <div class="pkd__ctrl">
+        <button class="pkd__nav" type="button" data-prev aria-label="Previous program"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg></button>
+        <button class="pkd__nav" type="button" data-next aria-label="Next program"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg></button>
+        <button class="pkd__close" type="button" data-close><span>Close</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg></button>
+      </div>
+    </div>
+
+    <div class="pkd__body">
+
+      <!-- LEFT · identity panel (carries the card's accent DNA) -->
+      <aside class="pkd__id" aria-label="Program identity">
+        <span class="pkd__num" data-f="n" aria-hidden="true"></span>
+        <div class="pkd__id-main">
+          <p class="pkd__cat pkd__r" data-f="category"></p>
+          <h2 class="pkd__title pkd__r" id="pkd-title" data-f="name"></h2>
+          <p class="pkd__tagline pkd__r">Personalised Nutrition + Strength + Lifestyle</p>
+          <div class="pkd__track pkd__r" data-f="track" aria-hidden="true"></div>
+          <p class="pkd__weeks pkd__r"><b data-f="weeks"></b>-week program</p>
+          <div class="pkd__suit pkd__r">
+            <span>Suitable for</span>
+            <p data-f="suitable"></p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- CENTRE · dossier (scrolls) -->
+      <div class="pkd__main">
+        <nav class="pkd__index" aria-label="Program sections">
+          <ol>
+            <li><a href="#pkd-s1" data-i="0"><span>01</span> Overview</a></li>
+            <li><a href="#pkd-s2" data-i="1"><span>02</span> Focus</a></li>
+            <li><a href="#pkd-s3" data-i="2"><span>03</span> Included</a></li>
+            <li><a href="#pkd-s4" data-i="3"><span>04</span> Journey</a></li>
+            <li><a href="#pkd-s5" data-i="4"><span>05</span> Duration</a></li>
+            <li><a href="#pkd-s6" data-i="5"><span>06</span> Investment</a></li>
+          </ol>
+          <span class="pkd__rail" aria-hidden="true"><i></i></span>
+        </nav>
+
+        <div class="pkd__scroll">
+          <div class="pkd__content">
+
+            <section class="pkd__sec pkd__r" id="pkd-s1" aria-labelledby="pkd-h1">
+              <h3 class="pkd__h" id="pkd-h1"><span>01</span> / Overview</h3>
+              <p class="pkd__lead" data-f="purpose"></p>
+              <p class="pkd__text" data-f="overview"></p>
+              <p class="pkd__medical" data-f="medical" hidden>Designed to work alongside your doctor's care. It does not replace medical advice, treatment or medication.</p>
+            </section>
+
+            <section class="pkd__sec pkd__r" id="pkd-s2" aria-labelledby="pkd-h2">
+              <h3 class="pkd__h" id="pkd-h2"><span>02</span> / What we work on</h3>
+              <ul class="pkd__work" data-f="work"></ul>
+            </section>
+
+            <section class="pkd__sec pkd__r" id="pkd-s3" aria-labelledby="pkd-h3">
+              <h3 class="pkd__h" id="pkd-h3"><span>03</span> / What's included</h3>
+              <ul class="pkd__inc" data-f="includes"></ul>
+            </section>
+
+            <section class="pkd__sec pkd__r" id="pkd-s4" aria-labelledby="pkd-h4">
+              <h3 class="pkd__h" id="pkd-h4"><span>04</span> / Program journey</h3>
+              <ol class="pkd__journey" data-f="journey"></ol>
+            </section>
+
+            <section class="pkd__sec pkd__r" id="pkd-s5" aria-labelledby="pkd-h5">
+              <h3 class="pkd__h" id="pkd-h5"><span>05</span> / Duration</h3>
+              <p class="pkd__big"><b data-f="weeks"></b> weeks</p>
+              <p class="pkd__text" data-f="durationNote"></p>
+            </section>
+
+            <section class="pkd__sec pkd__r" id="pkd-s6" aria-labelledby="pkd-h6">
+              <h3 class="pkd__h" id="pkd-h6"><span>06</span> / Investment</h3>
+              <p class="pkd__big" data-f="price"></p>
+              <p class="pkd__text">One program fee for the full <span data-f="weeks"></span> weeks. Prototype price.</p>
+              <button class="pkd__cta pkd__cta--inline" type="button" data-choose><span>Start this program</span><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></i></button>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT · decision panel -->
+      <aside class="pkd__side pkd__r" aria-label="Choose this program">
+        <dl class="pkd__facts">
+          <div><dt>Duration</dt><dd><span data-f="weeks"></span> weeks</dd></div>
+          <div><dt>Format</dt><dd>1:1 personalised</dd></div>
+          <div><dt>Reviews</dt><dd>Every 2 weeks</dd></div>
+        </dl>
+        <p class="pkd__price"><small>Investment</small><span data-f="price"></span></p>
+        <button class="pkd__cta" type="button" data-choose><span>Choose this program</span><i aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg></i></button>
+        <a class="pkd__talk" href="#talk">Talk to us first</a>
+        <p class="pkd__qual">Programs are personalised. Individual outcomes vary.</p>
+        <button class="pkd__next" type="button" data-next>
+          <span class="pkd__next-l">Next program</span>
+          <span class="pkd__next-n"><b data-f="nextN"></b> <span data-f="nextName"></span></span>
+        </button>
+      </aside>
+
+    </div>
+
+    <!-- mobile dock -->
+    <div class="pkd__dock">
+      <p><small>From</small><b data-f="price"></b></p>
+      <button class="pkd__dock-cta" type="button" data-choose>Choose program <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg></button>
+    </div>
+
+    <p class="pkd__toast" role="status" aria-live="polite"></p>
+  </div>
+</div>
+
+<script src="data.js" defer></script>
+<script src="packages.js" defer></script>
+</body>
+</html>

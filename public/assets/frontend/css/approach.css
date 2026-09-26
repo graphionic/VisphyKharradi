@@ -1,0 +1,250 @@
+/* ==========================================================================
+   FTPRENEUR — Section 05: The Approach (Marigold Conversion Card Refinement)
+   Outer Canvas: Dark Ink (#16213A / #141B31)
+   Inner Card: Marigold (#FF9E2C)
+   Primary CTA: Dark Ink (#141B31) + Ultramarine Arrow Tile (#2E47FF)
+   Typography: Bricolage Grotesque (Display), Karla (Body), JetBrains Mono (Mono)
+   ========================================================================== */
+
+.approach-sec {
+  --ultra: var(--color-primary, #2E47FF);
+  --ink: var(--color-ink, #141B31);
+  --navy-dark: #16213A;
+  --mint: var(--color-secondary, #00B79B);
+  --marigold: var(--color-accent, #FF9E2C);
+  --white: #F8FAFC;
+  --muted-ink: rgba(20, 27, 49, 0.75);
+  --hair-line-ink: rgba(20, 27, 49, 0.12);
+
+  --font-display: var(--font-family-display, 'Bricolage Grotesque', system-ui, sans-serif);
+  --font-body: var(--font-family-body, 'Karla', system-ui, sans-serif);
+  --font-mono: var(--font-family-mono, 'JetBrains Mono', monospace);
+
+  --gx: clamp(24px, 4.4vw, 72px);
+  --ease: cubic-bezier(.16, .84, .24, 1);
+
+  position: relative;
+  width: 100%;
+  background-color: var(--navy-dark);
+  color: var(--white);
+  padding: clamp(56px, 7.5vh, 96px) var(--gx);
+  overflow: hidden;
+  box-sizing: border-box;
+  isolation: isolate;
+  font-family: var(--font-body);
+}
+
+.approach-container {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+/* Background Grid & Ghost Numerals */
+.approach-bg-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.approach-bg-line {
+  position: absolute;
+  background: rgba(248, 250, 252, 0.035);
+}
+
+.approach-bg-line--h1 { top: 25%; left: 0; right: 0; height: 1px; }
+.approach-bg-line--h2 { bottom: 25%; left: 0; right: 0; height: 1px; }
+.approach-bg-line--v1 { left: var(--gx); top: 0; bottom: 0; width: 1px; }
+.approach-bg-line--v2 { right: var(--gx); top: 0; bottom: 0; width: 1px; }
+
+.approach-bg-ghost {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: clamp(160px, 20vw, 320px);
+  font-weight: 800;
+  color: var(--ink);
+  opacity: 0.04;
+  line-height: 1;
+  user-select: none;
+  font-variation-settings: "opsz" 96;
+}
+
+/* ==========================================================================
+   MARIGOLD CONVERSION CARD (#FF9E2C)
+   ========================================================================== */
+.approach-conversion-box {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 32px 48px;
+  align-items: center;
+  background-color: var(--marigold);
+  border: 1px solid var(--hair-line-ink);
+  border-radius: 24px;
+  padding: clamp(32px, 4vw, 56px);
+  position: relative;
+  isolation: isolate;
+  box-shadow: 0 20px 48px -15px rgba(20, 27, 49, 0.25);
+}
+
+/* Headline */
+.approach-conversion-title {
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(24px, 2.4vw, 34px);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  font-variation-settings: "opsz" 96;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.approach-conversion-title .text-accent {
+  color: var(--ultra);
+}
+
+/* Trust Line */
+.approach-trust-pills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.approach-trust-pills .dot {
+  color: var(--ultra);
+}
+
+/* CTA Group */
+.approach-cta-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+/* Primary CTA Button (Dark Ink #141B31 + Ultramarine #2E47FF Arrow Tile) */
+.approach-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 60px;
+  padding: 0 24px 0 28px;
+  border-radius: 16px;
+  background-color: var(--ink);
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 10px 25px -8px rgba(20, 27, 49, 0.4);
+  transition: transform 0.35s var(--ease), background-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+
+.approach-btn-primary .btn-arrow {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background-color: var(--ultra);
+  color: #FFFFFF;
+  transition: transform 0.35s var(--ease), background-color 0.35s var(--ease);
+}
+
+.approach-btn-primary .btn-arrow svg {
+  width: 18px;
+  height: 18px;
+  stroke: #FFFFFF;
+  transition: transform 0.35s var(--ease);
+}
+
+.approach-btn-primary:hover {
+  background-color: #1E293B;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px -8px rgba(20, 27, 49, 0.5);
+}
+
+.approach-btn-primary:hover .btn-arrow {
+  background-color: #1A34E6;
+}
+
+.approach-btn-primary:hover .btn-arrow svg {
+  transform: translateX(4px);
+}
+
+/* Secondary CTA Link (Ink #141B31 -> Ultramarine #2E47FF on Hover) */
+.approach-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  opacity: 0.95;
+  transition: color 0.25s var(--ease), opacity 0.25s var(--ease);
+}
+
+.approach-btn-ghost svg {
+  width: 15px;
+  height: 15px;
+  stroke: var(--ink);
+  transition: transform 0.25s var(--ease), stroke 0.25s var(--ease);
+}
+
+.approach-btn-ghost:hover {
+  opacity: 1;
+  color: var(--ultra);
+}
+
+.approach-btn-ghost:hover svg {
+  stroke: var(--ultra);
+  transform: translate(2px, -2px);
+}
+
+/* Muted Ink Disclaimer */
+.approach-disclaimer {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted-ink);
+  text-align: center;
+}
+
+/* RESPONSIVE LAYOUT */
+@media (max-width: 1024px) {
+  .approach-conversion-box {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .approach-btn-primary,
+  .approach-btn-primary .btn-arrow,
+  .approach-btn-primary .btn-arrow svg,
+  .approach-btn-ghost,
+  .approach-btn-ghost svg {
+    transition: none !important;
+  }
+}

@@ -439,4 +439,15 @@
   </div>
 </section>
 
+<!-- SECTION 04 — PROGRAM EDITIONS (PACKAGES) -->
+<?= $this->include('frontend/packages/section') ?>
+
+<!-- SECTION 05 — THE APPROACH -->
+<?= $this->include('frontend/sections/approach') ?>
+
+<!-- SECTION 06 — DYNAMIC FAQ SYSTEM -->
+<?php if (!empty($faqs)): ?>
+  <?= $this->include('frontend/sections/faq') ?>
+<?php endif; ?>
+
 <?= $this->endSection() ?>

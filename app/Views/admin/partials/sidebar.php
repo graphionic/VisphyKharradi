@@ -40,7 +40,7 @@ if ($initial === '') $initial = 'A';
                 <div class="admin-nav__label">Overview</div>
                 <ul class="admin-nav__list">
                     <li>
-                        <a class="admin-nav__link <?= ftpreneur_isActive($current, ['admin']) && !ftpreneur_isActive($current, ['admin/profile','admin/packages','admin/orders','admin/payments','admin/settings','admin/activity','admin/ui-preview','admin/brand-guidelines']) ? 'admin-nav__link--active' : '' ?>"
+                        <a class="admin-nav__link <?= ftpreneur_isActive($current, ['admin']) && !ftpreneur_isActive($current, ['admin/profile','admin/packages','admin/faqs','admin/client-results','admin/package-display','admin/orders','admin/payments','admin/settings','admin/activity','admin/ui-preview','admin/brand-guidelines']) ? 'admin-nav__link--active' : '' ?>"
                            href="<?= site_url('admin') ?>" aria-current="<?= ftpreneur_isActive($current, ['admin']) && $current==='admin' ? 'page' : 'false' ?>">
                             <svg class="admin-nav__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 8.5L10 3l7 5.5V16a1 1 0 0 1-1 1h-3V11H7v6H4a1 1 0 0 1-1-1V8.5Z" stroke="currentColor" stroke-width="1.45" stroke-linejoin="round"/></svg>
                             <span>Dashboard</span>
@@ -77,8 +77,35 @@ if ($initial === '') $initial = 'A';
             </div>
 
             <div class="admin-nav__group">
+                <div class="admin-nav__label">Content</div>
+                <ul class="admin-nav__list">
+                    <li>
+                        <a class="admin-nav__link <?= ftpreneur_isActive($current, ['admin/faqs']) ? 'admin-nav__link--active' : '' ?>"
+                           href="<?= site_url('admin/faqs') ?>" aria-current="<?= ftpreneur_isActive($current, ['admin/faqs']) ? 'page' : 'false' ?>">
+                            <svg class="admin-nav__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.35"/><path d="M8.5 7.5a1.5 1.5 0 0 1 3 0c0 1-1.5 1.5-1.5 2.5M10 13h.01" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/></svg>
+                            <span>FAQs</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="admin-nav__link <?= ftpreneur_isActive($current, ['admin/client-results']) ? 'admin-nav__link--active' : '' ?>"
+                           href="<?= site_url('admin/client-results') ?>" aria-current="<?= ftpreneur_isActive($current, ['admin/client-results']) ? 'page' : 'false' ?>">
+                            <svg class="admin-nav__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16 11V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6" stroke="currentColor" stroke-width="1.35"/><path d="M4 11l4 4 3-3 5 5" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="6.5" r="1" fill="currentColor"/></svg>
+                            <span>Client Results</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin-nav__group">
                 <div class="admin-nav__label">System</div>
                 <ul class="admin-nav__list">
+                    <li>
+                        <a class="admin-nav__link <?= ftpreneur_isActive($current, ['admin/package-display']) ? 'admin-nav__link--active' : '' ?>"
+                           href="<?= site_url('admin/package-display') ?>" aria-current="<?= ftpreneur_isActive($current, ['admin/package-display']) ? 'page' : 'false' ?>">
+                            <svg class="admin-nav__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="3" y="3" width="14" height="14" rx="1.6" stroke="currentColor" stroke-width="1.35"/><path d="M7 8h6M7 12h4" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/></svg>
+                            <span>Package Display</span>
+                        </a>
+                    </li>
                     <li>
                         <a class="admin-nav__link admin-nav__link--disabled" href="#" aria-disabled="true" tabindex="-1">
                             <svg class="admin-nav__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 7.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z" stroke="currentColor" stroke-width="1.35"/><path d="M10 3v1.2M10 15.8V17M3 10h1.2M15.8 10H17M4.6 4.6l.85.85M14.55 14.55l.85.85M4.6 15.4l.85-.85M14.55 5.45l.85-.85" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>

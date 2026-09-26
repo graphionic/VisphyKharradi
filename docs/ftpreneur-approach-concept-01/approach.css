@@ -1,0 +1,613 @@
+/* ==========================================================================
+   FTPRENEUR — Section 05: The Approach (Concept 01 · Bold Conversion Manifesto)
+   Canvas: Dark Ink (#141B31 / #16213A)
+   Primary Accent: Ultramarine (#2E47FF)
+   Micro Accents: Mint (#00B79B), Marigold (#FF9E2C)
+   Typography: Bricolage Grotesque (Display), Karla (Body), JetBrains Mono (Mono)
+   ========================================================================== */
+
+:root {
+  --ultra: #2E47FF;
+  --ink: #141B31;
+  --navy-dark: #16213A;
+  --navy-card: #19233F;
+  --mint: #00B79B;
+  --marigold: #FF9E2C;
+  --canvas-dark: #141B31;
+  --white: #F8FAFC;
+  --muted-slate: #94A3B8;
+  --hair-line: rgba(248, 250, 252, 0.12);
+
+  --font-display: 'Bricolage Grotesque', 'Schibsted Grotesk', system-ui, sans-serif;
+  --font-body: 'Karla', 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --gx: clamp(24px, 4.4vw, 72px);
+  --ease: cubic-bezier(.16, .84, .24, 1);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body.approach-page {
+  margin: 0;
+  padding: 0;
+  background-color: var(--canvas-dark);
+  color: var(--white);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   SECTION ROOT CONTAINER
+   ========================================================================== */
+.approach-sec {
+  position: relative;
+  width: 100%;
+  background-color: #16213A;
+  color: var(--white);
+  padding: clamp(80px, 9vh, 120px) var(--gx) clamp(90px, 10vh, 130px);
+  overflow: hidden;
+  box-sizing: border-box;
+  isolation: isolate;
+}
+
+.approach-container {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+}
+
+/* Background Grid & Ghost Numerals */
+.approach-bg-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.approach-bg-line {
+  position: absolute;
+  background: rgba(248, 250, 252, 0.035);
+}
+
+.approach-bg-line--h1 { top: 22%; left: 0; right: 0; height: 1px; }
+.approach-bg-line--h2 { bottom: 22%; left: 0; right: 0; height: 1px; }
+.approach-bg-line--v1 { left: var(--gx); top: 0; bottom: 0; width: 1px; }
+.approach-bg-line--v2 { right: var(--gx); top: 0; bottom: 0; width: 1px; }
+
+.approach-bg-ghost {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: clamp(220px, 28vw, 480px);
+  font-weight: 800;
+  color: #FFFFFF;
+  opacity: 0.018;
+  line-height: 1;
+  user-select: none;
+  font-variation-settings: "opsz" 96;
+}
+
+/* ==========================================================================
+   1. EDITORIAL CHAPTER BAR
+   ========================================================================== */
+.approach-chapter-bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: clamp(28px, 3.5vh, 44px);
+}
+
+.approach-chapter-id {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: clamp(11px, 0.85vw, 13px);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.approach-chapter-num { color: #FFFFFF; }
+.approach-chapter-slash { color: var(--marigold); }
+.approach-chapter-label { color: var(--ultra); }
+
+.approach-chapter-divider {
+  flex: 1;
+  height: 1px;
+  background: rgba(248, 250, 252, 0.08);
+}
+
+.approach-chapter-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mint);
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   2. OVERSIZED MANIFESTO STATEMENT
+   ========================================================================== */
+.approach-manifesto {
+  margin-bottom: clamp(48px, 6vh, 80px);
+}
+
+.approach-manifesto-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 32px 64px;
+  align-items: end;
+}
+
+.approach-headline {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(38px, 5.2vw, 76px);
+  line-height: 0.90;
+  letter-spacing: -0.035em;
+  font-variation-settings: "opsz" 96;
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.approach-headline .line {
+  display: block;
+}
+
+.approach-headline .line--accent {
+  color: var(--ultra);
+}
+
+.approach-headline .you-italic {
+  font-style: normal;
+  color: var(--white);
+  -webkit-text-stroke: 1.5px var(--ultra);
+  paint-order: stroke fill;
+}
+
+.approach-copy {
+  margin: 0 0 14px;
+  font-family: var(--font-body);
+  font-size: clamp(16px, 1.25vw, 19px);
+  line-height: 1.6;
+  color: #CBD5E1;
+  max-width: 44ch;
+}
+
+.approach-subcopy {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-slate);
+}
+
+/* ==========================================================================
+   3. THE METHOD PROCESS RAIL (INTERACTIVE)
+   ========================================================================== */
+.approach-method {
+  margin-bottom: clamp(64px, 8vh, 100px);
+  background: var(--navy-card);
+  border: 1px solid var(--hair-line);
+  border-radius: 24px;
+  padding: clamp(28px, 4vw, 48px);
+  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.35);
+}
+
+.approach-method-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.approach-method-tag {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mint);
+}
+
+.approach-method-hint {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted-slate);
+}
+
+/* Process Rail Wrap */
+.approach-rail-wrap {
+  position: relative;
+  margin-bottom: 36px;
+  padding: 10px 0;
+}
+
+.approach-rail-track {
+  position: absolute;
+  top: 50%;
+  left: 30px;
+  right: 30px;
+  height: 2px;
+  background: rgba(248, 250, 252, 0.15);
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.approach-rail-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0%;
+  background: var(--ultra);
+  box-shadow: 0 0 12px rgba(46, 71, 255, 0.8);
+  transition: width 0.45s var(--ease);
+}
+
+.approach-steps {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.approach-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: var(--muted-slate);
+  transition: color 0.3s var(--ease);
+  outline: none;
+  touch-action: manipulation;
+}
+
+.approach-step-num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  transition: color 0.3s var(--ease), transform 0.3s var(--ease);
+}
+
+.approach-step-node {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #16213A;
+  border: 2px solid rgba(248, 250, 252, 0.3);
+  display: grid;
+  place-items: center;
+  transition: border-color 0.35s var(--ease), background-color 0.35s var(--ease), transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+
+.approach-step-node .node-inner {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: transparent;
+  transition: background-color 0.35s var(--ease);
+}
+
+.approach-step-label {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: color 0.3s var(--ease);
+}
+
+/* Hover & Focus State */
+.approach-step:hover {
+  color: var(--white);
+}
+
+.approach-step:hover .approach-step-node {
+  border-color: var(--ultra);
+  transform: scale(1.15);
+}
+
+/* Active State */
+.approach-step.is-active {
+  color: var(--white);
+}
+
+.approach-step.is-active .approach-step-num {
+  color: var(--ultra);
+  transform: translateY(-2px);
+}
+
+.approach-step.is-active .approach-step-node {
+  background: var(--ultra);
+  border-color: var(--ultra);
+  box-shadow: 0 0 0 6px rgba(46, 71, 255, 0.25);
+  transform: scale(1.25);
+}
+
+.approach-step.is-active .approach-step-node .node-inner {
+  background: var(--marigold);
+}
+
+.approach-step.is-active .approach-step-label {
+  color: var(--white);
+}
+
+.approach-step:focus-visible {
+  outline: 2px solid var(--ultra);
+  outline-offset: 6px;
+  border-radius: 4px;
+}
+
+/* Dynamic Explanation Card */
+.approach-explanation-card {
+  position: relative;
+  background: rgba(20, 27, 49, 0.6);
+  border: 1px solid var(--hair-line);
+  border-left: 4px solid var(--ultra);
+  border-radius: 16px;
+  padding: clamp(24px, 3vw, 36px);
+  min-height: 160px;
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+}
+
+.approach-explanation-card.is-changing {
+  opacity: 0;
+  transform: translateY(6px);
+}
+
+.approach-explanation-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ultra);
+  margin-bottom: 10px;
+}
+
+.approach-exp-sep { color: var(--marigold); }
+.approach-exp-title { color: var(--white); }
+
+.approach-explanation-headline {
+  margin: 0 0 10px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(20px, 1.8vw, 26px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-variation-settings: "opsz" 96;
+  color: var(--white);
+}
+
+.approach-explanation-desc {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: clamp(15px, 1.15vw, 17px);
+  line-height: 1.6;
+  color: #CBD5E1;
+  max-width: 65ch;
+}
+
+/* ==========================================================================
+   4. CONVERSION BRIDGE & ACTION CALL
+   ========================================================================== */
+.approach-conversion-box {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 32px 48px;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(46, 71, 255, 0.08) 0%, rgba(20, 27, 49, 0.8) 100%);
+  border: 1px solid rgba(46, 71, 255, 0.3);
+  border-radius: 24px;
+  padding: clamp(32px, 4vw, 56px);
+  position: relative;
+  isolation: isolate;
+}
+
+.approach-conversion-title {
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(24px, 2.4vw, 34px);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  font-variation-settings: "opsz" 96;
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.approach-conversion-title .text-accent {
+  color: var(--ultra);
+}
+
+.approach-trust-pills {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-slate);
+}
+
+.approach-trust-pills .dot {
+  color: var(--mint);
+}
+
+.approach-cta-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+/* Primary CTA Button */
+.approach-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 60px;
+  padding: 0 24px 0 28px;
+  border-radius: 16px;
+  background: var(--ultra);
+  color: #FFFFFF;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 12px 30px -10px rgba(46, 71, 255, 0.7);
+  transition: transform 0.35s var(--ease), background-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+
+.approach-btn-primary .btn-arrow {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--marigold);
+  color: var(--ink);
+  transition: transform 0.35s var(--ease);
+}
+
+.approach-btn-primary .btn-arrow svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.35s var(--ease);
+}
+
+.approach-btn-primary:hover {
+  background: #233ae0;
+  transform: translateY(-2px);
+  box-shadow: 0 18px 36px -10px rgba(46, 71, 255, 0.85);
+}
+
+.approach-btn-primary:hover .btn-arrow svg {
+  transform: translateX(4px);
+}
+
+/* Ghost CTA Button */
+.approach-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--white);
+  text-decoration: none;
+  opacity: 0.85;
+  transition: opacity 0.25s, color 0.25s;
+}
+
+.approach-btn-ghost svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.25s;
+}
+
+.approach-btn-ghost:hover {
+  opacity: 1;
+  color: var(--ultra);
+}
+
+.approach-btn-ghost:hover svg {
+  transform: translate(2px, -2px);
+}
+
+.approach-disclaimer {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted-slate);
+  text-align: center;
+}
+
+/* ==========================================================================
+   RESPONSIVE LAYOUT (MOBILE & TABLET)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .approach-manifesto-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .approach-conversion-box {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .approach-rail-wrap {
+    margin-bottom: 24px;
+  }
+
+  .approach-rail-track {
+    display: none;
+  }
+
+  .approach-steps {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+
+  .approach-step-label {
+    font-size: 10px;
+    letter-spacing: 0;
+  }
+
+  .approach-step-num {
+    font-size: 11px;
+  }
+
+  .approach-method {
+    padding: 24px 18px;
+  }
+
+  .approach-explanation-card {
+    padding: 20px 18px;
+  }
+}

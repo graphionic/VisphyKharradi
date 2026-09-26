@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FTPRENEUR · Program Experience · Concept 02 — Visual Program Editions</title>
+  <link rel="stylesheet" href="assets/fonts.css" />
+  <link rel="stylesheet" href="editions.css" />
+</head>
+<body class="ed-body">
+
+  <p class="ed-proto">Prototype · Program experience · Concept 02: Visual program editions · Mock data · Demo photography</p>
+
+  <!-- ================================================================
+       SECTION — Program editions
+       ================================================================ -->
+  <section class="ed" id="programs" aria-labelledby="ed-heading">
+    <header class="ed__intro">
+      <div class="ed__intro-l">
+        <p class="ed__eyebrow"><span>06</span> / Program editions</p>
+        <h2 class="ed__heading" id="ed-heading">Programs, built <em>around&nbsp;you.</em></h2>
+      </div>
+      <div class="ed__intro-r">
+        <p class="ed__lede">Each program is an edition of the same method: a 1:1 assessment, then nutrition, strength and lifestyle structured around your routine, reviewed as you go.</p>
+        <p class="ed__qual">Programs are personalised. Individual outcomes vary.</p>
+      </div>
+    </header>
+
+    <div class="ed__bar">
+      <div class="ed__filters" role="group" aria-label="Filter programs by category">
+        <span class="ed__filters-ink" aria-hidden="true"></span>
+      </div>
+      <p class="ed__status" aria-live="polite"></p>
+    </div>
+
+    <div class="ed__grid" role="list"></div>
+
+    <div class="ed__more">
+      <p class="ed__more-count"></p>
+      <button class="ed__more-btn" type="button">
+        <span class="ed__more-label">Show more programs</span>
+        <span class="ed__more-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6" /></svg></span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       CARD TEMPLATE — one reusable component, filled from data.js
+       ================================================================ -->
+  <template id="ed-card-tpl">
+    <article class="ed-card" role="listitem">
+      <div class="ed-card__spine" aria-hidden="true">
+        <span class="ed-card__spine-fill"></span>
+        <span class="ed-card__spine-txt"><b data-f="number"></b><i></i><span data-f="category"></span></span>
+      </div>
+      <div class="ed-card__main">
+        <figure class="ed-card__cover">
+          <div class="ed-card__frame">
+            <img class="ed-card__img" alt="" loading="lazy" decoding="async" />
+            <div class="ed-card__slot" aria-hidden="true">
+              <span class="ed-card__slot-k">Image slot</span>
+              <span class="ed-card__slot-v" data-f="file"></span>
+              <span class="ed-card__slot-k">Drop the program photo in with this name</span>
+            </div>
+            <ul class="ed-card__focus" aria-hidden="true"></ul>
+          </div>
+          <span class="ed-card__no" data-f="number" aria-hidden="true"></span>
+          <span class="ed-card__wk" aria-hidden="true"><b data-f="durationWeeks"></b> wk</span>
+          <span class="ed-card__sig" aria-hidden="true"><i></i><span data-f="featuredLabel"></span></span>
+          <span class="ed-card__demo" aria-hidden="true">Demo image</span>
+        </figure>
+        <div class="ed-card__text">
+          <p class="ed-card__eyebrow" data-f="eyebrow"></p>
+          <h3 class="ed-card__title" data-f="shortName"></h3>
+          <p class="ed-card__summary" data-f="summary"></p>
+        </div>
+        <div class="ed-card__foot">
+          <p class="ed-card__price"><small>Investment</small><s data-f="priceWas"></s><b data-f="price"></b></p>
+          <button class="ed-card__explore" type="button">
+            <span>Explore</span>
+            <span class="ed-card__arrow" aria-hidden="true"><i></i><svg viewBox="0 0 24 24"><path d="M13 6l6 6-6 6" /></svg></span>
+          </button>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <!-- ================================================================
+       BOTTOM DRAWER — one instance, filled per program
+       ================================================================ -->
+  <div class="edd" id="ed-drawer" hidden>
+    <div class="edd__scrim" data-close></div>
+
+    <div class="edd__sheet" role="dialog" aria-modal="true" aria-labelledby="edd-title" tabindex="-1">
+      <div class="edd__bar">
+        <div class="edd__grab" aria-hidden="true"><span></span></div>
+        <p class="edd__crumb"><span class="edd__crumb-dot" aria-hidden="true"></span>Edition <b data-f="number"></b><span class="edd__crumb-of"> / <span data-f="total"></span></span><span class="edd__crumb-cat"> · <span data-f="category"></span></span></p>
+        <div class="edd__ctrl">
+          <button class="edd__nav" type="button" data-prev aria-label="Previous program"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg></button>
+          <button class="edd__nav" type="button" data-next aria-label="Next program"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg></button>
+          <button class="edd__close" type="button" data-close><span>Close</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg></button>
+        </div>
+      </div>
+
+      <div class="edd__body">
+        <!-- Visual: the program photograph stays dominant -->
+        <aside class="edd__visual">
+          <div class="edd__photo">
+            <img class="edd__img" alt="" />
+            <div class="edd__slot" aria-hidden="true"><span>Image slot</span><b data-f="file"></b></div>
+            <span class="edd__photo-no" data-f="number" aria-hidden="true"></span>
+            <span class="edd__photo-sig" aria-hidden="true"><i></i><span data-f="featuredLabel"></span></span>
+            <div class="edd__photo-cap">
+              <span class="edd__photo-sec"><b class="edd__sec-n">01</b> / <span class="edd__sec-l">Overview</span></span>
+              <span class="edd__photo-meta"><span data-f="durationWeeks"></span> weeks · <span data-f="format"></span></span>
+            </div>
+            <span class="edd__photo-demo" aria-hidden="true">Demo image</span>
+          </div>
+        </aside>
+
+        <!-- Story: scrolling editorial microsite -->
+        <div class="edd__story">
+          <nav class="edd__rail" aria-label="Program sections">
+            <span class="edd__rail-line" aria-hidden="true"><i></i></span>
+            <a href="#edd-s1" data-sec="1"><b>01</b><span>Overview</span></a>
+            <a href="#edd-s2" data-sec="2"><b>02</b><span>Focus</span></a>
+            <a href="#edd-s3" data-sec="3"><b>03</b><span>Included</span></a>
+            <a href="#edd-s4" data-sec="4"><b>04</b><span>Journey</span></a>
+            <a href="#edd-s5" data-sec="5"><b>05</b><span>Investment</span></a>
+          </nav>
+
+          <div class="edd__content">
+            <!-- 01 OVERVIEW -->
+            <section class="edd__sec" id="edd-s1" data-sec="1">
+              <p class="edd__kicker edd__r"><span data-f="eyebrow"></span></p>
+              <h2 class="edd__title edd__r" id="edd-title" data-f="name"></h2>
+              <p class="edd__lead edd__r" data-f="summary"></p>
+              <p class="edd__note edd__r" data-f="healthNote"></p>
+              <div class="edd__suit edd__r">
+                <p class="edd__label">Suitable for</p>
+                <p data-f="suitableFor"></p>
+              </div>
+              <dl class="edd__facts edd__r">
+                <div><dt>Duration</dt><dd><b data-f="durationWeeks"></b> weeks</dd></div>
+                <div><dt>Format</dt><dd data-f="format"></dd></div>
+                <div><dt>Reviews</dt><dd data-f="reviewFrequency"></dd></div>
+              </dl>
+            </section>
+
+            <!-- 02 FOCUS -->
+            <section class="edd__sec" id="edd-s2" data-sec="2">
+              <p class="edd__num"><b>02</b> Program focus</p>
+              <h3 class="edd__h">Where the program puts its weight.</h3>
+              <ul class="edd__disc"></ul>
+              <p class="edd__disc-key"><span><i class="on"></i><i class="on"></i><i class="on"></i> Lead</span><span><i class="on"></i><i class="on"></i><i></i> Core</span><span><i class="on"></i><i></i><i></i> Support</span></p>
+              <p class="edd__label">Focus areas</p>
+              <ul class="edd__areas"></ul>
+            </section>
+
+            <!-- 03 INCLUDED -->
+            <section class="edd__sec" id="edd-s3" data-sec="3">
+              <p class="edd__num"><b>03</b> What's included</p>
+              <h3 class="edd__h">Everything in this edition.</h3>
+              <ol class="edd__inc"></ol>
+            </section>
+
+            <!-- 04 JOURNEY -->
+            <section class="edd__sec" id="edd-s4" data-sec="4">
+              <p class="edd__num"><b>04</b> Program journey</p>
+              <h3 class="edd__h">How the weeks unfold.</h3>
+              <ol class="edd__jny" role="list"></ol>
+              <div class="edd__jny-note" aria-live="polite"><b class="edd__jny-n"></b><p class="edd__jny-t"></p></div>
+            </section>
+
+            <!-- 05 INVESTMENT -->
+            <section class="edd__sec edd__sec--inv" id="edd-s5" data-sec="5">
+              <p class="edd__num"><b>05</b> Program investment</p>
+              <div class="edd__inv">
+                <div class="edd__inv-l">
+                  <p class="edd__label">Program investment</p>
+                  <p class="edd__inv-price"><s data-f="priceWas"></s><b data-f="price"></b></p>
+                  <ul class="edd__inv-meta">
+                    <li><b data-f="durationWeeks"></b> weeks</li>
+                    <li data-f="format"></li>
+                    <li>Reviews <span data-f="reviewFrequencyLc"></span></li>
+                  </ul>
+                </div>
+                <div class="edd__inv-r">
+                  <button class="edd__cta" type="button" data-start>
+                    <span class="edd__cta-l">Start this program</span>
+                    <span class="edd__cta-ok" aria-hidden="true">Program selected</span>
+                    <span class="edd__cta-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" /></svg></span>
+                  </button>
+                  <button class="edd__talk" type="button" data-talk>Talk to us first</button>
+                  <p class="edd__qual">Programs are personalised. Individual outcomes vary.</p>
+                </div>
+              </div>
+
+              <button class="edd__next" type="button" data-next>
+                <span class="edd__next-img"><img alt="" /></span>
+                <span class="edd__next-txt"><small>Next edition · <span class="edd__next-no"></span></small><b class="edd__next-name"></b></span>
+                <span class="edd__next-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" /></svg></span>
+              </button>
+            </section>
+          </div>
+
+          <!-- sticky dock (hidden while the investment section is on screen) -->
+          <div class="edd__dock">
+            <p class="edd__dock-price"><small><span data-f="durationWeeks"></span> weeks · <span data-f="format"></span></small><b data-f="price"></b></p>
+            <button class="edd__dock-cta" type="button" data-start><span>Start this program</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" /></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="edd__toast" role="status" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="editions.js"></script>
+</body>
+</html>
