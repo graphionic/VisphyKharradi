@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FTPRENEUR · Client Results · Transformation Journal: 3-story carousel (08A.1 refinement)</title>
+  <link rel="stylesheet" href="assets/fonts.css" />
+  <link rel="stylesheet" href="journal.css" />
+  <link rel="stylesheet" href="drawer.css" />
+</head>
+<body class="crj-body">
+
+  <!-- review chrome: NOT part of the design -->
+  <div class="rv-label">
+    <b>08A.1 refinement</b><span>Transformation Journal · 3-story carousel</span>
+    <i>Review label · View full story opens the Full Story drawer: Aarav shows every evidence component (neutral placeholders), Meera a report only, Vikram and the rest story + outcomes only · Story 02 shows the IMAGE state with a neutral sample photo (not a client); all others show the INITIALS fallback · Stories 05–08 (Nisha P., Isha R., Kabir T., Ananya V.) use placeholder data until the real records are supplied</i>
+  </div>
+
+  <!-- =================================================================
+       CLIENT RESULTS — TRANSFORMATION JOURNAL (grouped carousel)
+       ================================================================= -->
+  <section class="crj" aria-labelledby="crj-h">
+    <div class="crj__wrap">
+      <header class="crj__intro">
+        <div>
+          <p class="crj__eyebrow">Real progress</p>
+          <h2 class="crj__h" id="crj-h">Progress, <span>made personal.<svg viewBox="0 0 300 16" preserveAspectRatio="none" aria-hidden="true"><path d="M3 11 C 60 4, 140 3, 297 8"/></svg></span></h2>
+        </div>
+        <p class="crj__lede">Every journey is different. Explore real experiences and measurable changes from personalised nutrition, strength and lifestyle programs.</p>
+      </header>
+
+      <div class="crj__carousel" aria-roledescription="carousel" aria-label="Client stories">
+        <div class="crj__canvas">
+          <div class="crj__viewport" tabindex="0" aria-label="Client stories. Use the left and right arrow keys to browse.">
+            <div class="crj__track"></div>
+          </div>
+        </div>
+
+        <footer class="crj__nav">
+          <div class="crj__prog">
+            <b class="crj__cur">01</b>
+            <span class="crj__line" aria-hidden="true"><i></i></span>
+            <span class="crj__tot">03</span>
+            <span class="crj__range" aria-live="polite"></span>
+          </div>
+          <p class="crj__fine">Individual results vary.</p>
+          <div class="crj__btns">
+            <button class="crj__btn" type="button" data-prev><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H6M11 6l-6 6 6 6"/></svg><span>Previous</span></button>
+            <button class="crj__btn crj__btn--next" type="button" data-next><span>Next stories</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button>
+          </div>
+        </footer>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================================
+       FULL CLIENT STORY — bottom drawer (same page, no route change)
+       ================================================================= -->
+  <div class="crd" id="crd" hidden>
+    <div class="crd__scrim" data-crd-close></div>
+    <div class="crd__sheet" role="dialog" aria-modal="true" aria-labelledby="crd-title" tabindex="-1">
+
+      <header class="crd__head">
+        <span class="crd__grab" aria-hidden="true"></span>
+        <div class="crd__head-id">
+          <span class="crd__head-media" aria-hidden="true"></span>
+          <div>
+            <p class="crd__head-kicker">Client result <b class="crd__head-n">/ 01</b></p>
+            <p class="crd__head-name"></p>
+          </div>
+        </div>
+        <p class="crd__head-prog"></p>
+        <button class="crd__x" type="button" data-crd-close aria-label="Close client story">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </header>
+
+      <div class="crd__scroll">
+        <div class="crd__content"></div>
+      </div>
+
+      <!-- inner evidence viewer: stacks over the story, never closes the drawer -->
+      <div class="crd__viewer" role="region" aria-label="Evidence viewer" hidden>
+        <header class="crd__vhead">
+          <button class="crd__back" type="button" data-viewer-back>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H6M11 6l-6 6 6 6"/></svg><span>Back to story</span>
+          </button>
+          <div class="crd__vtitle"><p class="crd__vname"></p><p class="crd__vmeta"></p></div>
+          <button class="crd__x crd__x--soft" type="button" data-viewer-back aria-label="Close viewer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </header>
+        <div class="crd__vbody"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="stories.js"></script>
+  <script src="journal.js"></script>
+  <script src="drawer.js"></script>
+</body>
+</html>

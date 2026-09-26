@@ -87,4 +87,33 @@ class Paths
      * value - the directory should not be publicly accessible.
      */
     public string $envDirectory = __DIR__ . '/../../';
+
+    /**
+     * Constructor
+     *
+     * Dynamically determines the .env location:
+     * - Hostinger Production: Outside public_html at parent directory (~/domains/domain.com/.env)
+     * - Local Development: Project root directory (PROJECT_ROOT/.env)
+     */
+    public function __construct()
+    {
+        $projectRoot = __DIR__ . '/../../';
+        $parentDir   = __DIR__ . '/../../../';
+
+        $realParent  = realpath($parentDir);
+        $realProject = realpath($projectRoot);
+
+        // 1. Check if .env exists outside public_html (Hostinger production architecture)
+        if ($realParent && is_file($realParent . DIRECTORY_SEPARATOR . '.env')) {
+            $this->envDirectory = $realParent;
+        }
+        // 2. Check if .env exists in project root (Local development architecture)
+        elseif ($realProject && is_file($realProject . DIRECTORY_SEPARATOR . '.env')) {
+            $this->envDirectory = $realProject;
+        }
+        // 3. Fallback to default project root
+        else {
+            $this->envDirectory = $projectRoot;
+        }
+    }
 }
