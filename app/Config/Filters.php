@@ -74,7 +74,7 @@ class Filters extends BaseFilters
      * }
      */
     // Phase 3: CSRF enabled globally for POST forms (admin login/logout/password).
-    // Future Razorpay webhook POST /payment/webhook will be exempted (HMAC verified) — documented, not created in Phase 3.
+    // Only POST /payment/webhook is CSRF-exempt; its controller requires a valid raw-body Razorpay HMAC.
     // See SECURITY_ARCHITECTURE.md §4 and README.
     public array $globals = [
         'before' => [

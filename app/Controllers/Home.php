@@ -111,4 +111,54 @@ class Home extends BaseController
             ->setHeader('Cache-Control', 'private, max-age=3600')
             ->setBody(file_get_contents($res['path']));
     }
+
+    /**
+     * Public route: /privacy-policy
+     */
+    public function privacyPolicy(): string
+    {
+        return $this->renderLegalPage('privacy', 'legal.privacy.title', 'legal.privacy.content', 'Privacy Policy');
+    }
+
+    /**
+     * Public route: /terms-and-conditions
+     */
+    public function termsAndConditions(): string
+    {
+        return $this->renderLegalPage('terms', 'legal.terms.title', 'legal.terms.content', 'Terms & Conditions');
+    }
+
+    /**
+     * Public route: /refund-policy
+     */
+    public function refundPolicy(): string
+    {
+        return $this->renderLegalPage('refund', 'legal.refund.title', 'legal.refund.content', 'Refund Policy');
+    }
+
+    /**
+     * Helper to render legal pages dynamically using SettingModel
+     */
+    private function renderLegalPage(string $type, string $titleKey, string $contentKey, string $defaultTitle): string
+    {
+        $settingModel = new \App\Models\SettingModel();
+
+        $rowTitle = $settingModel->where('setting_key', $titleKey)->first();
+        $pageTitle = trim((string) ($rowTitle['setting_value'] ?? $defaultTitle));
+        if ($pageTitle === '') {
+            $pageTitle = $defaultTitle;
+        }
+
+        $rowContent = $settingModel->where('setting_key', $contentKey)->first();
+        $pageContent = (string) ($rowContent['setting_value'] ?? '');
+
+        return view('frontend/pages/legal', [
+            'title'            => $pageTitle . " — Ftpreneur Legal",
+            'meta_description' => "Read the official {$pageTitle} for Ftpreneur by Visphy Kharradi.",
+            'canonical_url'    => base_url(uri_string()),
+            'pageTitle'        => $pageTitle,
+            'pageContent'      => $pageContent,
+            'pageType'         => $type,
+        ]);
+    }
 }

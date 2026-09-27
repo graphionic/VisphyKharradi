@@ -54,7 +54,7 @@
 
       <!-- LEFT COLUMN: BRAND -->
       <div class="footer__col footer__col--brand">
-        <a class="footer__brand" href="#" aria-label="FTPRENEUR by Visphy Kharradi — home">
+        <a class="footer__brand" href="<?= base_url('/') ?>" aria-label="FTPRENEUR by Visphy Kharradi — home">
           <img class="footer__brand-logo" src="<?= base_url('assets/frontend/images/ftpreneur-logo.png') ?>" alt="FTPRENEUR by Visphy Kharradi" width="1324" height="1188" />
         </a>
 
@@ -73,11 +73,11 @@
         <span class="footer__col-label">EXPLORE</span>
         <nav class="footer__nav" aria-label="Footer Navigation">
           <ul class="footer__nav-list">
-            <li><a href="#about">About</a></li>
-            <li><a href="#approach">Approach</a></li>
-            <li><a href="#programs">Programs</a></li>
-            <li><a href="#results">Client Results</a></li>
-            <li><a href="#faq">FAQ</a></li>
+            <li><a href="<?= base_url('/#about') ?>">About</a></li>
+            <li><a href="<?= base_url('/#approach') ?>">Approach</a></li>
+            <li><a href="<?= base_url('/#programs') ?>">Programs</a></li>
+            <li><a href="<?= base_url('/#results') ?>">Client Results</a></li>
+            <li><a href="<?= base_url('/#faq') ?>">FAQ</a></li>
           </ul>
         </nav>
       </div>
@@ -106,9 +106,11 @@
       </p>
 
       <div class="footer__legal">
-        <a href="#privacy" class="footer__legal-link">Privacy Policy</a>
+        <a href="<?= base_url('privacy-policy') ?>" class="footer__legal-link">Privacy Policy</a>
         <span class="footer__legal-sep" aria-hidden="true">•</span>
-        <a href="#terms" class="footer__legal-link">Terms &amp; Conditions</a>
+        <a href="<?= base_url('terms-and-conditions') ?>" class="footer__legal-link">Terms &amp; Conditions</a>
+        <span class="footer__legal-sep" aria-hidden="true">•</span>
+        <a href="<?= base_url('refund-policy') ?>" class="footer__legal-link">Refund Policy</a>
       </div>
     </div>
 

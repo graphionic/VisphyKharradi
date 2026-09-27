@@ -41,3 +41,7 @@ switch ($design) {
 
 ?>
 </div>
+
+<?= $this->include('frontend/sections/checkout') ?>
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/checkout.css?v=1.0') ?>">
+<script src="<?= base_url('assets/frontend/js/checkout.js?v=1.0') ?>" defer></script>

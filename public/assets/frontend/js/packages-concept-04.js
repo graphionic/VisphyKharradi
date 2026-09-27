@@ -304,22 +304,14 @@
       if (nextNameEl) nextNameEl.textContent = nx.name;
       if (nextImgEl) nextImgEl.src = nx.image || '';
 
-      // Form CTA Link
+      // Purchase stays on the landing page in the shared checkout drawer.
       var ctaBtn = dr.querySelector('[data-start]');
-      var ctaFormUrl = p.google_form_url || null;
-      if (ctaBtn) {
-        ctaBtn.classList.remove('is-done');
-        if (ctaFormUrl) {
-          ctaBtn.onclick = function () {
-            window.open(ctaFormUrl, '_blank', 'noopener,noreferrer');
-          };
-        } else {
-          ctaBtn.onclick = function () {
-            ctaBtn.classList.add('is-done');
-            toast(p.name + ' selected — redirecting to consultation...');
-          };
-        }
-      }
+      if (ctaBtn) ctaBtn.onclick = function () {
+        if (!window.FtCheckout) return;
+        var returnFocus = lastFocus;
+        closeDrawer(function () { window.FtCheckout.open(p.id, returnFocus); });
+      };
+
     }
 
     function order() {
@@ -357,7 +349,7 @@
       history.replaceState(null, '', '#program=' + p.slug);
     }
 
-    function closeDrawer() {
+    function closeDrawer(onClosed) {
       if (dr.hidden || dr.classList.contains('is-closing')) return;
       dr.classList.add('is-closing');
       dr.classList.remove('is-open');
@@ -369,7 +361,8 @@
           c.classList.remove('is-selected');
         });
         history.replaceState(null, '', location.pathname + location.search);
-        if (lastFocus && document.contains(lastFocus)) lastFocus.focus({ preventScroll: true });
+        if (typeof onClosed === "function") onClosed();
+        else if (lastFocus && document.contains(lastFocus)) lastFocus.focus({ preventScroll: true });
       };
       setTimeout(done, reduced.matches ? 0 : 380);
     }

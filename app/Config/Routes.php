@@ -5,6 +5,14 @@ use CodeIgniter\Router\RouteCollection;
 /** @var RouteCollection $routes */
 $routes->get('/', 'Home::index');
 
+// Landing-page checkout — JSON only; POST routes keep global CSRF protection.
+$routes->get('checkout/session', 'CheckoutController::session');
+$routes->get('checkout/packages/(:num)', 'CheckoutController::package/$1');
+$routes->post('payment/create-order', 'CheckoutController::createOrder');
+$routes->post('payment/verify', 'CheckoutController::verify');
+// Server-to-server only: exempt from CSRF, authenticated by raw-body HMAC.
+$routes->post('payment/webhook', 'RazorpayWebhookController::receive');
+
 // Admin authentication — Phase 3
 $routes->get('admin/login', 'Admin\AuthController::login', ['filter' => 'adminGuest']);
 $routes->post('admin/login', 'Admin\AuthController::attemptLogin', ['filter' => 'adminGuest']);
@@ -16,6 +24,7 @@ $routes->get('admin/profile', 'Admin\ProfileController::index', ['filter' => 'ad
 $routes->post('admin/profile/password', 'Admin\ProfileController::updatePassword', ['filter' => 'adminAuth']);
 
 // Packages — Phase 5D: media, lifecycle, reorder, soft-delete
+$routes->get('admin/packages', 'Admin\PackageController::index', ['filter' => 'adminAuth']);
 $routes->get('admin/packages/create', 'Admin\PackageController::create', ['filter' => 'adminAuth']);
 $routes->get('admin/packages/deleted', 'Admin\PackageController::deleted', ['filter' => 'adminAuth']);
 $routes->post('admin/packages/reorder', 'Admin\PackageController::reorder', ['filter' => 'adminAuth']);
@@ -81,3 +90,25 @@ $routes->get('admin/brand-guidelines', 'Admin\BrandGuidelinesController::index',
 $routes->get('admin/brand-guidelines/frame', 'Admin\BrandGuidelinesController::frame', ['filter' => 'adminAuth']);
 $routes->get('admin/brand-guidelines/css/styles.css', 'Admin\BrandGuidelinesController::css', ['filter' => 'adminAuth']);
 $routes->get('admin/brand-guidelines/js/main.js', 'Admin\BrandGuidelinesController::js', ['filter' => 'adminAuth']);
+
+// Central Admin Settings
+$routes->get('admin/settings', 'Admin\SettingsController::index', ['filter' => 'adminAuth']);
+$routes->post('admin/settings', 'Admin\SettingsController::update', ['filter' => 'adminAuth']);
+
+// Legal Pages Admin Settings
+$routes->get('admin/settings/legal', 'Admin\LegalSettingsController::index', ['filter' => 'adminAuth']);
+$routes->post('admin/settings/legal', 'Admin\LegalSettingsController::update', ['filter' => 'adminAuth']);
+
+// Admin Orders — Phase A
+$routes->get('admin/orders', 'Admin\OrderController::index', ['filter' => 'adminAuth']);
+$routes->get('admin/orders/(:num)', 'Admin\OrderController::show/$1', ['filter' => 'adminAuth']);
+
+// Post-Payment Admin Settings
+$routes->get('admin/settings/post-payment', 'Admin\PostPaymentSettingsController::index', ['filter' => 'adminAuth']);
+$routes->post('admin/settings/post-payment', 'Admin\PostPaymentSettingsController::update', ['filter' => 'adminAuth']);
+
+
+// Public Legal Pages
+$routes->get('privacy-policy', 'Home::privacyPolicy');
+$routes->get('terms-and-conditions', 'Home::termsAndConditions');
+$routes->get('refund-policy', 'Home::refundPolicy');

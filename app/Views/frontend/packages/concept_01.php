@@ -220,4 +220,4 @@ $pkProgramsJson = json_encode($pkPrograms, JSON_HEX_TAG | JSON_HEX_APOS | JSON_H
 </div>
 
 <!-- Concept 01 Script -->
-<script src="<?= base_url('assets/frontend/js/packages-concept-01.js?v=1.0') ?>" defer></script>
+<script src="<?= base_url('assets/frontend/js/packages-concept-01.js?v=1.1') ?>" defer></script>

@@ -260,20 +260,6 @@
       var nx = neighbour(1);
       set("nextN", pad(nx.n));
       set("nextName", nx.name);
-
-      // Form CTA destination
-      var ctaBtn = drawer.querySelector("[data-choose]");
-      if (ctaBtn) {
-        ctaBtn.classList.remove("is-done");
-      }
-      var ctaFormUrl = p.google_form_url || null;
-      drawer.querySelectorAll(".pkd__cta").forEach(function (el) {
-        if (ctaFormUrl && el.tagName.toLowerCase() === 'a') {
-          el.href = ctaFormUrl;
-          el.target = "_blank";
-          el.rel = "noopener noreferrer";
-        }
-      });
     }
 
     function lock(on) {
@@ -313,7 +299,7 @@
       }
     }
 
-    function close() {
+    function close(onClosed) {
       if (!isOpen) return;
       isOpen = false;
       drawer.classList.add("is-closing");
@@ -322,7 +308,8 @@
         drawer.hidden = true;
         drawer.classList.remove("is-closing");
         lock(false);
-        if (opener && document.contains(opener)) opener.focus({ preventScroll: true });
+        if (typeof onClosed === "function") onClosed();
+        else if (opener && document.contains(opener)) opener.focus({ preventScroll: true });
         var c = openCard;
         setTimeout(function () { if (c) c.classList.remove("is-selected"); }, 900);
       };
@@ -358,21 +345,17 @@
       }
     });
 
-    var toastT = 0;
     drawer.addEventListener("click", function (e) {
       var t = e.target;
       if (t.closest("[data-close]")) return close();
       if (t.closest("[data-prev]")) return step(-1);
       if (t.closest("[data-next]")) return step(1);
       var ch = t.closest("[data-choose]");
-      if (ch && !cur.google_form_url) {
-        drawer.querySelectorAll("[data-choose]").forEach(function (b) { b.classList.add("is-done"); });
-        if (toast) {
-          toast.textContent = "✓ " + cur.name + " selected — Redirecting to consultation...";
-          toast.classList.add("is-on");
-          clearTimeout(toastT);
-          toastT = setTimeout(function () { toast.classList.remove("is-on"); }, 2600);
-        }
+      if (ch && cur && window.FtCheckout) {
+        e.preventDefault();
+        var selectedId = cur.id;
+        var returnFocus = opener;
+        close(function () { window.FtCheckout.open(selectedId, returnFocus); });
         return;
       }
       var a = t.closest(".pkd__index a");

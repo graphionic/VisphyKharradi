@@ -260,4 +260,4 @@ $edProgramsJson = json_encode($edPrograms, JSON_HEX_TAG | JSON_HEX_APOS | JSON_H
 </div>
 
 <!-- Concept 04 Script -->
-<script src="<?= base_url('assets/frontend/js/packages-concept-04.js?v=1.0') ?>" defer></script>
+<script src="<?= base_url('assets/frontend/js/packages-concept-04.js?v=1.1') ?>" defer></script>

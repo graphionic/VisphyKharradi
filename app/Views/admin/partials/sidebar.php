@@ -60,17 +60,10 @@ if ($initial === '') $initial = 'A';
                         </a>
                     </li>
                     <li>
-                        <a class="admin-nav__link admin-nav__link--disabled" href="#" aria-disabled="true" tabindex="-1">
+                        <a class="admin-nav__link <?= ftpreneur_isActive($current, ['admin/orders']) ? 'admin-nav__link--active' : '' ?>"
+                           href="<?= site_url('admin/orders') ?>" aria-current="<?= ftpreneur_isActive($current, ['admin/orders']) ? 'page' : 'false' ?>">
                             <svg class="admin-nav__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 13l3-3 3 3 4-4 3 3" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="3" width="14" height="14" rx="1.5" stroke="currentColor" stroke-width="1.35"/></svg>
                             <span>Orders</span>
-                            <span class="admin-nav__badge-soon">Soon</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="admin-nav__link admin-nav__link--disabled" href="#" aria-disabled="true" tabindex="-1">
-                            <svg class="admin-nav__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="3" y="5" width="14" height="10" rx="1.2" stroke="currentColor" stroke-width="1.35"/><path d="M3 8h14M7 12h4" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/></svg>
-                            <span>Payments</span>
-                            <span class="admin-nav__badge-soon">Soon</span>
                         </a>
                     </li>
                 </ul>
@@ -100,6 +93,13 @@ if ($initial === '') $initial = 'A';
                 <div class="admin-nav__label">System</div>
                 <ul class="admin-nav__list">
                     <li>
+                        <a class="admin-nav__link <?= ftpreneur_isActive($current, ['admin/settings']) ? 'admin-nav__link--active' : '' ?>"
+                           href="<?= site_url('admin/settings') ?>" aria-current="<?= ftpreneur_isActive($current, ['admin/settings']) ? 'page' : 'false' ?>">
+                            <svg class="admin-nav__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14Z" stroke="currentColor" stroke-width="1.35"/><circle cx="10" cy="10" r="2.5" stroke="currentColor" stroke-width="1.35"/></svg>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li>
                         <a class="admin-nav__link <?= ftpreneur_isActive($current, ['admin/package-display']) ? 'admin-nav__link--active' : '' ?>"
                            href="<?= site_url('admin/package-display') ?>" aria-current="<?= ftpreneur_isActive($current, ['admin/package-display']) ? 'page' : 'false' ?>">
                             <svg class="admin-nav__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="3" y="3" width="14" height="14" rx="1.6" stroke="currentColor" stroke-width="1.35"/><path d="M7 8h6M7 12h4" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/></svg>
@@ -107,10 +107,17 @@ if ($initial === '') $initial = 'A';
                         </a>
                     </li>
                     <li>
-                        <a class="admin-nav__link admin-nav__link--disabled" href="#" aria-disabled="true" tabindex="-1">
-                            <svg class="admin-nav__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 7.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z" stroke="currentColor" stroke-width="1.35"/><path d="M10 3v1.2M10 15.8V17M3 10h1.2M15.8 10H17M4.6 4.6l.85.85M14.55 14.55l.85.85M4.6 15.4l.85-.85M14.55 5.45l.85-.85" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-                            <span>Settings</span>
-                            <span class="admin-nav__badge-soon">Soon</span>
+                        <a class="admin-nav__link <?= ftpreneur_isActive($current, ['admin/settings/legal']) ? 'admin-nav__link--active' : '' ?>"
+                           href="<?= site_url('admin/settings/legal') ?>" aria-current="<?= ftpreneur_isActive($current, ['admin/settings/legal']) ? 'page' : 'false' ?>">
+                            <svg class="admin-nav__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M6 3h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.35"/><path d="M7 7h6M7 10h6M7 13h4" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/></svg>
+                            <span>Legal Pages</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="admin-nav__link <?= ftpreneur_isActive($current, ['admin/settings/post-payment']) ? 'admin-nav__link--active' : '' ?>"
+                           href="<?= site_url('admin/settings/post-payment') ?>" aria-current="<?= ftpreneur_isActive($current, ['admin/settings/post-payment']) ? 'page' : 'false' ?>">
+                            <svg class="admin-nav__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z" stroke="currentColor" stroke-width="1.35"/><path d="M7 10l2 2 4-4" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <span>Post-Payment</span>
                         </a>
                     </li>
                     <li>
