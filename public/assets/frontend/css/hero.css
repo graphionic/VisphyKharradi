@@ -240,6 +240,7 @@ a {
 }
 
 .nav__cta:hover {
+  color: #FFFFFF !important;
   background: var(--ultra);
   transform: translateY(-1px);
   box-shadow: 0 10px 22px -12px rgba(46, 71, 255, .7);
@@ -878,6 +879,7 @@ a {
 }
 
 .btn-primary:hover {
+  color: #FFFFFF !important;
   transform: translateY(-2px);
   box-shadow: 0 1px 0 rgba(255, 255, 255, .18) inset, 0 22px 40px -18px rgba(46, 71, 255, .75);
 }

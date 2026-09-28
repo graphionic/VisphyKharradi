@@ -157,6 +157,7 @@
 }
 
 .footer__btn-primary:hover {
+  color: #FFFFFF !important;
   background-color: #1A34FF;
   transform: translateY(-2px);
   box-shadow: 0 20px 36px -10px rgba(46, 71, 255, 0.75);

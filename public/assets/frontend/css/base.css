@@ -78,6 +78,38 @@ a:hover {
   color: var(--color-primary-hover);
 }
 
+/* Button Link Hover Safety — Prevent global link hover from corrupting primary button text contrast */
+a.btn-primary,
+a.btn--primary,
+a.approach-btn-primary,
+a.footer__btn-primary,
+a.nav__cta,
+a.crd-cta__p,
+a.ft-checkout__primary,
+a[class*="btn-primary"],
+a[class*="btn--primary"] {
+  color: #FFFFFF;
+}
+
+a.btn-primary:hover,
+a.btn-primary:focus-visible,
+a.btn--primary:hover,
+a.btn--primary:focus-visible,
+a.approach-btn-primary:hover,
+a.approach-btn-primary:focus-visible,
+a.footer__btn-primary:hover,
+a.footer__btn-primary:focus-visible,
+a.nav__cta:hover,
+a.nav__cta:focus-visible,
+a.crd-cta__p:hover,
+a.crd-cta__p:focus-visible,
+a.ft-checkout__primary:hover,
+a.ft-checkout__primary:focus-visible,
+a[class*="btn-primary"]:hover,
+a[class*="btn--primary"]:hover {
+  color: #FFFFFF !important;
+}
+
 /* Media Elements */
 img, svg, video, canvas {
   display: block;
