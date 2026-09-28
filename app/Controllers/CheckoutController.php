@@ -129,7 +129,12 @@ class CheckoutController extends BaseController
             return $this->respond(['message' => $e->getMessage()], $e->httpStatus);
         } catch (\Throwable $e) {
             // Never log SDK response bodies, customer details or credentials.
-            log_message('error', 'Checkout request failed ({type}).', ['type' => get_class($e)]);
+            log_message('error', 'Checkout request failed [{type}]: {message} in {file}:{line}', [
+                'type'    => get_class($e),
+                'message' => $e->getMessage(),
+                'file'    => $e->getFile(),
+                'line'    => $e->getLine(),
+            ]);
             return $this->respond(['message' => 'Payment service is temporarily unavailable. Please try again.'], 503);
         }
     }
