@@ -19,8 +19,8 @@ foreach (['grid', 'carousel'] as $mode) {
     }
 }
 ?>
-<link rel="stylesheet" href="<?= base_url('assets/frontend/css/packages-layout.css?v=1.1') ?>">
-<script src="<?= base_url('assets/frontend/js/packages-layout.js?v=1.0') ?>" defer></script>
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/packages-layout.css?v=' . time()) ?>">
+<script src="<?= base_url('assets/frontend/js/packages-layout.js?v=' . time()) ?>" defer></script>
 <div class="package-display" style="<?= esc(implode(';', $countStyles), 'attr') ?>"
      data-layout-desktop="<?= esc($packageLayouts['desktop'], 'attr') ?>"
      data-layout-tablet="<?= esc($packageLayouts['tablet'], 'attr') ?>"
@@ -43,5 +43,5 @@ switch ($design) {
 </div>
 
 <?= $this->include('frontend/sections/checkout') ?>
-<link rel="stylesheet" href="<?= base_url('assets/frontend/css/checkout.css?v=1.0') ?>">
-<script src="<?= base_url('assets/frontend/js/checkout.js?v=1.0') ?>" defer></script>
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/checkout.css?v=' . time()) ?>">
+<script src="<?= base_url('assets/frontend/js/checkout.js?v=' . time()) ?>" defer></script>

@@ -70,7 +70,7 @@ $hasOrders  = !empty($orders);
                 <!-- Search Query -->
                 <div class="field" style="margin: 0;">
                     <label class="field__label" for="q">Search Orders</label>
-                    <input class="input <?= $filters['q'] !== '' ? 'input--active-filter' : '' ?>"
+                    <input class="field__input <?= $filters['q'] !== '' ? 'field__input--active-filter' : '' ?>"
                            id="q" name="q" type="search"
                            placeholder="Order #, customer, email or mobile"
                            value="<?= esc($filters['q']) ?>"
@@ -80,7 +80,7 @@ $hasOrders  = !empty($orders);
                 <!-- Order Status Filter -->
                 <div class="field" style="margin: 0;">
                     <label class="field__label" for="order_status">Order Status</label>
-                    <select class="input <?= $filters['order_status'] !== 'all' ? 'input--active-filter' : '' ?>"
+                    <select class="field__select <?= $filters['order_status'] !== 'all' ? 'field__select--active-filter' : '' ?>"
                             id="order_status" name="order_status">
                         <option value="all" <?= $filters['order_status'] === 'all' ? 'selected' : '' ?>>All Order Statuses</option>
                         <option value="paid" <?= $filters['order_status'] === 'paid' ? 'selected' : '' ?>>Paid</option>
@@ -93,7 +93,7 @@ $hasOrders  = !empty($orders);
                 <!-- Payment Status Filter -->
                 <div class="field" style="margin: 0;">
                     <label class="field__label" for="payment_status">Payment Status</label>
-                    <select class="input <?= $filters['payment_status'] !== 'all' ? 'input--active-filter' : '' ?>"
+                    <select class="field__select <?= $filters['payment_status'] !== 'all' ? 'field__select--active-filter' : '' ?>"
                             id="payment_status" name="payment_status">
                         <option value="all" <?= $filters['payment_status'] === 'all' ? 'selected' : '' ?>>All Payment Statuses</option>
                         <option value="captured" <?= $filters['payment_status'] === 'captured' ? 'selected' : '' ?>>Captured</option>

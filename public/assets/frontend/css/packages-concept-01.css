@@ -757,17 +757,27 @@
 .pkd__facts dd { margin: 0; font-size: 14.5px; font-weight: 700; }
 .pkd__price { margin: 28px 0 0; font-family: var(--f-display); font-weight: 800; font-size: clamp(38px, 3.2vw, 52px); line-height: 1; letter-spacing: -.035em; font-variation-settings: "opsz" 96; }
 .pkd__price small { display: block; margin-bottom: 8px; font-family: var(--f-mono); font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-.pkd__cta {
+.pkd__cta,
+.pkd__cta span,
+.pkd__dock-cta,
+.pkd__dock-cta span {
   display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%;
   height: 58px; margin-top: 24px; padding: 0 8px 0 22px; border: 0; border-radius: 16px;
-  background: var(--ultra); color: #fff; cursor: pointer; font-family: var(--f-text); font-size: 15px; font-weight: 700;
+  background: var(--ultra); color: #FFFFFF !important; cursor: pointer; font-family: var(--f-text); font-size: 15px; font-weight: 700;
   box-shadow: 0 1px 0 rgba(255, 255, 255, .18) inset, 0 18px 32px -18px rgba(46, 71, 255, .85);
   transition: transform .35s var(--ease), background-color .35s var(--ease);
   text-decoration: none;
 }
 .pkd__cta i { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; background: var(--marigold); color: var(--ink); overflow: hidden; }
 .pkd__cta svg, .pkd__dock-cta svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-.pkd__cta:hover { background: #2238E0; transform: translateY(-2px); }
+.pkd__cta:hover,
+.pkd__cta:hover span,
+.pkd__dock-cta:hover,
+.pkd__dock-cta:hover span {
+  color: #FFFFFF !important;
+  background: #2238E0;
+  transform: translateY(-2px);
+}
 .pkd__cta:hover svg { animation: pk-arrow .55s var(--ease); }
 @keyframes pk-arrow { 0% { transform: none; } 45% { transform: translateX(24px); } 46% { transform: translateX(-24px); } 100% { transform: none; } }
 .pkd__cta:focus-visible, .pkd__talk:focus-visible, .pkd__next:focus-visible, .pkd__dock-cta:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
