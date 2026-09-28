@@ -3,7 +3,7 @@
  * Ftpreneur Public Frontend — Scripts Partial
  */
 ?>
-<script src="<?= base_url('assets/frontend/js/hero.js') ?>" defer></script>
+<script src="<?= base_url('assets/frontend/js/hero.js?v=' . time()) ?>" defer></script>
 <script src="<?= base_url('assets/frontend/js/credibility.js?v=1.0') ?>" defer></script>
 <script src="<?= base_url('assets/frontend/js/reality.js?v=1.0') ?>" defer></script>
 <script src="<?= base_url('assets/frontend/js/packages.js?v=1.1') ?>" defer></script>
