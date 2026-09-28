@@ -49,22 +49,22 @@ $robotsVal = esc($robots ?? 'index, follow');
 <link rel="preload" href="<?= base_url('assets/frontend/images/visphy-cutout.webp') ?>" as="image" />
 
 <!-- Arena Hero Fonts & Styles -->
-<link rel="stylesheet" href="<?= base_url('assets/frontend/css/fonts.css') ?>" />
-<link rel="stylesheet" href="<?= base_url('assets/frontend/css/hero.css') ?>" />
-<link rel="stylesheet" href="<?= base_url('assets/frontend/css/credibility.css?v=6.0') ?>" />
-<link rel="stylesheet" href="<?= base_url('assets/frontend/css/reality.css?v=1.0') ?>" />
-<link rel="stylesheet" href="<?= base_url('assets/frontend/css/packages.css?v=1.0') ?>" />
-<link rel="stylesheet" href="<?= base_url('assets/frontend/css/approach.css?v=1.0') ?>" />
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/fonts.css?v=' . time()) ?>" />
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/hero.css?v=' . time()) ?>" />
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/credibility.css?v=' . time()) ?>" />
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/reality.css?v=' . time()) ?>" />
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/packages.css?v=' . time()) ?>" />
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/approach.css?v=' . time()) ?>" />
 <link rel="stylesheet" href="<?= base_url('assets/frontend/css/client-results.css?v=' . time()) ?>" />
-<link rel="stylesheet" href="<?= base_url('assets/frontend/css/faq.css?v=1.0') ?>" />
-<link rel="stylesheet" href="<?= base_url('assets/frontend/css/footer.css?v=1.0') ?>" />
-<link rel="stylesheet" href="<?= base_url('assets/frontend/css/legal.css?v=1.0') ?>" />
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/faq.css?v=' . time()) ?>" />
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/footer.css?v=' . time()) ?>" />
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/legal.css?v=' . time()) ?>" />
 
 <!-- Production Frontend CSS -->
-<link rel="stylesheet" href="<?= base_url('assets/frontend/css/tokens.css?v=6.0') ?>">
-<link rel="stylesheet" href="<?= base_url('assets/frontend/css/base.css?v=6.0') ?>">
-<link rel="stylesheet" href="<?= base_url('assets/frontend/css/layout.css?v=6.0') ?>">
-<link rel="stylesheet" href="<?= base_url('assets/frontend/css/components.css?v=6.0') ?>">
-<link rel="stylesheet" href="<?= base_url('assets/frontend/css/utilities.css?v=6.0') ?>">
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/tokens.css?v=' . time()) ?>">
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/base.css?v=' . time()) ?>">
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/layout.css?v=' . time()) ?>">
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/components.css?v=' . time()) ?>">
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/utilities.css?v=' . time()) ?>">
 
 <script>document.documentElement.classList.replace("no-js", "js");</script>
