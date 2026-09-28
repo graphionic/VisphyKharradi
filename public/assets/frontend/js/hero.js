@@ -40,11 +40,78 @@
       you.addEventListener("click", function () { hero.classList.toggle("is-you"); });
     }
 
-    /* ---------- Mobile menu (prototype: state only) ---------- */
-    var menu = document.querySelector(".nav__menu");
-    if (menu) menu.addEventListener("click", function () {
-      menu.setAttribute("aria-expanded", menu.getAttribute("aria-expanded") === "true" ? "false" : "true");
+    /* ---------- Navigation Drawer & Smooth Scroll ---------- */
+    var menuBtn = document.querySelector(".nav__menu");
+    var drawer = document.getElementById("nav-drawer");
+    var body = document.body;
+
+    function openNavDrawer() {
+      if (!drawer) return;
+      drawer.classList.add("is-open");
+      drawer.setAttribute("aria-hidden", "false");
+      if (menuBtn) {
+        menuBtn.setAttribute("aria-expanded", "true");
+        menuBtn.classList.add("is-active");
+      }
+      body.classList.add("is-nav-drawer-open");
+    }
+
+    function closeNavDrawer() {
+      if (!drawer) return;
+      drawer.classList.remove("is-open");
+      drawer.setAttribute("aria-hidden", "true");
+      if (menuBtn) {
+        menuBtn.setAttribute("aria-expanded", "false");
+        menuBtn.classList.remove("is-active");
+      }
+      body.classList.remove("is-nav-drawer-open");
+    }
+
+    if (menuBtn) {
+      menuBtn.addEventListener("click", function () {
+        var isOpen = drawer && drawer.classList.contains("is-open");
+        if (isOpen) {
+          closeNavDrawer();
+        } else {
+          openNavDrawer();
+        }
+      });
+    }
+
+    // Close on data-nav-close elements (scrim, close button)
+    var closeEls = document.querySelectorAll("[data-nav-close]");
+    for (var i = 0; i < closeEls.length; i++) {
+      closeEls[i].addEventListener("click", closeNavDrawer);
+    }
+
+    // Close on Escape key
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && drawer && drawer.classList.contains("is-open")) {
+        closeNavDrawer();
+      }
     });
+
+    // Handle smooth navigation clicks and close drawer on link selection
+    var navAnchors = document.querySelectorAll('a[href^="#"]');
+    for (var k = 0; k < navAnchors.length; k++) {
+      (function(anchor) {
+        anchor.addEventListener("click", function (e) {
+          var targetId = anchor.getAttribute("href");
+          if (!targetId || targetId === "#") return;
+          
+          var targetEl = document.querySelector(targetId);
+          if (targetEl) {
+            e.preventDefault();
+            closeNavDrawer();
+            targetEl.scrollIntoView({ behavior: "smooth" });
+            if (history.pushState) {
+              history.pushState(null, null, targetId);
+            }
+          }
+        });
+      })(navAnchors[k]);
+    }
+
 
     /* ---------- Editorial Text Loop ---------- */
     var loopEl = hero.querySelector(".editorial-loop");

@@ -5,14 +5,15 @@
 <!-- Ftpreneur Operations — Phase 1 Foundation Ready -->
 
 <!-- NAV -->
-<header class="nav">
-  <a class="brand" href="#" aria-label="FTPRENEUR by Visphy Kharradi — home">
+<header class="nav" id="main-header">
+  <a class="brand" href="#hero" aria-label="FTPRENEUR by Visphy Kharradi — home">
     <img class="brand__logo" src="<?= base_url('assets/frontend/images/ftpreneur-logo.png') ?>" alt="FTPRENEUR by Visphy Kharradi" width="1324" height="1188" />
   </a>
   <nav class="nav__links" aria-label="Primary">
     <a href="#about">About</a>
     <a href="#approach">Approach</a>
     <a href="#programs">Programs</a>
+    <a href="#results">Results</a>
     <a href="#faq">FAQ</a>
   </nav>
   <a class="nav__phone" href="tel:+919574293300" aria-label="Call +91 95742 93300">+91 95742 93300</a>
@@ -20,10 +21,52 @@
     <span>Get started</span>
     <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" /></svg>
   </a>
-  <button class="nav__menu" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
+  <button class="nav__menu" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="nav-drawer"><span></span><span></span></button>
+
+  <!-- Mobile Drawer Overlay -->
+  <div class="nav__drawer" id="nav-drawer" aria-hidden="true">
+    <div class="nav__drawer-scrim" data-nav-close></div>
+    <div class="nav__drawer-panel" role="dialog" aria-modal="true" aria-label="Mobile Navigation Menu">
+      <div class="nav__drawer-header">
+        <span class="nav__drawer-title">MENU</span>
+        <button class="nav__drawer-close" type="button" data-nav-close aria-label="Close menu">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <nav class="nav__drawer-links" aria-label="Mobile Primary Navigation">
+        <a href="#about" class="nav__drawer-link">
+          <span class="nav__drawer-num">01</span>
+          <span class="nav__drawer-text">About</span>
+        </a>
+        <a href="#approach" class="nav__drawer-link">
+          <span class="nav__drawer-num">02</span>
+          <span class="nav__drawer-text">Approach</span>
+        </a>
+        <a href="#programs" class="nav__drawer-link">
+          <span class="nav__drawer-num">03</span>
+          <span class="nav__drawer-text">Programs</span>
+        </a>
+        <a href="#results" class="nav__drawer-link">
+          <span class="nav__drawer-num">04</span>
+          <span class="nav__drawer-text">Results</span>
+        </a>
+        <a href="#faq" class="nav__drawer-link">
+          <span class="nav__drawer-num">05</span>
+          <span class="nav__drawer-text">FAQ</span>
+        </a>
+      </nav>
+      <div class="nav__drawer-foot">
+        <a class="nav__drawer-phone" href="tel:+919574293300">+91 95742 93300</a>
+        <a class="nav__drawer-cta" href="#start">
+          <span>Get started</span>
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" /></svg>
+        </a>
+      </div>
+    </div>
+  </div>
 </header>
 
-<section class="hero" aria-labelledby="hero-title">
+<section class="hero" id="hero" aria-labelledby="hero-title">
 
   <!-- 01 · architectural grid -->
   <div class="grid" aria-hidden="true"><span></span><span></span><span></span></div>
@@ -127,7 +170,7 @@
 </section>
 
 <!-- SECTION 02 · TRUST + CREDIBILITY (THE RECORD ARENA) -->
-<section class="credibility-section bg-navy" id="credibility" aria-labelledby="credibility-title">
+<section class="credibility-section bg-navy" id="about" aria-labelledby="credibility-title">
   
   <!-- Atmosphere: Technical Grid & Ghost Numerals -->
   <div class="credibility__bg-grid" aria-hidden="true">

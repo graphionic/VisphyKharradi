@@ -29,6 +29,24 @@ html {
   }
 }
 
+/* Landing Page Section Scroll Margin Offset for Sticky Header */
+section[id],
+footer[id],
+header[id],
+div[id] {
+  scroll-margin-top: 96px;
+}
+
+@media (max-width: 1024px) {
+  section[id],
+  footer[id],
+  header[id],
+  div[id] {
+    scroll-margin-top: 76px;
+  }
+}
+
+
 body {
   min-height: 100vh;
   display: flex;
