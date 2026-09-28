@@ -224,6 +224,13 @@
 }
 .field__select:disabled { cursor: not-allowed; }
 
+.field__input--active-filter,
+.field__select--active-filter {
+  border-color: var(--color-primary, #2E47FF);
+  background-color: rgba(46, 71, 255, 0.03);
+  font-weight: 600;
+}
+
 /* Checkbox / Radio / Toggle — product quality */
 .check { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; user-select: none; }
 .check__input {

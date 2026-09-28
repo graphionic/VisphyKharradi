@@ -54,7 +54,7 @@ $edProgramsJson = json_encode($edPrograms, JSON_HEX_TAG | JSON_HEX_APOS | JSON_H
 ?>
 
 <!-- Concept 04 Stylesheet -->
-<link rel="stylesheet" href="<?= base_url('assets/frontend/css/packages-concept-04.css?v=1.0') ?>" />
+<link rel="stylesheet" href="<?= base_url('assets/frontend/css/packages-concept-04.css?v=' . time()) ?>" />
 
 <!-- Concept 04 Data Payload -->
 <script>

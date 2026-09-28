@@ -1236,15 +1236,18 @@ body.is-locked-c4 { overflow: hidden !important; }
 }
 .pvd__talk:hover { background: var(--canvas); }
 
-.pvd__cta {
+.pvd__cta,
+a.pvd__cta,
+.pvd__cta:link,
+.pvd__cta:visited {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   height: 48px;
   padding: 0 22px;
   border-radius: 12px;
-  background: var(--ultra);
-  color: #fff;
+  background: var(--ultra) !important;
+  color: #fff !important;
   font-family: var(--f-mono);
   font-size: 12px;
   font-weight: 700;
@@ -1252,11 +1255,14 @@ body.is-locked-c4 { overflow: hidden !important; }
   text-transform: uppercase;
   border: 0;
   cursor: pointer;
-  transition: background .25s, transform .2s;
-  text-decoration: none;
+  transition: background .25s, transform .2s, color .25s;
+  text-decoration: none !important;
 }
-.pvd__cta:hover {
-  background: #1b35e6;
+.pvd__cta:hover,
+a.pvd__cta:hover,
+.pvd__cta:hover * {
+  background: #1b35e6 !important;
+  color: #fff !important;
   transform: translateY(-1px);
 }
 .pvd__cta svg {
