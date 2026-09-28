@@ -33,7 +33,7 @@ class Razorpay extends BaseConfig
             $dbSecret  = !empty($secretRow['setting_value']) ? EncryptionService::decrypt($secretRow['setting_value']) : '';
             $dbWebhook = !empty($webhookRow['setting_value']) ? EncryptionService::decrypt($webhookRow['setting_value']) : '';
 
-            if (!empty($dbKeyId)) {
+            if (!empty($dbKeyId) && !empty($dbSecret)) {
                 $this->keyId         = $dbKeyId;
                 $this->keySecret     = $dbSecret;
                 $this->webhookSecret = $dbWebhook;

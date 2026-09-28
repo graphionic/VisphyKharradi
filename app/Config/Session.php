@@ -127,4 +127,19 @@ class Session extends BaseConfig
      * seconds.
      */
     public int $lockMaxRetries = 300;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $path = trim((string) $this->savePath);
+        if ($path === '' || strtolower($path) === 'null' || !is_dir($path)) {
+            $this->savePath = WRITEPATH . 'session';
+        }
+
+        if (!is_dir($this->savePath)) {
+            @mkdir($this->savePath, 0700, true);
+        }
+    }
 }
+
