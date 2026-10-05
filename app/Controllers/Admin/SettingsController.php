@@ -63,6 +63,13 @@ class SettingsController extends BaseController
         $address         = (string) ($this->settingModel->where('setting_key', 'general.address')->first()['setting_value'] ?? '');
         $businessHours   = trim((string) ($this->settingModel->where('setting_key', 'general.business_hours')->first()['setting_value'] ?? 'MON – SAT // 9:00 AM – 7:00 PM IST'));
 
+        $websiteMode           = trim((string) ($this->settingModel->where('setting_key', 'general.website_mode')->first()['setting_value'] ?? 'live'));
+        $websiteMode           = in_array($websiteMode, ['live', 'coming_soon'], true) ? $websiteMode : 'live';
+        $comingSoonHeading     = trim((string) ($this->settingModel->where('setting_key', 'general.coming_soon_heading')->first()['setting_value'] ?? 'Something powerful is coming.'));
+        $comingSoonMessage     = trim((string) ($this->settingModel->where('setting_key', 'general.coming_soon_message')->first()['setting_value'] ?? "We're preparing a better way to take control of your health, performance and well-being. Ftpreneur is launching soon."));
+        $comingSoonShowContact = trim((string) ($this->settingModel->where('setting_key', 'general.coming_soon_show_contact')->first()['setting_value'] ?? 'enabled'));
+        $comingSoonShowContact = in_array($comingSoonShowContact, ['enabled', 'disabled'], true) ? $comingSoonShowContact : 'enabled';
+
         // 2. Razorpay Credentials & Mode
         $razorpayMode         = trim((string) ($this->settingModel->where('setting_key', 'payment.razorpay.mode')->first()['setting_value'] ?? 'test'));
         $razorpayMode         = in_array($razorpayMode, ['test', 'live'], true) ? $razorpayMode : 'test';
@@ -140,6 +147,10 @@ class SettingsController extends BaseController
             'generalWaNumber'           => old('general_whatsapp_number', $generalWaNumber),
             'address'                   => old('address', $address),
             'businessHours'             => old('business_hours', $businessHours),
+            'websiteMode'               => old('website_mode', $websiteMode),
+            'comingSoonHeading'         => old('coming_soon_heading', $comingSoonHeading),
+            'comingSoonMessage'         => old('coming_soon_message', $comingSoonMessage),
+            'comingSoonShowContact'     => old('coming_soon_show_contact', $comingSoonShowContact),
             // Razorpay
             'razorpayMode'              => old('razorpay_mode', $razorpayMode),
             'razorpayTestKeyId'         => old('razorpay_test_key_id', $razorpayTestKeyId),
@@ -193,8 +204,23 @@ class SettingsController extends BaseController
             $contactPhone    = trim((string) $this->request->getPost('contact_phone'));
             $contactEmail    = trim((string) $this->request->getPost('contact_email'));
             $generalWaNumber = trim((string) $this->request->getPost('general_whatsapp_number'));
-            $address         = trim((string) $this->request->getPost('address'));
-            $businessHours   = trim((string) $this->request->getPost('business_hours'));
+            $address               = trim((string) $this->request->getPost('address'));
+            $businessHours         = trim((string) $this->request->getPost('business_hours'));
+
+            $websiteMode           = trim((string) $this->request->getPost('website_mode'));
+            $websiteMode           = in_array($websiteMode, ['live', 'coming_soon'], true) ? $websiteMode : 'live';
+
+            $comingSoonHeading     = trim((string) $this->request->getPost('coming_soon_heading'));
+            if ($comingSoonHeading === '') {
+                $comingSoonHeading = 'Something powerful is coming.';
+            }
+
+            $comingSoonMessage     = trim((string) $this->request->getPost('coming_soon_message'));
+            if ($comingSoonMessage === '') {
+                $comingSoonMessage = "We're preparing a better way to take control of your health, performance and well-being. Ftpreneur is launching soon.";
+            }
+
+            $comingSoonShowContact = $this->request->getPost('coming_soon_show_contact') === 'disabled' ? 'disabled' : 'enabled';
 
             if ($siteName === '') {
                 return redirect()->to('/admin/settings?tab=general')->withInput()->with('error', 'Business / Site name is required.');
@@ -212,6 +238,12 @@ class SettingsController extends BaseController
             $this->settingModel->setSetting('general.whatsapp_number', $generalWaNumber, 'string', true);
             $this->settingModel->setSetting('general.address', $address, 'text', true);
             $this->settingModel->setSetting('general.business_hours', $businessHours, 'string', true);
+
+            // Save Website Status & Coming Soon settings
+            $this->settingModel->setSetting('general.website_mode', $websiteMode, 'string', true);
+            $this->settingModel->setSetting('general.coming_soon_heading', $comingSoonHeading, 'string', true);
+            $this->settingModel->setSetting('general.coming_soon_message', $comingSoonMessage, 'text', true);
+            $this->settingModel->setSetting('general.coming_soon_show_contact', $comingSoonShowContact, 'string', true);
 
             // Handle Logo File Upload / Removal
             if ($this->request->getPost('remove_logo') === '1') {

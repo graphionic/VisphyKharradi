@@ -66,6 +66,62 @@
             <!-- TAB 1: GENERAL SETTINGS -->
             <?php if ($activeTab === 'general'): ?>
 
+                <!-- SECTION 0: WEBSITE STATUS -->
+                <div style="border: 1px solid var(--color-border, #E2E8F0); border-radius: 12px; padding: 24px; margin-bottom: 32px; background: #FAFAFA;">
+                    <h4 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 700; color: #0F172A; text-transform: uppercase; letter-spacing: 0.5px;">Website Status</h4>
+
+                    <div class="field" style="margin-bottom: 20px;">
+                        <label class="field__label">Website Mode</label>
+                        <div style="display: flex; gap: 24px; margin-top: 8px;">
+                            <label style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; color: #0F172A;">
+                                <input type="radio" name="website_mode" value="live" <?= $websiteMode === 'live' ? 'checked' : '' ?> style="width: 18px; height: 18px;" onchange="toggleComingSoonFields(this.value)">
+                                <span>● Live Mode</span>
+                            </label>
+                            <label style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; color: #0F172A;">
+                                <input type="radio" name="website_mode" value="coming_soon" <?= $websiteMode === 'coming_soon' ? 'checked' : '' ?> style="width: 18px; height: 18px;" onchange="toggleComingSoonFields(this.value)">
+                                <span>○ Coming Soon Mode</span>
+                            </label>
+                        </div>
+                        <div class="field__hint" style="margin-top: 6px;">When set to "Coming Soon", public visitors see a dedicated announcement page. Admin routes and payment webhooks remain fully accessible.</div>
+                    </div>
+
+                    <div id="coming-soon-options" style="display: <?= $websiteMode === 'coming_soon' ? 'block' : 'none' ?>; border-top: 1px solid #E2E8F0; padding-top: 20px; margin-top: 16px;">
+                        <div class="field" style="margin-bottom: 16px;">
+                            <label for="coming_soon_heading" class="field__label">Coming Soon Heading</label>
+                            <input type="text" id="coming_soon_heading" name="coming_soon_heading" class="field__input" value="<?= esc($comingSoonHeading) ?>" maxlength="200" placeholder="Something powerful is coming.">
+                        </div>
+
+                        <div class="field" style="margin-bottom: 16px;">
+                            <label for="coming_soon_message" class="field__label">Coming Soon Message</label>
+                            <textarea id="coming_soon_message" name="coming_soon_message" class="field__input" rows="3" placeholder="We're preparing a better way to take control of your health..."><?= esc($comingSoonMessage) ?></textarea>
+                        </div>
+
+                        <div class="field">
+                            <label class="field__label">Show Contact Options</label>
+                            <div style="display: flex; gap: 24px; margin-top: 8px;">
+                                <label style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; color: #0F172A;">
+                                    <input type="radio" name="coming_soon_show_contact" value="enabled" <?= $comingSoonShowContact === 'enabled' ? 'checked' : '' ?> style="width: 16px; height: 16px;">
+                                    <span>Enabled</span>
+                                </label>
+                                <label style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; color: #0F172A;">
+                                    <input type="radio" name="coming_soon_show_contact" value="disabled" <?= $comingSoonShowContact === 'disabled' ? 'checked' : '' ?> style="width: 16px; height: 16px;">
+                                    <span>Disabled</span>
+                                </label>
+                            </div>
+                            <div class="field__hint" style="margin-top: 4px;">Displays configured WhatsApp and Email contacts from General Settings when enabled.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                function toggleComingSoonFields(val) {
+                    var el = document.getElementById('coming-soon-options');
+                    if (el) {
+                        el.style.display = (val === 'coming_soon') ? 'block' : 'none';
+                    }
+                }
+                </script>
+
                 <!-- SECTION 1: BRAND & ASSETS -->
                 <div style="border: 1px solid var(--color-border, #E2E8F0); border-radius: 12px; padding: 24px; margin-bottom: 32px; background: #FAFAFA;">
                     <h4 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 700; color: #0F172A; text-transform: uppercase; letter-spacing: 0.5px;">Brand Identity &amp; Assets</h4>
