@@ -37,6 +37,7 @@ class Filters extends BaseFilters
         'securityheaders' => \App\Filters\SecurityHeaders::class,
         'adminAuth'       => \App\Filters\AdminAuth::class,
         'adminGuest'      => \App\Filters\AdminGuest::class,
+        'websiteMode'     => \App\Filters\WebsiteModeFilter::class,
     ];
 
     /**
@@ -78,6 +79,7 @@ class Filters extends BaseFilters
     // See SECURITY_ARCHITECTURE.md §4 and README.
     public array $globals = [
         'before' => [
+            'websiteMode',
             // 'honeypot',
             'csrf' => ['except' => ['payment/webhook']],
             // 'invalidchars',
