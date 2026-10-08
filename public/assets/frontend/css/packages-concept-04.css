@@ -327,6 +327,41 @@ body.is-locked-c4 { overflow: hidden !important; }
   line-height: 1.55;
   color: #475569;
 }
+/* Option Selector Pills */
+.pv-card__opts, .pvd__opts {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.pv-card__opt-btn, .pvd__opt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 12px;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  border-radius: 6px;
+  border: 1px solid var(--line-2);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .2s var(--ease);
+}
+.pv-card__opt-btn:hover, .pvd__opt-btn:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.pv-card__opt-btn.is-active, .pv-card__opt-btn[aria-checked="true"],
+.pvd__opt-btn.is-active, .pvd__opt-btn[aria-checked="true"] {
+  background: var(--ink);
+  color: #FFFFFF;
+  border-color: var(--ink);
+}
 .pv-card__facts {
   margin: auto 0 0;
   padding-top: 18px;

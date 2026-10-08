@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let afterClose;
   let drawerOpener;
 
-  // Data map for drawer switching
+  // Data map for drawer switching and option handling
   const packageDataMap = [];
   cards.forEach((card, index) => {
     try {
@@ -33,7 +33,60 @@ document.addEventListener('DOMContentLoaded', function() {
       if (json) {
         const data = JSON.parse(json);
         data.index = index;
+        data.cardElement = card;
+        
+        let initialOpt = null;
+        if (data.options && data.options.length > 0) {
+          initialOpt = data.options[0];
+          data.selectedOptionId = initialOpt ? initialOpt.id : null;
+        } else {
+          data.selectedOptionId = null;
+        }
+
         packageDataMap.push(data);
+
+        // Render options on card if > 1
+        const cardOptsContainer = card.querySelector('[data-card-opts]');
+        if (cardOptsContainer && data.options && data.options.length > 1) {
+          cardOptsContainer.innerHTML = '';
+          data.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'pkg-card__opt-btn' + (opt.id === data.selectedOptionId ? ' is-active' : '');
+            btn.setAttribute('role', 'radio');
+            btn.setAttribute('aria-checked', opt.id === data.selectedOptionId ? 'true' : 'false');
+            btn.textContent = opt.formatted_duration || opt.name;
+            
+            btn.addEventListener('click', function(e) {
+              e.stopPropagation(); // prevent opening drawer when picking option
+              data.selectedOptionId = opt.id;
+              
+              // update card pills UI
+              cardOptsContainer.querySelectorAll('.pkg-card__opt-btn').forEach(b => {
+                b.classList.remove('is-active');
+                b.setAttribute('aria-checked', 'false');
+              });
+              btn.classList.add('is-active');
+              btn.setAttribute('aria-checked', 'true');
+
+              // update card price & duration
+              const priceEl = card.querySelector('.pkg-card__price b');
+              if (priceEl && opt.formatted_price) priceEl.textContent = opt.formatted_price;
+              
+              const wkEl = card.querySelector('.pkg-card__wk');
+              if (wkEl && opt.formatted_duration) wkEl.textContent = opt.formatted_duration;
+            });
+            cardOptsContainer.appendChild(btn);
+          });
+
+          // Set initial card price & duration if default option exists
+          if (initialOpt) {
+            const priceEl = card.querySelector('.pkg-card__price b');
+            if (priceEl && initialOpt.formatted_price) priceEl.textContent = initialOpt.formatted_price;
+            const wkEl = card.querySelector('.pkg-card__wk');
+            if (wkEl && initialOpt.formatted_duration) wkEl.textContent = initialOpt.formatted_duration;
+          }
+        }
       }
     } catch (e) {
       console.error('Failed to parse package json', e);
@@ -105,6 +158,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const elImg = drawer.querySelector('[data-drawer-img]');
     const elFeatures = drawer.querySelector('[data-drawer-features]');
     const elCta = drawer.querySelector('[data-drawer-cta]');
+    const optsWrap = drawer.querySelector('[data-drawer-opts-wrap]');
+    const optsContainer = drawer.querySelector('[data-drawer-opts]');
 
     if (elCrumbNum) elCrumbNum.textContent = String(index + 1).padStart(2, '0');
     if (elCrumbTotal) elCrumbTotal.textContent = String(packageDataMap.length).padStart(2, '0');
@@ -122,17 +177,75 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
 
-    const durationText = data.duration_value && data.duration_unit ? `${data.duration_value} ${data.duration_unit}` : '12 Weeks';
+    // Drawer options & price synchronization
+    let activeOpt = null;
+    if (data.options && data.options.length > 0) {
+      activeOpt = data.options.find(o => o.id === data.selectedOptionId) || data.options[0];
+      data.selectedOptionId = activeOpt.id;
+    }
+
+    const durationText = activeOpt ? activeOpt.formatted_duration : (data.duration_value && data.duration_unit ? `${data.duration_value} ${data.duration_unit}` : '12 Weeks');
     if (elDuration) elDuration.textContent = durationText;
 
-    if (elPrice) elPrice.textContent = data.formatted_selling_price || ('₹' + (data.selling_price || ''));
+    const priceText = activeOpt ? activeOpt.formatted_price : (data.formatted_selling_price || ('₹' + (data.selling_price || '')));
+    if (elPrice) elPrice.textContent = priceText;
     
     if (elRegularPrice) {
-      if (data.regular_price && parseFloat(data.regular_price) > parseFloat(data.selling_price || 0)) {
+      if (!activeOpt && data.regular_price && parseFloat(data.regular_price) > parseFloat(data.selling_price || 0)) {
         elRegularPrice.textContent = data.formatted_regular_price || ('₹' + data.regular_price);
         elRegularPrice.style.display = 'inline';
       } else {
         elRegularPrice.style.display = 'none';
+      }
+    }
+
+    // Render drawer options selector if options > 1
+    if (optsWrap && optsContainer) {
+      if (data.options && data.options.length > 1) {
+        optsWrap.style.display = 'block';
+        optsContainer.innerHTML = '';
+        data.options.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'pkg-drawer__opt-btn' + (opt.id === data.selectedOptionId ? ' is-active' : '');
+          btn.setAttribute('role', 'radio');
+          btn.setAttribute('aria-checked', opt.id === data.selectedOptionId ? 'true' : 'false');
+          btn.textContent = opt.formatted_duration || opt.name;
+
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            data.selectedOptionId = opt.id;
+            
+            // update drawer buttons
+            optsContainer.querySelectorAll('.pkg-drawer__opt-btn').forEach(b => {
+              b.classList.remove('is-active');
+              b.setAttribute('aria-checked', 'false');
+            });
+            btn.classList.add('is-active');
+            btn.setAttribute('aria-checked', 'true');
+
+            // update drawer price & duration
+            if (elPrice && opt.formatted_price) elPrice.textContent = opt.formatted_price;
+            if (elDuration && opt.formatted_duration) elDuration.textContent = opt.formatted_duration;
+
+            // sync card UI
+            if (data.cardElement) {
+              const cardPriceEl = data.cardElement.querySelector('.pkg-card__price b');
+              if (cardPriceEl && opt.formatted_price) cardPriceEl.textContent = opt.formatted_price;
+              const cardWkEl = data.cardElement.querySelector('.pkg-card__wk');
+              if (cardWkEl && opt.formatted_duration) cardWkEl.textContent = opt.formatted_duration;
+              const cardOpts = data.cardElement.querySelectorAll('.pkg-card__opt-btn');
+              cardOpts.forEach(cb => {
+                const isActive = cb.textContent.trim() === (opt.formatted_duration || opt.name).trim();
+                cb.classList.toggle('is-active', isActive);
+                cb.setAttribute('aria-checked', isActive ? 'true' : 'false');
+              });
+            }
+          });
+          optsContainer.appendChild(btn);
+        });
+      } else {
+        optsWrap.style.display = 'none';
       }
     }
 
@@ -161,9 +274,9 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         if (!window.FtCheckout) return;
         const returnFocus = drawerOpener;
-        closeDrawer(function () { window.FtCheckout.open(data.id, returnFocus); });
+        const optId = data.selectedOptionId;
+        closeDrawer(function () { window.FtCheckout.open(data.id, returnFocus, optId); });
       };
-
     }
 
     // Open animations & lock scroll

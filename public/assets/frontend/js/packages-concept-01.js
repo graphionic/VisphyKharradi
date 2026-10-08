@@ -72,9 +72,27 @@
     function card(p, k) {
       var isFeatured = p.featured;
       var accent = p.accent || (isFeatured ? "ultra" : (k % 3 === 0 ? "ultra" : (k % 3 === 1 ? "mint" : "marigold")));
-      // Stable palette rhythm follows package order, including after filtering.
       var tone = ['ultra', 'mint', 'sky', 'white', 'mint', 'sky', 'white', 'ink'][(p.n - 1) % 8];
       var weeks = p.weeks || 12;
+
+      var hasOpts = p.options && p.options.length > 1;
+      if (hasOpts && !p.selectedOptionId) {
+        p.selectedOptionId = p.options[0].id;
+        p.selectedPrice = p.options[0].price;
+        p.selectedDuration = p.options[0].formatted_duration;
+      }
+      var activePrice = p.selectedPrice || p.price;
+      var activeDur = p.selectedDuration || (weeks + ' weeks');
+
+      var optsHtml = '';
+      if (hasOpts) {
+        optsHtml = '<div class="pk-card__opts" role="radiogroup" aria-label="Select duration">';
+        p.options.forEach(function (opt) {
+          var sel = (opt.id === p.selectedOptionId);
+          optsHtml += '<button type="button" role="radio" class="pk-card__opt-btn' + (sel ? ' is-active' : '') + '" aria-checked="' + sel + '" data-opt-id="' + opt.id + '" data-n="' + p.n + '" data-price="' + opt.price + '" data-dur="' + esc(opt.formatted_duration) + '">' + esc(opt.name) + '</button>';
+        });
+        optsHtml += '</div>';
+      }
 
       return '<li class="pk__cell" style="--k:' + k + '">' +
         '<article class="pk-card' + (isFeatured ? " is-featured" : "") + '" data-accent="' + accent + '" data-tone="' + tone + '" data-n="' + p.n + '" data-slug="' + esc(p.slug) + '">' +
@@ -82,16 +100,17 @@
           '<div class="pk-card__top">' +
             (isFeatured ? '<span class="pk-card__sig">Signature program</span>'
                         : '<span class="pk-card__prog">Personalised program</span>') +
-            '<span class="pk-card__dur">' + weeks + ' wk</span>' +
+            '<span class="pk-card__dur" data-card-dur="' + p.n + '">' + esc(activeDur) + '</span>' +
           '</div>' +
           '<p class="pk-card__cat"><i aria-hidden="true"></i>' + (isFeatured ? "Recommended start · " : "") + esc(p.category || "Personalised") + '</p>' +
           '<h3 class="pk-card__name"><button class="pk-card__open" type="button" aria-haspopup="dialog" aria-controls="pk-drawer" data-n="' + p.n + '">' + esc(p.name) + '</button></h3>' +
           '<p class="pk-card__purpose">' + esc(p.purpose || p.short_description || "") + '</p>' +
+          (optsHtml ? optsHtml : '') +
           '<div class="pk-card__track" aria-hidden="true">' + ticks(weeks) + '</div>' +
-          '<div class="pk-card__signals"><span class="pk-card__weeks">' + weeks + ' weeks</span><p class="pk-card__pillars">' + pillars() + '</p></div>' +
+          '<div class="pk-card__signals"><span class="pk-card__weeks" data-card-wk="' + p.n + '">' + esc(activeDur) + '</span><p class="pk-card__pillars">' + pillars() + '</p></div>' +
           '<div class="pk-card__foot">' +
             '<span class="pk-card__fill" aria-hidden="true"></span>' +
-            '<p class="pk-card__price"><small>From</small>' + inr(p.price) + '</p>' +
+            '<p class="pk-card__price" data-card-price="' + p.n + '"><small>Investment</small>' + inr(activePrice) + '</p>' +
             '<span class="pk-card__cta" aria-hidden="true">Explore <span class="pk-card__arrow"></span></span>' +
           '</div>' +
         '</article></li>';
@@ -337,6 +356,38 @@
     }
 
     grid.addEventListener("click", function (e) {
+      var optBtn = e.target.closest(".pk-card__opt-btn");
+      if (optBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        var nVal = parseInt(optBtn.getAttribute("data-n"), 10);
+        var optId = parseInt(optBtn.getAttribute("data-opt-id"), 10);
+        var pObj = byN(nVal);
+        if (pObj && pObj.options) {
+          var matchedOpt = pObj.options.filter(function (o) { return o.id === optId; })[0];
+          if (matchedOpt) {
+            pObj.selectedOptionId = matchedOpt.id;
+            pObj.selectedPrice = matchedOpt.price;
+            pObj.selectedDuration = matchedOpt.formatted_duration;
+
+            var cardEl = optBtn.closest(".pk-card");
+            if (cardEl) {
+              cardEl.querySelectorAll(".pk-card__opt-btn").forEach(function (b) {
+                var isThis = parseInt(b.getAttribute("data-opt-id"), 10) === optId;
+                b.classList.toggle("is-active", isThis);
+                b.setAttribute("aria-checked", String(isThis));
+              });
+              var priceEl = cardEl.querySelector('[data-card-price]');
+              if (priceEl) priceEl.innerHTML = '<small>Investment</small>' + inr(matchedOpt.price);
+              var durEl = cardEl.querySelector('[data-card-dur]');
+              if (durEl) durEl.textContent = matchedOpt.formatted_duration;
+              var wkEl = cardEl.querySelector('[data-card-wk]');
+              if (wkEl) wkEl.textContent = matchedOpt.formatted_duration;
+            }
+          }
+        }
+        return;
+      }
       var b = e.target.closest(".pk-card__open");
       if (b) {
         var nVal = parseInt(b.getAttribute("data-n"), 10);
@@ -354,8 +405,9 @@
       if (ch && cur && window.FtCheckout) {
         e.preventDefault();
         var selectedId = cur.id;
+        var selectedOptId = cur.selectedOptionId || (cur.options && cur.options.length ? cur.options[0].id : null);
         var returnFocus = opener;
-        close(function () { window.FtCheckout.open(selectedId, returnFocus); });
+        close(function () { window.FtCheckout.open(selectedId, returnFocus, selectedOptId); });
         return;
       }
       var a = t.closest(".pkd__index a");

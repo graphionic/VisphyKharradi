@@ -261,6 +261,8 @@ class PackageService
         $value = (int) $value;
         // Handle pluralization
         $map = [
+            'minute'  => $value === 1 ? 'Minute' : 'Minutes',
+            'minutes' => $value === 1 ? 'Minute' : 'Minutes',
             'day'    => $value === 1 ? 'Day' : 'Days',
             'days'   => $value === 1 ? 'Day' : 'Days',
             'week'   => $value === 1 ? 'Week' : 'Weeks',
@@ -580,11 +582,11 @@ class PackageService
         $data['duration_value'] = $durationValueRaw === '' ? null : (int)$durationValueRaw;
 
         // Duration unit
-        $allowedUnits = ['days', 'weeks', 'months'];
+        $allowedUnits = ['minutes', 'days', 'weeks', 'months', 'years', 'minute', 'mins', 'min'];
         if ($durationUnit === '') {
             $errors['duration_unit'] = 'Duration unit is required.';
         } elseif (!in_array($durationUnit, $allowedUnits, true)) {
-            $errors['duration_unit'] = 'Duration unit must be Days, Weeks or Months.';
+            $errors['duration_unit'] = 'Duration unit must be Minutes, Days, Weeks, or Months.';
         }
         $data['duration_unit'] = $durationUnit;
 
@@ -1417,7 +1419,8 @@ class PackageService
         $gallery = $this->getGalleryImages($packageId);
         $features = $this->featureModel->where('package_id',$packageId)->where('is_active',1)->orderBy('display_order','ASC')->findAll();
         $featTexts = array_map(fn($r)=>$r['feature_text'], $features);
-        return ['package'=>$pkg, 'features'=>$featTexts, 'gallery'=>$gallery];
+        $options = $this->getPackageOptions($packageId, false);
+        return ['package'=>$pkg, 'features'=>$featTexts, 'gallery'=>$gallery, 'options'=>$options];
     }
 
     // ==================== LIFECYCLE OPERATIONS ====================

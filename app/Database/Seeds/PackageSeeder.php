@@ -5,255 +5,176 @@ namespace App\Database\Seeds;
 use CodeIgniter\Database\Seeder;
 
 /**
- * PackageSeeder — Seeds real production FTPRENEUR health & performance packages
+ * PackageSeeder — Seeds real client FTPRENEUR offerings:
+ * 1. Visphy Kharradi Personal Guidance Programme (3M / 6M)
+ * 2. Visphy-Designed Team-Guided Programme (3M / 6M)
+ * 3. One-to-One Counselling with Visphy Kharradi (Standalone ₹15k)
+ *
+ * Deactivates demo packages (soft/is_active = 0) without destroying historical references.
+ * ZERO DATABASE FK CONSTRAINTS — logical references only.
  */
 class PackageSeeder extends Seeder
 {
     public function run(): void
     {
-        $packages = [
+        $realSlugs = [
+            'visphy-kharradi-personal-guidance-programme',
+            'visphy-designed-team-guided-programme',
+            'one-to-one-counselling-with-visphy-kharradi',
+        ];
+
+        // Deactivate demo/legacy packages so only the 3 real client offerings are active
+        $this->db->table('packages')
+            ->whereNotIn('slug', $realSlugs)
+            ->update([
+                'is_active'  => 0,
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
+
+        $programmes = [
             [
-                'name'              => 'Personalised Health Coaching',
-                'slug'              => 'personalised-health',
-                'short_description' => 'Comprehensive health assessment and 1:1 tailored nutrition, movement, and habit protocols.',
-                'full_description'  => '<p>Our foundational health optimization program combining deep metabolic profiling, lifestyle coaching, and continuous support to restore energy, vitality, and systemic wellness.</p><p>We build your plan around your daily life, routine, and preferences—ensuring sustainable changes that stick long after the program ends.</p>',
-                'regular_price'     => '18000.00',
-                'selling_price'     => '14999.00',
-                'duration_value'    => 12,
-                'duration_unit'     => 'weeks',
-                'badge'             => 'Best Value',
-                'cta_label'         => 'Get Started',
-                'featured_image'    => 'uploads/packages/personalised-health.jpg',
+                'name'              => 'Visphy Kharradi Personal Guidance Programme',
+                'slug'              => 'visphy-kharradi-personal-guidance-programme',
+                'short_description' => 'Personalised nutrition and strength/exercise strategy designed by Visphy Kharradi, with direct 1-to-1 video counselling sessions.',
+                'full_description'  => '<p>For individuals who want their complete personalised plan designed by Visphy Kharradi, together with direct personal guidance from Visphy.</p><p>Visphy personally studies the case, designs the nutrition and exercise strategy, reviews important progress updates and conducts two one-to-one video counselling sessions during the programme.</p>',
+                'regular_price'     => '50000.00',
+                'selling_price'     => '50000.00',
+                'duration_value'    => 3,
+                'duration_unit'     => 'months',
+                'badge'             => 'Personal Guidance',
+                'cta_label'         => 'Enrol Now',
                 'display_order'     => 1,
-                'is_featured'       => 0,
-                'is_active'         => 1,
-                'features'          => [
-                    '1:1 Comprehensive Health Assessment',
-                    'Customized Nutrition Plan (Indian & Global Options)',
-                    'Bi-weekly Dedicated Progress Reviews',
-                    'Direct WhatsApp Support & Follow-up',
-                    'Lifestyle, Sleep & Habit Architecture Guidance',
-                ],
-            ],
-            [
-                'name'              => 'Executive Performance Protocol',
-                'slug'              => 'executive-performance',
-                'short_description' => 'High-impact health and performance optimization for busy executives and business leaders.',
-                'full_description'  => '<p>Designed specifically for time-pressed leaders seeking peak cognitive performance, stress resilience, and sustainable physical endurance without burnout.</p><p>Includes executive travel nutrition guides, high-efficiency workout programming, and priority 1:1 consultation access.</p>',
-                'regular_price'     => '25000.00',
-                'selling_price'     => '19999.00',
-                'duration_value'    => 12,
-                'duration_unit'     => 'weeks',
-                'badge'             => 'Signature Program',
-                'cta_label'         => 'Get Started',
-                'featured_image'    => 'uploads/packages/executive-performance.jpg',
-                'display_order'     => 2,
                 'is_featured'       => 1,
                 'is_active'         => 1,
+                'options'           => [
+                    [
+                        'name'              => '3 Months',
+                        'duration_value'    => 3,
+                        'duration_unit'     => 'month',
+                        'price'             => '50000.00',
+                        'short_description' => '3 Months Personal Guidance by Visphy Kharradi',
+                        'sort_order'        => 1,
+                        'is_active'         => 1,
+                    ],
+                    [
+                        'name'              => '6 Months',
+                        'duration_value'    => 6,
+                        'duration_unit'     => 'month',
+                        'price'             => '80000.00',
+                        'short_description' => '6 Months Personal Guidance by Visphy Kharradi',
+                        'sort_order'        => 2,
+                        'is_active'         => 1,
+                    ],
+                ],
                 'features'          => [
-                    'Comprehensive Executive Lifestyle Audit',
-                    'Travel & Dining Out Meal Protocol',
-                    'Stress Resilience & Sleep Optimization',
-                    'Weekly 1:1 Direct Strategy Sessions',
-                    'Priority Messaging & Concierge Support',
+                    'Detailed evaluation of lifestyle, health conditions, medical history, goals and relevant blood reports',
+                    'Personalised nutrition plan designed by Visphy Kharradi',
+                    'Personalised strength-training and exercise plan designed by Visphy Kharradi',
+                    'Two private video-call counselling sessions with Visphy Kharradi (approx. 30 mins each)',
+                    'Discuss progress, challenges, doubts and lifestyle directly with Visphy',
+                    'Regular progress monitoring by the Visphy Kharradi team',
+                    'Nutrition and exercise-plan modifications based on progress, reports and medical condition',
+                    'Food alternatives based on preferences, routine, travel and availability',
+                    'Exercise alternatives according to fitness level, mobility, equipment and medical limitations',
+                    'Periodic reminders for relevant progress reports and blood tests',
+                    'Priority coordination and support from the Visphy Kharradi team',
+                    'Access to relevant client webinars, educational sessions and wellness challenges whenever scheduled',
                 ],
             ],
             [
-                'name'              => 'Metabolic Health & Reversal',
-                'slug'              => 'metabolic-reversal',
-                'short_description' => 'Targeted lifestyle interventions for insulin sensitivity, glucose balance, and body composition.',
-                'full_description'  => '<p>A science-backed protocol focusing on dietary structure, targeted resistance work, and metabolic habit building for long-term health sustainability.</p><p>Works alongside medical guidance to optimize metabolic biomarkers, daily energy consistency, and body composition.</p>',
-                'regular_price'     => '22000.00',
-                'selling_price'     => '17999.00',
-                'duration_value'    => 12,
-                'duration_unit'     => 'weeks',
-                'badge'             => 'Recommended',
-                'cta_label'         => 'Get Started',
-                'featured_image'    => 'uploads/packages/metabolic-reversal.jpg',
+                'name'              => 'Visphy-Designed Team-Guided Programme',
+                'slug'              => 'visphy-designed-team-guided-programme',
+                'short_description' => 'Personalised plan created by Visphy Kharradi with regular guidance, counselling and follow-up support from his trained team.',
+                'full_description'  => '<p>For individuals who want a personalised plan created by Visphy Kharradi while receiving regular guidance, counselling and follow-up support from his trained team.</p><p>Routine consultations, counselling, questions, monitoring, follow-ups and plan coordination are handled by the assigned team member. Direct 1-to-1 video counselling with Visphy Kharradi is not included.</p>',
+                'regular_price'     => '25000.00',
+                'selling_price'     => '25000.00',
+                'duration_value'    => 3,
+                'duration_unit'     => 'months',
+                'badge'             => 'Team-Guided',
+                'cta_label'         => 'Enrol Now',
+                'display_order'     => 2,
+                'is_featured'       => 0,
+                'is_active'         => 1,
+                'options'           => [
+                    [
+                        'name'              => '3 Months',
+                        'duration_value'    => 3,
+                        'duration_unit'     => 'month',
+                        'price'             => '25000.00',
+                        'short_description' => '3 Months Team-Guided Programme',
+                        'sort_order'        => 1,
+                        'is_active'         => 1,
+                    ],
+                    [
+                        'name'              => '6 Months',
+                        'duration_value'    => 6,
+                        'duration_unit'     => 'month',
+                        'price'             => '40000.00',
+                        'short_description' => '6 Months Team-Guided Programme',
+                        'sort_order'        => 2,
+                        'is_active'         => 1,
+                    ],
+                ],
+                'features'          => [
+                    'Detailed evaluation of lifestyle, health conditions, medical history, goals and relevant blood reports',
+                    'Personalised nutrition plan designed by Visphy Kharradi',
+                    'Personalised strength-training and exercise plan designed by Visphy Kharradi',
+                    'Assigned member of the Visphy Kharradi team throughout the programme',
+                    'Scheduled consultation and counselling with the assigned team member',
+                    'Regular WhatsApp check-ins and progress follow-ups',
+                    'Nutrition and exercise-plan modifications based on progress, reports and changing requirements',
+                    'Food alternatives based on preferences, schedule and availability',
+                    'Exercise alternatives according to fitness level, mobility and available equipment',
+                    'Periodic reminders for relevant progress reports and blood tests',
+                    'Access to relevant client webinars, educational sessions and wellness challenges whenever scheduled',
+                ],
+            ],
+            [
+                'name'              => 'One-to-One Counselling with Visphy Kharradi',
+                'slug'              => 'one-to-one-counselling-with-visphy-kharradi',
+                'short_description' => 'Focused 30-minute private video consultation with Visphy Kharradi for personalised lifestyle, fitness and motivational guidance.',
+                'full_description'  => '<p>A focused one-to-one private video consultation for individuals who want to speak directly with Visphy Kharradi without enrolling in a complete three-month or six-month programme.</p><p>This standalone consultation includes one private video session for personalised discussion and practical guidance. It does not include written charts, blood report evaluation, or ongoing WhatsApp support.</p>',
+                'regular_price'     => '15000.00',
+                'selling_price'     => '15000.00',
+                'duration_value'    => 30,
+                'duration_unit'     => 'minutes',
+                'badge'             => 'Consultation',
+                'cta_label'         => 'Book Session',
                 'display_order'     => 3,
                 'is_featured'       => 0,
                 'is_active'         => 1,
+                'options'           => [],
                 'features'          => [
-                    'Glucose Response & Metabolic Pattern Tracking',
-                    'Personalised Food Structure & Meal Timing',
-                    'Strength & Daily Movement Blueprint',
-                    'Bi-weekly Biomarker & Progress Analysis',
-                ],
-            ],
-            [
-                'name'              => 'Gut Microbiome & Digestive Health',
-                'slug'              => 'gut-microbiome',
-                'short_description' => 'Gut-first restorative protocol for digestion, nutrient absorption, and immunity.',
-                'full_description'  => '<p>Systemic digestive reset helping eliminate bloat, restore gut barrier function, and establish microbiome diversity through whole foods and lifestyle strategy.</p><p>Addresses gut-brain axis balance, food sensitivities, and sustainable digestive comfort.</p>',
-                'regular_price'     => '16000.00',
-                'selling_price'     => '12999.00',
-                'duration_value'    => 8,
-                'duration_unit'     => 'weeks',
-                'badge'             => 'Popular',
-                'cta_label'         => 'Get Started',
-                'featured_image'    => 'uploads/packages/gut-microbiome.jpg',
-                'display_order'     => 4,
-                'is_featured'       => 0,
-                'is_active'         => 1,
-                'features'          => [
-                    'Gut Symptom & Trigger Food Audit',
-                    'Elimination & Systematic Reintroduction Guide',
-                    'Microbiome-Friendly Meal Structure',
-                    'Weekly Check-ins & Digestive Tracking',
-                ],
-            ],
-            [
-                'name'              => 'Hormonal Balance & Vitality',
-                'slug'              => 'hormonal-balance',
-                'short_description' => 'Personalised lifestyle framework for endocrine health, energy, and mood stability.',
-                'full_description'  => '<p>Integrated nutritional and lifestyle coaching designed to support thyroid, adrenal, and reproductive hormone harmony.</p><p>Helps balance energy dips, manage stress impact, and foster sustainable daily vitality.</p>',
-                'regular_price'     => '19000.00',
-                'selling_price'     => '15999.00',
-                'duration_value'    => 12,
-                'duration_unit'     => 'weeks',
-                'badge'             => 'Recommended',
-                'cta_label'         => 'Get Started',
-                'featured_image'    => 'uploads/packages/hormonal-balance.jpg',
-                'display_order'     => 5,
-                'is_featured'       => 0,
-                'is_active'         => 1,
-                'features'          => [
-                    'Hormone & Cycle-Aware Food Planning',
-                    'Sleep Architecture & Circadian Alignment',
-                    'Targeted Low-Stress Movement Guidance',
-                    'Bi-weekly Dedicated Coaching Sessions',
-                ],
-            ],
-            [
-                'name'              => 'Longevity & Anti-Aging Optimization',
-                'slug'              => 'longevity-optimization',
-                'short_description' => 'Long-term preventive protocol targeting cellular health, mobility, and lifespan expansion.',
-                'full_description'  => '<p>Advanced preventive health framework combining strength preservation, mitochondrial support, and anti-inflammatory lifestyle habits for long-term healthspan expansion.</p>',
-                'regular_price'     => '32000.00',
-                'selling_price'     => '27999.00',
-                'duration_value'    => 24,
-                'duration_unit'     => 'weeks',
-                'badge'             => 'Premium Protocol',
-                'cta_label'         => 'Get Started',
-                'featured_image'    => 'uploads/packages/longevity-optimization.jpg',
-                'display_order'     => 6,
-                'is_featured'       => 0,
-                'is_active'         => 1,
-                'features'          => [
-                    'Bi-weekly 1:1 Longevity Consultations',
-                    'Cellular Health & Movement Plan',
-                    'Strength & Bone Density Focus Routine',
-                    'Continuous Lifestyle & Recovery Support',
-                ],
-            ],
-            [
-                'name'              => 'Sports Performance & Conditioning',
-                'slug'              => 'sports-performance',
-                'short_description' => 'Structured strength, mobility, and recovery protocol for endurance and power athletes.',
-                'full_description'  => '<p>Targeted periodized training and nutrition support tailored to athletic goals, peak performance, and injury prevention.</p>',
-                'regular_price'     => '15000.00',
-                'selling_price'     => '11999.00',
-                'duration_value'    => 10,
-                'duration_unit'     => 'weeks',
-                'badge'             => 'Popular',
-                'cta_label'         => 'Get Started',
-                'featured_image'    => 'uploads/packages/sports-performance.jpg',
-                'display_order'     => 7,
-                'is_featured'       => 0,
-                'is_active'         => 1,
-                'features'          => [
-                    'Performance & Movement Assessment',
-                    'Periodized Strength & Athletic Training Plan',
-                    'Post-Workout Recovery & Hydration Protocol',
-                    'Weekly Metric Reviews',
-                ],
-            ],
-            [
-                'name'              => 'Postpartum Restoration & Wellness',
-                'slug'              => 'postpartum-restoration',
-                'short_description' => 'Gentle, safe, and supportive health rebuild for new mothers.',
-                'full_description'  => '<p>Nurturing health guidance tailored for postnatal recovery, pelvic stability, energy restoration, and balanced nutrition.</p>',
-                'regular_price'     => '14000.00',
-                'selling_price'     => '10999.00',
-                'duration_value'    => 8,
-                'duration_unit'     => 'weeks',
-                'badge'             => 'Special Care',
-                'cta_label'         => 'Get Started',
-                'featured_image'    => 'uploads/packages/postpartum-restoration.jpg',
-                'display_order'     => 8,
-                'is_featured'       => 0,
-                'is_active'         => 1,
-                'features'          => [
-                    'Postpartum Safety & Energy Audit',
-                    'Gentle Core & Functional Movement Guidance',
-                    'Nourishing Meal Framework for New Mothers',
-                    'Flexible Check-in Schedule',
-                ],
-            ],
-            [
-                'name'              => 'Burnout Recovery & Stress Reset',
-                'slug'              => 'burnout-recovery',
-                'short_description' => 'Restorative lifestyle protocol for nervous system balance, sleep, and fatigue.',
-                'full_description'  => '<p>A calming, structured health reboot focused on nervous system downregulation, restorative sleep architecture, and sustainable work-life balance.</p>',
-                'regular_price'     => '12000.00',
-                'selling_price'     => '8999.00',
-                'duration_value'    => 6,
-                'duration_unit'     => 'weeks',
-                'badge'             => 'Essential',
-                'cta_label'         => 'Get Started',
-                'featured_image'    => 'uploads/packages/burnout-recovery.jpg',
-                'display_order'     => 9,
-                'is_featured'       => 0,
-                'is_active'         => 1,
-                'features'          => [
-                    'Nervous System Hygiene Plan',
-                    'Sleep Architecture & Night Routine Audit',
-                    'Low-Barrier Daily Movement Protocol',
-                    'Weekly Check-ins',
-                ],
-            ],
-            [
-                'name'              => 'Bridal Transformation Protocol',
-                'slug'              => 'bridal-transformation',
-                'short_description' => 'Tailored timeline-based health, skin glow, and body composition program.',
-                'full_description'  => '<p>Custom-timed health and radiance protocol designed to help brides look and feel their absolute best on their special day.</p>',
-                'regular_price'     => '21000.00',
-                'selling_price'     => '16999.00',
-                'duration_value'    => 12,
-                'duration_unit'     => 'weeks',
-                'badge'             => 'Popular',
-                'cta_label'         => 'Get Started',
-                'featured_image'    => 'uploads/packages/bridal-transformation.jpg',
-                'display_order'     => 10,
-                'is_featured'       => 0,
-                'is_active'         => 1,
-                'features'          => [
-                    'Timeline-Mapped Nutrition & Fitness Plan',
-                    'Skin & Gut Radiance Protocol',
-                    'Targeted Tone & Strength Guidance',
-                    'Weekly Progress & Fitting Check-ins',
+                    'One private video consultation with Visphy Kharradi (approx. 30 minutes)',
+                    'Personalised discussion based on individual concerns and health goals',
+                    'Practical lifestyle, fitness and motivational guidance',
+                    'Direct opportunity to ask questions regarding nutrition, exercise and routine',
+                    'Guidance on disease-management, weight challenges, and discipline',
+                    'Does NOT include written nutrition chart or exercise programme',
+                    'Does NOT include blood-report evaluation or ongoing WhatsApp support',
                 ],
             ],
         ];
 
-        foreach ($packages as $pkg) {
-            $features = $pkg['features'];
-            unset($pkg['features']);
+        foreach ($programmes as $prog) {
+            $options = $prog['options'] ?? [];
+            $features = $prog['features'] ?? [];
+            unset($prog['options'], $prog['features']);
 
-            $existing = $this->db->table('packages')->where('slug', $pkg['slug'])->get()->getRowArray();
+            $existing = $this->db->table('packages')->where('slug', $prog['slug'])->get()->getRowArray();
             if ($existing) {
                 $packageId = (int) $existing['id'];
-                $this->db->table('packages')->where('id', $packageId)->update(array_merge($pkg, [
+                $this->db->table('packages')->where('id', $packageId)->update(array_merge($prog, [
                     'updated_at' => date('Y-m-d H:i:s'),
                 ]));
             } else {
-                $pkg['created_at'] = date('Y-m-d H:i:s');
-                $pkg['updated_at'] = date('Y-m-d H:i:s');
-                $this->db->table('packages')->insert($pkg);
+                $prog['created_at'] = date('Y-m-d H:i:s');
+                $prog['updated_at'] = date('Y-m-d H:i:s');
+                $this->db->table('packages')->insert($prog);
                 $packageId = (int) $this->db->insertID();
             }
 
-            // Sync features
+            // Sync features idempotently
             $this->db->table('package_features')->where('package_id', $packageId)->delete();
             $seq = 1;
             foreach ($features as $fText) {
@@ -264,8 +185,25 @@ class PackageSeeder extends Seeder
                     'is_active'     => 1,
                 ]);
             }
+
+            // Sync options idempotently
+            $this->db->table('package_options')->where('package_id', $packageId)->delete();
+            foreach ($options as $opt) {
+                $this->db->table('package_options')->insert([
+                    'package_id'        => $packageId,
+                    'name'              => $opt['name'],
+                    'duration_value'    => $opt['duration_value'],
+                    'duration_unit'     => $opt['duration_unit'],
+                    'price'             => $opt['price'],
+                    'short_description' => $opt['short_description'] ?? null,
+                    'sort_order'        => $opt['sort_order'] ?? 1,
+                    'is_active'         => $opt['is_active'] ?? 1,
+                    'created_at'        => date('Y-m-d H:i:s'),
+                    'updated_at'        => date('Y-m-d H:i:s'),
+                ]);
+            }
         }
 
-        echo "PackageSeeder completed: " . count($packages) . " packages seeded successfully.\n";
+        echo "PackageSeeder: 3 real client programmes successfully seeded.\n";
     }
 }

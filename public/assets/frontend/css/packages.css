@@ -322,6 +322,42 @@ body.is-pkg-drawer-locked {
   overflow: hidden;
 }
 
+/* Option Selector Pills */
+.pkg-card__opts, .pkg-drawer__opts {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.pkg-card__opt-btn, .pkg-drawer__opt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 12px;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  border-radius: 6px;
+  border: 1px solid var(--line-2);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all .2s var(--ease);
+}
+.pkg-card__opt-btn:hover, .pkg-drawer__opt-btn:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.pkg-card__opt-btn.is-active, .pkg-card__opt-btn[aria-checked="true"],
+.pkg-drawer__opt-btn.is-active, .pkg-drawer__opt-btn[aria-checked="true"] {
+  background: var(--ink);
+  color: #FFFFFF;
+  border-color: var(--ink);
+}
+
 /* Foot */
 .pkg-card__foot {
   margin-top: auto;

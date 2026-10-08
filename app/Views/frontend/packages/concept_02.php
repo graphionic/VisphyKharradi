@@ -55,6 +55,23 @@ $totalPackages = count($packages);
           ? base_url($pkg['featured_image'])
           : base_url('assets/frontend/images/vispy-hercules-pillars-record.jpg');
 
+        $options = [];
+        if (!empty($pkg['options']) && is_array($pkg['options'])) {
+          foreach ($pkg['options'] as $opt) {
+            if ((int)($opt['is_active'] ?? 1) === 1) {
+              $options[] = [
+                'id'                 => (int)$opt['id'],
+                'name'               => $opt['name'],
+                'duration_value'     => (int)$opt['duration_value'],
+                'duration_unit'      => $opt['duration_unit'],
+                'formatted_duration' => PackageService::formatDuration((int)$opt['duration_value'], (string)$opt['duration_unit']),
+                'price'              => (float)$opt['price'],
+                'formatted_price'    => PackageService::formatPrice($opt['price']),
+              ];
+            }
+          }
+        }
+
         $jsonPayload = htmlspecialchars(json_encode([
           'id'                      => (int)$pkg['id'],
           'name'                    => $pkg['name'],
@@ -72,6 +89,7 @@ $totalPackages = count($packages);
           'google_form_url'         => $pkg['google_form_url'],
           'image_url'               => $imgUrl,
           'features'                => $pkg['features'] ?? [],
+          'options'                 => $options,
         ]), ENT_QUOTES, 'UTF-8');
       ?>
 
@@ -104,6 +122,7 @@ $totalPackages = count($packages);
             <p class="pkg-card__eyebrow"><?= esc($badgeText ?? '1:1 PERSONALISED') ?></p>
             <h3 class="pkg-card__title"><?= esc($pkg['name']) ?></h3>
             <p class="pkg-card__summary"><?= esc($pkg['short_description'] ?? '') ?></p>
+            <div class="pkg-card__opts" data-card-opts></div>
           </div>
 
           <div class="pkg-card__foot">
@@ -216,6 +235,12 @@ $totalPackages = count($packages);
         <!-- Full Description / Overview -->
         <div class="pkg-drawer__desc" data-drawer-desc>
           <!-- Rich HTML content -->
+        </div>
+
+        <!-- Duration / Option Selector -->
+        <div class="pkg-drawer__opts-wrap" data-drawer-opts-wrap style="display:none; margin-bottom: 20px;">
+          <label style="display:block; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.12em; opacity:0.7; margin-bottom: 8px;">Select Duration</label>
+          <div class="pkg-drawer__opts" data-drawer-opts></div>
         </div>
 
         <!-- Investment & Action Box -->

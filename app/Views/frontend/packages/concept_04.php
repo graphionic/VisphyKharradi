@@ -25,6 +25,23 @@ foreach ($packages as $i => $pkg) {
         ? base_url($pkg['featured_image'])
         : base_url('assets/frontend/images/vispy-hercules-pillars-record.jpg');
 
+    $options = [];
+    if (!empty($pkg['options']) && is_array($pkg['options'])) {
+        foreach ($pkg['options'] as $opt) {
+            if ((int)($opt['is_active'] ?? 1) === 1) {
+                $options[] = [
+                    'id'                 => (int)$opt['id'],
+                    'name'               => $opt['name'],
+                    'duration_value'     => (int)$opt['duration_value'],
+                    'duration_unit'      => $opt['duration_unit'],
+                    'formatted_duration' => PackageService::formatDuration((int)$opt['duration_value'], (string)$opt['duration_unit']),
+                    'price'              => (float)$opt['price'],
+                    'formatted_price'    => PackageService::formatPrice($opt['price']),
+                ];
+            }
+        }
+    }
+
     $edPrograms[] = [
         'number'            => $numInt,
         'id'                => (int)$pkg['id'],
@@ -47,6 +64,7 @@ foreach ($packages as $i => $pkg) {
         'cta_label'         => $pkg['cta_label'],
         'image'             => $imgUrl,
         'features'          => $pkg['features'] ?? [],
+        'options'           => $options,
     ];
 }
 
@@ -115,6 +133,7 @@ $edProgramsJson = json_encode($edPrograms, JSON_HEX_TAG | JSON_HEX_APOS | JSON_H
     <div class="pv-card__panel">
       <h3 class="pv-card__name" data-f="name">Program Name</h3>
       <p class="pv-card__line" data-f="line">Short description</p>
+      <div class="pv-card__opts" data-card-opts></div>
       <dl class="pv-card__facts">
         <div><dt>Duration</dt><dd><span data-f="durationWeeks">12</span> weeks</dd></div>
         <div><dt>Investment</dt><dd><s data-f="priceWas"></s><span data-f="price">₹14,999</span></dd></div>
@@ -221,6 +240,10 @@ $edProgramsJson = json_encode($edPrograms, JSON_HEX_TAG | JSON_HEX_APOS | JSON_H
 
           <section class="pvd__sec pvd__sec--last" id="pvd-s5" data-sec="5">
             <p class="pvd__label">Investment</p>
+            <div class="pvd__opts-wrap" data-drawer-opts-wrap style="display:none; margin-bottom: 16px;">
+              <label style="display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--muted); margin-bottom: 6px;">Select Duration</label>
+              <div class="pvd__opts" data-drawer-opts></div>
+            </div>
             <div class="pvd__inv">
               <div>
                 <p class="pvd__inv-price"><s data-f="priceWas"></s><b data-f="price">₹14,999</b></p>
