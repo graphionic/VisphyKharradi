@@ -19,8 +19,13 @@ class CheckoutController extends BaseController
     {
         return $this->handle(function () use ($id) {
             $this->throttle('summary', 60);
+            $optionId = $this->request->getGet('option_id') ?? $this->request->getGet('package_option_id');
+            $packageOptionId = null;
+            if ($optionId !== null && (is_string($optionId) || is_int($optionId)) && ctype_digit((string) $optionId) && (int) $optionId > 0) {
+                $packageOptionId = (int) $optionId;
+            }
             $service = new CheckoutService();
-            return ['package' => $service->summary($service->package($id))];
+            return ['package' => $service->summary($service->package($id), $packageOptionId)];
         });
     }
 
@@ -32,6 +37,7 @@ class CheckoutController extends BaseController
             $data = [
                 'checkout_id' => $this->string($input, 'checkout_id'),
                 'package_id' => $this->string($input, 'package_id'),
+                'package_option_id' => $this->string($input, 'package_option_id'),
                 'name' => trim($this->string($input, 'name')),
                 'email' => trim($this->string($input, 'email')),
                 'phone' => preg_replace('/[\s().-]+/', '', trim($this->string($input, 'phone'))),
@@ -39,6 +45,11 @@ class CheckoutController extends BaseController
             $errors = [];
             if (!preg_match('/^[a-f0-9-]{36}$/D', $data['checkout_id'])) $errors['checkout_id'] = 'Please reopen checkout.';
             if (!ctype_digit($data['package_id']) || (int) $data['package_id'] < 1) $errors['package_id'] = 'Please select a program.';
+            if ($data['package_option_id'] !== '') {
+                if (!ctype_digit($data['package_option_id']) || (int) $data['package_option_id'] < 1) {
+                    $errors['package_option_id'] = 'Please select a valid program option.';
+                }
+            }
             if (mb_strlen($data['name']) < 2 || mb_strlen($data['name']) > 100 || preg_match('/[\x00-\x1F\x7F]/u', $data['name'])) $errors['name'] = 'Enter your full name (2–100 characters).';
             if (strlen($data['email']) > 190 || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) $errors['email'] = 'Enter a valid email address.';
             if (preg_match('/^[6-9]\d{9}$/D', $data['phone'])) $data['phone'] = '+91' . $data['phone'];
@@ -51,7 +62,7 @@ class CheckoutController extends BaseController
             $session = session();
             $map = $session->get('checkout_orders') ?? [];
             $key = $data['checkout_id'];
-            $fingerprint = hash('sha256', json_encode([$data['package_id'], $data['name'], $data['email'], $data['phone']], JSON_THROW_ON_ERROR));
+            $fingerprint = hash('sha256', json_encode([$data['package_id'], $data['package_option_id'], $data['name'], $data['email'], $data['phone']], JSON_THROW_ON_ERROR));
             $gateway = new RazorpayService(); // Configuration check before local financial writes.
             $service = new CheckoutService();
             if (isset($map[$key])) {
@@ -60,7 +71,8 @@ class CheckoutController extends BaseController
                 }
                 $id = (int) $map[$key]['id'];
             } else {
-                $order = $service->createLocal((int) $data['package_id'], $data);
+                $packageOptionId = $data['package_option_id'] !== '' ? (int) $data['package_option_id'] : null;
+                $order = $service->createLocal((int) $data['package_id'], $data, $packageOptionId);
                 $id = (int) $order['id'];
                 // Bound memory; preserve recent requests for safe retries after network loss.
                 if (count($map) >= 20) array_shift($map);

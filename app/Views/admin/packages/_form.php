@@ -150,9 +150,10 @@ $hasGalleryError = $hasError('gallery_images');
                         <label class="field__label" for="duration_unit">Duration Unit</label>
                         <select class="field__input <?= $hasError('duration_unit') ? 'field__input--error' : '' ?>" id="duration_unit" name="duration_unit">
                             <option value="">Select unit</option>
-                            <option value="days" <?= $getValue('duration_unit', '')==='days' ? 'selected' : '' ?>>Days</option>
-                            <option value="weeks" <?= $getValue('duration_unit', '')==='weeks' ? 'selected' : '' ?>>Weeks</option>
-                            <option value="months" <?= $getValue('duration_unit', '')==='months' ? 'selected' : '' ?>>Months</option>
+                            <option value="minutes" <?= in_array($getValue('duration_unit', ''), ['minutes', 'minute', 'mins', 'min']) ? 'selected' : '' ?>>Minutes</option>
+                            <option value="days" <?= in_array($getValue('duration_unit', ''), ['days', 'day']) ? 'selected' : '' ?>>Days</option>
+                            <option value="weeks" <?= in_array($getValue('duration_unit', ''), ['weeks', 'week']) ? 'selected' : '' ?>>Weeks</option>
+                            <option value="months" <?= in_array($getValue('duration_unit', ''), ['months', 'month']) ? 'selected' : '' ?>>Months</option>
                         </select>
                         <?php if ($hasError('duration_unit')): ?><div class="field__error"><?= esc($errors['duration_unit']) ?></div><?php endif; ?>
                     </div>

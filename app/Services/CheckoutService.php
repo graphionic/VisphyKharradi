@@ -6,6 +6,7 @@ use App\Domain\OrderStatus;
 use App\Domain\PaymentStatus;
 use App\Models\OrderModel;
 use App\Models\PackageModel;
+use App\Models\PackageOptionModel;
 use App\Models\PaymentModel;
 use App\Services\Checkout\CheckoutException;
 use CodeIgniter\Database\BaseConnection;
@@ -34,14 +35,26 @@ class CheckoutService
         return $package;
     }
 
-    public function summary(array $package): array
+    public function summary(array $package, ?int $packageOptionId = null): array
     {
+        $amount = $package['selling_price'];
+        $duration = $this->duration($package);
+
+        if ($packageOptionId !== null) {
+            $optionModel = new PackageOptionModel($this->db);
+            $option = $optionModel->where('is_active', 1)->find($packageOptionId);
+            if ($option && (int) $option['package_id'] === (int) $package['id'] && !empty($option['price']) && (float) $option['price'] > 0) {
+                $amount = $option['price'];
+                $duration = PackageService::formatDuration((int) $option['duration_value'], $option['duration_unit']);
+            }
+        }
+
         return [
             'id' => (int) $package['id'],
             'name' => $package['name'],
-            'amount' => RazorpayService::paise((string) $package['selling_price']),
+            'amount' => RazorpayService::paise((string) $amount),
             'currency' => 'INR',
-            'duration' => $this->duration($package),
+            'duration' => $duration,
         ];
     }
 
@@ -51,26 +64,53 @@ class CheckoutService
             : PackageService::formatDuration((int) $package['duration_value'], $package['duration_unit']);
     }
 
-    public function createLocal(int $packageId, array $customer): array
+    public function createLocal(int $packageId, array $customer, ?int $packageOptionId = null): array
     {
         // No client-supplied price or duration enters this contract.
         $package = $this->package($packageId);
-        RazorpayService::paise((string) $package['selling_price']);
-        return $this->transaction(function () use ($package, $customer) {
+        $finalPrice = $package['selling_price'];
+        $finalDuration = $this->duration($package);
+
+        $optionModel = new PackageOptionModel($this->db);
+        $activeOptions = $optionModel->where('package_id', $package['id'])->where('is_active', 1)->findAll();
+
+        if (!empty($activeOptions)) {
+            if ($packageOptionId === null) {
+                throw new CheckoutException('Please select a program duration option to proceed.', 400);
+            }
+        }
+
+        if ($packageOptionId !== null) {
+            $option = $optionModel->where('is_active', 1)->find($packageOptionId);
+            if (!$option) {
+                throw new CheckoutException('The selected program option is no longer available. Please choose another option.', 404);
+            }
+            if ((int) $option['package_id'] !== (int) $package['id']) {
+                throw new CheckoutException('The selected option does not belong to this program.', 400);
+            }
+            if (empty($option['price']) || (float) $option['price'] <= 0) {
+                throw new CheckoutException('The selected program option price is invalid.', 400);
+            }
+            $finalPrice = $option['price'];
+            $finalDuration = PackageService::formatDuration((int) $option['duration_value'], $option['duration_unit']);
+        }
+
+        RazorpayService::paise((string) $finalPrice);
+        return $this->transaction(function () use ($package, $customer, $finalPrice, $finalDuration) {
             $id = $this->orders->insert([
                 'order_number' => (new OrderNumberService($this->db))->generateInTransaction((int) date('Y')),
                 'package_id' => $package['id'],
                 'package_name_snapshot' => $package['name'],
                 'package_slug_snapshot' => $package['slug'],
-                'package_price_snapshot' => $package['selling_price'],
-                'package_duration_snapshot' => $this->duration($package),
+                'package_price_snapshot' => $finalPrice,
+                'package_duration_snapshot' => $finalDuration,
                 'customer_name' => $customer['name'],
                 'customer_email' => $customer['email'],
                 'customer_phone' => $customer['phone'],
                 'currency' => 'INR',
-                'subtotal' => $package['selling_price'],
+                'subtotal' => $finalPrice,
                 'discount_amount' => '0.00',
-                'total_amount' => $package['selling_price'],
+                'total_amount' => $finalPrice,
                 'status' => OrderStatus::Pending->value,
             ]);
             if (!$id) throw new \RuntimeException('Unable to create checkout order.');

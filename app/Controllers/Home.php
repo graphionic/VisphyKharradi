@@ -27,7 +27,7 @@ class Home extends BaseController
             ->orderBy('id', 'ASC')
             ->findAll();
 
-        // Hydrate active features for each package
+        // Hydrate active features and options for each package
         if (!empty($packages)) {
             $packageIds = array_column($packages, 'id');
             $allFeatures = $featureModel
@@ -42,9 +42,23 @@ class Home extends BaseController
                 $featuresByPackage[$pid][] = $feat['feature_text'];
             }
 
+            $optionModel = new \App\Models\PackageOptionModel();
+            $allOptions = $optionModel
+                ->whereIn('package_id', $packageIds)
+                ->where('is_active', 1)
+                ->orderBy('sort_order', 'ASC')
+                ->findAll();
+
+            $optionsByPackage = [];
+            foreach ($allOptions as $opt) {
+                $pid = (int) $opt['package_id'];
+                $optionsByPackage[$pid][] = $opt;
+            }
+
             foreach ($packages as &$pkg) {
                 $pid = (int) $pkg['id'];
                 $pkg['features'] = $featuresByPackage[$pid] ?? [];
+                $pkg['options']  = $optionsByPackage[$pid] ?? [];
             }
             unset($pkg);
         }

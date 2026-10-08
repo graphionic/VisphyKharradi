@@ -87,13 +87,24 @@
       el.dataset.accent = ACCENT[p.category] || 'ultra';
       if (p.featured) el.classList.add('is-featured');
 
+      var initialOpt = null;
+      if (p.options && p.options.length > 0) {
+        initialOpt = p.options[0];
+        p.selectedOptionId = initialOpt ? initialOpt.id : null;
+      } else {
+        p.selectedOptionId = null;
+      }
+
+      var displayPrice = initialOpt ? initialOpt.formatted_price : inr(p.discountPrice || p.price);
+      var displayDuration = initialOpt ? (initialOpt.duration_unit === 'months' ? initialOpt.duration_value * 4 : initialOpt.duration_value) : (p.durationWeeks || 12);
+
       var map = {
         number: pad(p.number),
         category: p.category || 'Personalised',
         name: p.name,
         line: p.short_description || p.purpose || '',
-        durationWeeks: p.durationWeeks || 12,
-        price: inr(p.discountPrice || p.price),
+        durationWeeks: displayDuration,
+        price: displayPrice,
         priceWas: p.discountPrice ? inr(p.price) : '',
         featuredLabel: p.featuredLabel || 'Signature Program'
       };
@@ -102,6 +113,41 @@
         var key = n.dataset.f;
         n.textContent = map[key] == null ? '' : map[key];
       });
+
+      var optsContainer = el.querySelector('[data-card-opts]');
+      if (optsContainer && p.options && p.options.length > 1) {
+        optsContainer.innerHTML = '';
+        p.options.forEach(function (opt) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'pv-card__opt-btn' + (opt.id === p.selectedOptionId ? ' is-active' : '');
+          btn.setAttribute('role', 'radio');
+          btn.setAttribute('aria-checked', opt.id === p.selectedOptionId ? 'true' : 'false');
+          btn.textContent = opt.formatted_duration || opt.name;
+
+          btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            p.selectedOptionId = opt.id;
+
+            optsContainer.querySelectorAll('.pv-card__opt-btn').forEach(function (b) {
+              b.classList.remove('is-active');
+              b.setAttribute('aria-checked', 'false');
+            });
+            btn.classList.add('is-active');
+            btn.setAttribute('aria-checked', 'true');
+
+            var priceEl = el.querySelector('.pv-card__panel [data-f="price"]');
+            if (priceEl && opt.formatted_price) priceEl.textContent = opt.formatted_price;
+
+            var durWkEl = el.querySelector('.pv-card__wk [data-f="durationWeeks"]');
+            var durFactEl = el.querySelector('.pv-card__facts [data-f="durationWeeks"]');
+            var wVal = opt.duration_unit === 'months' ? opt.duration_value * 4 : opt.duration_value;
+            if (durWkEl) durWkEl.textContent = wVal;
+            if (durFactEl) durFactEl.textContent = wVal;
+          });
+          optsContainer.appendChild(btn);
+        });
+      }
 
       var img = el.querySelector('.pv-card__img');
       if (img) {
@@ -212,11 +258,20 @@
       dr.dataset.accent = ACCENT[p.category] || 'ultra';
       dr.dataset.featured = p.featured ? 'true' : 'false';
 
+      var activeOpt = null;
+      if (p.options && p.options.length > 0) {
+        activeOpt = p.options.find(function (o) { return o.id === p.selectedOptionId; }) || p.options[0];
+        p.selectedOptionId = activeOpt.id;
+      }
+
+      var displayPrice = activeOpt ? activeOpt.formatted_price : inr(p.discountPrice || p.price);
+      var displayDuration = activeOpt ? (activeOpt.duration_unit === 'months' ? activeOpt.duration_value * 4 : activeOpt.duration_value) : (p.durationWeeks || 12);
+
       var map = {
         number: pad(p.number),
         category: p.category || 'Personalised',
         name: p.name,
-        durationWeeks: p.durationWeeks || 12,
+        durationWeeks: displayDuration,
         summary: p.short_description || p.purpose || '',
         healthNote: p.full_description || p.overview || 'Every program is structured 1:1 around your assessment, routine, and progress.',
         suitableFor: p.suitableFor || 'Anyone seeking scientific guidance for nutrition, strength, and lifestyle habits.',
@@ -225,14 +280,73 @@
         reviewEvery: '2',
         reviewUnit: 'weekly reviews',
         reviewLc: 'every 2 weeks',
-        price: inr(p.discountPrice || p.price),
-        priceWas: p.discountPrice ? inr(p.price) : ''
+        price: displayPrice,
+        priceWas: p.discountPrice && !activeOpt ? inr(p.price) : ''
       };
 
       Array.prototype.slice.call(dr.querySelectorAll('[data-f]')).forEach(function (n) {
         var key = n.dataset.f;
         n.textContent = map[key] == null ? '' : map[key];
       });
+
+      var optsWrap = dr.querySelector('[data-drawer-opts-wrap]');
+      var optsContainer = dr.querySelector('[data-drawer-opts]');
+      if (optsWrap && optsContainer) {
+        if (p.options && p.options.length > 1) {
+          optsWrap.style.display = 'block';
+          optsContainer.innerHTML = '';
+          p.options.forEach(function (opt) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'pvd__opt-btn' + (opt.id === p.selectedOptionId ? ' is-active' : '');
+            btn.setAttribute('role', 'radio');
+            btn.setAttribute('aria-checked', opt.id === p.selectedOptionId ? 'true' : 'false');
+            btn.textContent = opt.formatted_duration || opt.name;
+
+            btn.addEventListener('click', function (e) {
+              e.stopPropagation();
+              p.selectedOptionId = opt.id;
+
+              optsContainer.querySelectorAll('.pvd__opt-btn').forEach(function (b) {
+                b.classList.remove('is-active');
+                b.setAttribute('aria-checked', 'false');
+              });
+              btn.classList.add('is-active');
+              btn.setAttribute('aria-checked', 'true');
+
+              // update drawer price & duration displays
+              Array.prototype.slice.call(dr.querySelectorAll('[data-f="price"]')).forEach(function (el) {
+                el.textContent = opt.formatted_price;
+              });
+              var wVal = opt.duration_unit === 'months' ? opt.duration_value * 4 : opt.duration_value;
+              Array.prototype.slice.call(dr.querySelectorAll('[data-f="durationWeeks"]')).forEach(function (el) {
+                el.textContent = wVal;
+              });
+
+              // sync card element
+              var cardEl = cards[p.slug];
+              if (cardEl) {
+                var cardPriceEl = cardEl.querySelector('.pv-card__panel [data-f="price"]');
+                if (cardPriceEl) cardPriceEl.textContent = opt.formatted_price;
+                var cardWkEl = cardEl.querySelector('.pv-card__wk [data-f="durationWeeks"]');
+                var cardFactEl = cardEl.querySelector('.pv-card__facts [data-f="durationWeeks"]');
+                if (cardWkEl) cardWkEl.textContent = wVal;
+                if (cardFactEl) cardFactEl.textContent = wVal;
+
+                var cardBtns = cardEl.querySelectorAll('.pv-card__opt-btn');
+                cardBtns.forEach(function (cb) {
+                  var isActive = cb.textContent.trim() === (opt.formatted_duration || opt.name).trim();
+                  cb.classList.toggle('is-active', isActive);
+                  cb.setAttribute('aria-checked', isActive ? 'true' : 'false');
+                });
+              }
+            });
+            optsContainer.appendChild(btn);
+          });
+        } else {
+          optsWrap.style.display = 'none';
+        }
+      }
 
       var img = dr.querySelector('.pvd__img');
       if (img) {
@@ -309,7 +423,8 @@
       if (ctaBtn) ctaBtn.onclick = function () {
         if (!window.FtCheckout) return;
         var returnFocus = lastFocus;
-        closeDrawer(function () { window.FtCheckout.open(p.id, returnFocus); });
+        var optId = p.selectedOptionId;
+        closeDrawer(function () { window.FtCheckout.open(p.id, returnFocus, optId); });
       };
 
     }

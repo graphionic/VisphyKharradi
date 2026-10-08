@@ -400,6 +400,47 @@
   font-weight: 700;
 }
 
+/* Option Selector */
+.pk-card__opts {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 12px 26px 0;
+  flex-wrap: wrap;
+}
+.pk-card__opt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 12px;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  border-radius: 6px;
+  border: 1px solid var(--c-hair);
+  background: transparent;
+  color: var(--c-muted);
+  cursor: pointer;
+  transition: all .2s var(--ease);
+}
+.pk-card__opt-btn:hover {
+  border-color: var(--c-fg);
+  color: var(--c-fg);
+}
+.pk-card__opt-btn[aria-checked="true"] {
+  background: var(--c-fg);
+  color: var(--c-bg);
+  border-color: var(--c-fg);
+}
+.pk-card[data-tone="ultra"] .pk-card__opt-btn[aria-checked="true"],
+.pk-card[data-tone="ink"] .pk-card__opt-btn[aria-checked="true"] {
+  background: #FFFFFF;
+  color: #141B31;
+  border-color: #FFFFFF;
+}
+
 /* Card Foot */
 .pk-card__foot {
   position: relative;

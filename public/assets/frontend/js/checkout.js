@@ -125,7 +125,11 @@
   async function loadSummary() {
     showState('loading', 'Loading your program…');
     try {
-      const data = await request(root.dataset.summaryUrl.replace(/\/$/, '') + '/' + context.packageId);
+      let url = root.dataset.summaryUrl.replace(/\/$/, '') + '/' + context.packageId;
+      if (context.packageOptionId) {
+        url += '?option_id=' + encodeURIComponent(context.packageOptionId);
+      }
+      const data = await request(url);
       context.summary = data.package;
       summary(data.package);
       showState('details');
@@ -136,14 +140,18 @@
     }
   }
 
-  async function open(packageId, from) {
+  async function open(packageId, from, packageOptionId) {
     if (isOpen || !root.hidden || !packageId) return;
-    context = contexts.get(String(packageId));
+    const optId = packageOptionId ? String(packageOptionId) : null;
+    const key = String(packageId) + (optId ? '_' + optId : '');
+    context = contexts.get(key);
     if (!context) {
-      context = { packageId, checkoutId: uuid() };
-      contexts.set(String(packageId), context);
+      context = { packageId: String(packageId), packageOptionId: optId, checkoutId: uuid() };
+      contexts.set(key, context);
+    } else {
+      context.packageOptionId = optId;
     }
-    opener = from || document.activeElement;
+    opener = (from && typeof from === 'object' && from.nodeType) ? from : document.activeElement;
     clearTimeout(closeTimer);
     isOpen = true;
     root.hidden = false;
@@ -297,7 +305,11 @@
     showState('preparing', 'Preparing your secure payment…');
     try {
       await loadSDK();
-      const data = await request(root.dataset.createUrl, { checkout_id: context.checkoutId, package_id: context.packageId, ...customer });
+      const payload = { checkout_id: context.checkoutId, package_id: context.packageId, ...customer };
+      if (context.packageOptionId) {
+        payload.package_option_id = context.packageOptionId;
+      }
+      const data = await request(root.dataset.createUrl, payload);
       if (data.status === 'paid') return paid(data);
       context.order = data;
       summary(data); // Authoritative snapshot amount, not the card's displayed amount.

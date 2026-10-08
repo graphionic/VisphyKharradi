@@ -27,6 +27,23 @@ foreach ($packages as $i => $pkg) {
         ? base_url($pkg['featured_image'])
         : base_url('assets/frontend/images/vispy-hercules-pillars-record.jpg');
 
+    $optionsList = [];
+    if (!empty($pkg['options']) && is_array($pkg['options'])) {
+        foreach ($pkg['options'] as $opt) {
+            if ((int)($opt['is_active'] ?? 1) === 1) {
+                $optionsList[] = [
+                    'id'                 => (int)$opt['id'],
+                    'name'               => $opt['name'],
+                    'duration_value'     => (int)$opt['duration_value'],
+                    'duration_unit'      => $opt['duration_unit'],
+                    'price'              => (float)$opt['price'],
+                    'formatted_price'    => PackageService::formatPrice($opt['price']),
+                    'formatted_duration' => PackageService::formatDuration((int)$opt['duration_value'], $opt['duration_unit']),
+                ];
+            }
+        }
+    }
+
     $pkPrograms[] = [
         'n'                 => $numInt,
         'id'                => (int)$pkg['id'],
@@ -45,6 +62,7 @@ foreach ($packages as $i => $pkg) {
         'cta_label'         => $pkg['cta_label'],
         'featured_image'    => $imgUrl,
         'features'          => $pkg['features'] ?? [],
+        'options'           => $optionsList,
     ];
 }
 
